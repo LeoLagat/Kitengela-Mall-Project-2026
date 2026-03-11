@@ -172,4 +172,4 @@ You can change these in `docker-compose.yml` or use a `.env` file.
 
 ---
 
-If you need more details on any specific file or want a more technical/developer-focused README, let me know!
+
