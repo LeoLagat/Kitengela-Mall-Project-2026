@@ -1,0 +1,23 @@
+# PHP
+/vendor/
+/node_modules/
+.env
+.env.*
+*.log
+*.cache
+*.tmp
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+*.bak
+*.swp
+*.swo
+*.zip
+*.tar.gz
+*.tar
+*.gz
+*.rar
+*.7z
+# Ignore debug and test files
+*.txt

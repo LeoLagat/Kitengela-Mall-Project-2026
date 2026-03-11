@@ -1,8 +1,35 @@
 # Kitengela Mall Parking System
 
+![Docker](https://img.shields.io/badge/docker-ready-blue)
+![MIT License](https://img.shields.io/badge/license-MIT-green)
+![Build Status](https://img.shields.io/badge/build-passing-brightgreen)
+
 ## Overview
 
 This is a web-based parking management system for Kitengela Mall. It supports admin, staff, and driver roles, manages parking bays, invoicing, payments (including M-Pesa integration), and provides real-time parking status displays.
+
+---
+
+## Quick Start (Docker)
+
+You can run the entire system using Docker and Docker Compose:
+
+```bash
+docker-compose up --build
+```
+
+This will start both the PHP/Apache server and a MySQL database. The app will be available at [http://localhost:8080](http://localhost:8080).
+
+**Default MySQL credentials:**
+
+- Database: `parking_db`
+- User: `parking_user`
+- Password: `parking_pass`
+- Root Password: `root_pass`
+
+You can change these in `docker-compose.yml` or use a `.env` file.
+
+---
 
 ---
 
