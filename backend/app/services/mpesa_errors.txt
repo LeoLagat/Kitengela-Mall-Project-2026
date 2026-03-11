@@ -1,0 +1,34 @@
+Payment Failed: DS timeout user cannot be reached.
+Payment Failed: DS timeout user cannot be reached.
+Payment Failed: DS timeout user cannot be reached.
+Payment Failed: DS timeout user cannot be reached.
+Payment Failed: DS timeout user cannot be reached.
+DB Error: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'receipt_number' in 'field list'
+DB Error: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'receipt_number' in 'field list'
+DB Error: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'receipt_number' in 'field list'
+DB Error: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'receipt_number' in 'field list'
+DB Error: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'receipt_number' in 'field list'
+DB Error: SQLSTATE[HY093]: Invalid parameter number: number of bound variables does not match number of tokens
+DB Error: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'checkout_id' in 'where clause'
+DB Error: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'checkout_id' in 'where clause'
+DB Error: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'checkout_id' in 'where clause'
+DB Error: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'checkout_id' in 'where clause'
+DB Error: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'checkout_id' in 'where clause'
+DB Error: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'checkout_id' in 'where clause'
+Bad API response (HTTP 503): upstream connect error or disconnect/reset before headers. retried and the latest reset reason: connection timeout
+Bad API response (HTTP 503): upstream connect error or disconnect/reset before headers. retried and the latest reset reason: connection timeout
+Bad API response (HTTP 503): upstream connect error or disconnect/reset before headers. retried and the latest reset reason: connection timeout
+Bad API response (HTTP 503): upstream connect error or disconnect/reset before headers. retried and the latest reset reason: connection timeout
+OAuth cURL Error: Connection timed out after 15010 milliseconds
+OAuth cURL Error: Connection timed out after 15004 milliseconds
+Server error 503 on STK push, retrying...
+Bad API response (HTTP 503): upstream connect error or disconnect/reset before headers. retried and the latest reset reason: connection timeout
+Server error 503 on STK push, retrying...
+Bad API response (HTTP 503): upstream connect error or disconnect/reset before headers. retried and the latest reset reason: connection timeout
+Mpesa DB insert error: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'receipt' in 'field list'
+Mpesa DB insert error: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'receipt' in 'field list'
+Inserted new mpesa_transaction for callback: ws_CO_11032026211811817727516126
+Mpesa DB insert error: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'receipt' in 'field list'
+Inserted new mpesa_transaction for callback: ws_CO_11032026223739340727516126
+Mpesa DB insert error: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'receipt' in 'field list'
+Inserted new mpesa_transaction for callback: ws_CO_12032026000803085727516126

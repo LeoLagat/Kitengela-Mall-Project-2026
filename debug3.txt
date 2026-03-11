@@ -1,0 +1,199 @@
+owner_accounts creation attempted
+Tables:
+Array
+(
+    [0] => administrators
+    [1] => mpesa_transactions
+    [2] => owner_accounts
+    [3] => parking_bays
+    [4] => staff_vehicles
+    [5] => vehicle_logs
+)
+
+owners table:
+Array
+(
+    [0] => Array
+        (
+            [id] => 1
+            [plate_number] => KZA123Q
+            [owner_name] => DENRI
+            [invoice_monthly] => 1
+            [created_at] => 2026-03-10 18:46:43
+        )
+
+)
+
+recent vehicle_logs:
+Array
+(
+    [0] => Array
+        (
+            [id] => 17
+            [plate_number] => KDR900W
+            [bay_id] => 4
+            [entry_time] => 2026-03-10 17:48:55
+            [exit_time] => 2026-03-10 18:42:39
+            [total_fee] => 50.00
+            [payment_status] => paid
+            [mpesa_checkout_id] => ws_CO_10032026184220353727516126
+            [nominal_fee] => 0.00
+        )
+
+    [1] => Array
+        (
+            [id] => 16
+            [plate_number] => KDC675W
+            [bay_id] => 3
+            [entry_time] => 2026-03-10 17:48:28
+            [exit_time] => 2026-03-10 18:54:48
+            [total_fee] => 70.00
+            [payment_status] => paid
+            [mpesa_checkout_id] => ws_CO_10032026185424235727516126
+            [nominal_fee] => 0.00
+        )
+
+    [2] => Array
+        (
+            [id] => 15
+            [plate_number] => KDE564R
+            [bay_id] => 2
+            [entry_time] => 2026-03-10 17:48:12
+            [exit_time] => 2026-03-10 18:50:01
+            [total_fee] => 70.00
+            [payment_status] => paid
+            [mpesa_checkout_id] => ws_CO_10032026184938659727516126
+            [nominal_fee] => 0.00
+        )
+
+    [3] => Array
+        (
+            [id] => 14
+            [plate_number] => KAA123E
+            [bay_id] => 1
+            [entry_time] => 2026-03-10 17:47:59
+            [exit_time] => 2026-03-10 17:49:52
+            [total_fee] => 0.00
+            [payment_status] => paid
+            [mpesa_checkout_id] => 
+            [nominal_fee] => 0.00
+        )
+
+    [4] => Array
+        (
+            [id] => 13
+            [plate_number] => KBM444M
+            [bay_id] => 2
+            [entry_time] => 2026-03-10 12:42:44
+            [exit_time] => 2026-03-10 17:15:41
+            [total_fee] => 0.00
+            [payment_status] => paid
+            [mpesa_checkout_id] => ws_CO_10032026171521356727516126
+            [nominal_fee] => 0.00
+        )
+
+)
+
+mpesa_transactions:
+Array
+(
+    [0] => Array
+        (
+            [id] => 1
+            [plate_number] => KCC123Q
+            [mpesa_receipt_number] => QWE123ABC
+            [phone_number] => 254712345678
+            [amount] => 200.00
+            [transaction_date] => 2026-03-10 07:21:52
+            [status] => completed
+            [created_at] => 2026-03-10 07:21:52
+        )
+
+)
+
+mpesa_transactions columns:
+Array
+(
+    [0] => Array
+        (
+            [Field] => id
+            [Type] => int(11)
+            [Null] => NO
+            [Key] => PRI
+            [Default] => 
+            [Extra] => auto_increment
+        )
+
+    [1] => Array
+        (
+            [Field] => plate_number
+            [Type] => varchar(20)
+            [Null] => YES
+            [Key] => 
+            [Default] => 
+            [Extra] => 
+        )
+
+    [2] => Array
+        (
+            [Field] => mpesa_receipt_number
+            [Type] => varchar(50)
+            [Null] => YES
+            [Key] => 
+            [Default] => 
+            [Extra] => 
+        )
+
+    [3] => Array
+        (
+            [Field] => phone_number
+            [Type] => varchar(15)
+            [Null] => YES
+            [Key] => 
+            [Default] => 
+            [Extra] => 
+        )
+
+    [4] => Array
+        (
+            [Field] => amount
+            [Type] => decimal(10,2)
+            [Null] => YES
+            [Key] => 
+            [Default] => 
+            [Extra] => 
+        )
+
+    [5] => Array
+        (
+            [Field] => transaction_date
+            [Type] => datetime
+            [Null] => YES
+            [Key] => 
+            [Default] => 
+            [Extra] => 
+        )
+
+    [6] => Array
+        (
+            [Field] => status
+            [Type] => varchar(20)
+            [Null] => YES
+            [Key] => 
+            [Default] => 
+            [Extra] => 
+        )
+
+    [7] => Array
+        (
+            [Field] => created_at
+            [Type] => timestamp
+            [Null] => NO
+            [Key] => 
+            [Default] => current_timestamp()
+            [Extra] => 
+        )
+
+)
+
+mpesa_response.txt tail:

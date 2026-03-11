@@ -1,0 +1,13 @@
+alter_transactions.php
+cleanup_transactions.php
+ensure_restricted.php
+fix_bay_mismatch.php
+fix_plate_numbers.php
+fk_transactions.php
+normalize_phone.php
+populate_parking_bays.php
+show_schema.php
+show_transactions.php
+test_http503.php
+test_mpesa.php
+truncate_parking_tables.php

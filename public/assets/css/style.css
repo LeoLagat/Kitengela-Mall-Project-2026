@@ -1,0 +1,540 @@
+/* Reset and Base Styles */
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap');
+
+body {
+    margin: 0;
+    font-family: 'Roboto', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: #f5f7fa;
+    color: darkslategray;
+    line-height: 1.6;
+}
+
+h1, h2, h3, h4, h5 {
+    color: #2d862d;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* larger headings on landing card */
+.card h2 { font-size: 38px; }
+.card h3 { font-size: 24px; margin-top: 20px; }
+.card p { font-size: 18px; line-height: 1.5; }
+
+/* Navigation - refined, flatter look */
+nav {
+    background: linear-gradient(90deg, #0a5a0a 0%, #074e07 100%);
+    padding: 0.8rem 5%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 3px 12px rgba(0,0,0,0.2);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}
+
+nav .logo {
+    color: white;
+    font-size: 26px;
+    font-weight: 700;
+    letter-spacing: 2px;
+}
+
+/* Bay boxes for basement display */
+.bay-boxes {
+    display: flex;
+    gap: 32px;
+    justify-content: center;
+    margin-top: 32px;
+}
+.bay-box {
+    background: #fff;
+    border-radius: 16px;
+    box-shadow: 0 2px 8px rgba(44,130,44,0.08);
+    padding: 24px 36px;
+    min-width: 220px;
+    text-align: center;
+    border: 1.5px solid #e0e0e0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+.bay-title {
+    color: #2d862d;
+    font-size: 22px;
+    font-weight: 700;
+    margin-bottom: 12px;
+}
+.bay-count {
+    font-size: 32px;
+    font-weight: 700;
+    color: #34495e;
+}
+.bay-label {
+    font-size: 16px;
+    color: #219a21;
+    font-weight: 500;
+    margin-left: 8px;
+}
+.bay-number {
+    font-size: 38px;
+    font-weight: 900;
+    color: #219a21;
+    margin-right: 8px;
+    display: inline-block;
+    letter-spacing: 2px;
+}
+.bay-boxes {
+    display: flex;
+    flex-direction: row;
+    gap: 32px;
+    justify-content: center;
+    margin-top: 32px;
+    flex-wrap: wrap;
+}
+@media (max-width: 900px) {
+    .bay-boxes {
+        flex-direction: column;
+        gap: 18px;
+        align-items: center;
+    }
+}
+/* Admin Panel Improvements */
+.admin-panel {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 32px;
+}
+.admin-header {
+    font-size: 32px;
+    font-weight: 700;
+    color: #2d862d;
+    margin-bottom: 24px;
+}
+.admin-nav {
+    display: flex;
+    gap: 24px;
+    margin-bottom: 24px;
+}
+.admin-nav a {
+    color: #fff;
+    background: #2d862d;
+    padding: 8px 18px;
+    border-radius: 6px;
+    font-weight: 600;
+    text-decoration: none;
+    transition: background 0.2s;
+}
+.admin-nav a:hover {
+    background: #219a21;
+}
+.admin-content {
+    width: 100%;
+    max-width: 1100px;
+    margin: 0 auto;
+    background: #fff;
+    border-radius: 16px;
+    box-shadow: 0 2px 8px rgba(44,130,44,0.08);
+    padding: 32px;
+}
+
+/* Responsive bay-boxes for mobile */
+@media (max-width: 700px) {
+    .bay-boxes {
+        flex-direction: column;
+        gap: 18px;
+        align-items: center;
+    }
+    .bay-box {
+        min-width: 90vw;
+        max-width: 98vw;
+        padding: 18px 8px;
+    }
+}
+
+/* Card container improvements */
+.container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 70vh;
+}
+.card {
+    background: #fff;
+    border-radius: 24px;
+    box-shadow: 0 8px 32px rgba(44, 130, 44, 0.12), 0 1.5px 6px rgba(0,0,0,0.08);
+    padding: 48px 36px 36px 36px;
+    max-width: 600px;
+    margin: 40px auto;
+    text-align: center;
+    border-top: 8px solid #2d862d;
+}
+
+/* Floor blocks styling */
+.floors {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    margin-top: 32px;
+}
+.floor-block {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background: #f7fff7;
+    border-radius: 16px;
+    box-shadow: 0 2px 8px rgba(44,130,44,0.08);
+    padding: 18px 0 12px 0;
+    width: 100%;
+    max-width: 420px;
+    margin: 0 auto;
+}
+.floor-title {
+    font-size: 22px;
+    font-weight: 600;
+    color: #2d862d;
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+.floor-icon {
+    font-size: 28px;
+    color: #0a5a0a;
+    filter: drop-shadow(0 2px 2px #b6e2b6);
+}
+.floor-label {
+    font-size: 22px;
+    font-weight: 500;
+}
+.floor-count {
+    font-size: 32px;
+    font-weight: 700;
+    color: #219a21;
+    margin-top: 6px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+.floor-count.available {
+    color: #219a21;
+}
+.floor-count.unavailable {
+    color: #c0392b;
+    font-size: 24px;
+}
+.count-number {
+    font-size: 38px;
+    font-weight: 900;
+    color: #219a21;
+    margin-right: 8px;
+}
+.count-label {
+    font-size: 18px;
+    font-weight: 500;
+    color: #2d862d;
+}
+.floor-count i {
+    font-size: 32px;
+    color: #0a5a0a;
+    margin-right: 8px;
+}
+
+footer {
+    margin-top: 48px;
+    text-align: center;
+    color: #2d862d;
+    font-size: 18px;
+    font-weight: 500;
+    letter-spacing: 1px;
+}
+
+nav .links a {
+    color: white;
+    text-decoration: none;
+    margin-left: 30px;
+    font-weight: 600;
+    padding: 6px 10px;
+    border-radius: 4px;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+nav .links a:hover {
+    background: rgba(255,255,255,0.1);
+    color: #fff;
+}
+
+/* active page indicator */
+nav .links a.active {
+    background: white;
+    color: darkgreen;
+    font-weight: 700;
+}
+
+/* Main Container and wrapper */
+.container,
+.page {
+    width: 95%;
+    max-width: 1000px;
+    margin: 80px auto 100px auto;
+}
+
+/* make cards more prominent with gradient and shadow */
+.card {
+    background: white;
+    padding: 40px;
+    border-radius: 15px;
+    box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+    text-align: center;
+    border-top: 8px solid #2d862d;
+    transition: transform 0.3s;
+}
+.card:hover { transform: translateY(-3px); }
+
+.card h2 {
+    color: #2d862d;
+    font-size: 36px;
+    margin-bottom: 25px;
+}
+
+/* floor blocks on index page */
+.floor-block {
+    background: linear-gradient(135deg, royalblue, #4169e1);
+    color: white;
+    padding: 40px 30px;
+    width: 360px;            /* larger block for distance readability */
+    border-radius: 16px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+    transition: transform 0.2s, box-shadow 0.2s;
+    text-align: center;
+}
+.floor-block:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 14px 28px rgba(0,0,0,0.25);
+}
+.floor-title { font-size: 2.2em; margin-bottom: 12px; font-weight:700; display:inline-flex; align-items:center; justify-content:center; }
+.floor-icon { margin-right: 10px; font-size:1.8em; }
+.floor-count { font-size: 3.6em; font-weight:800; text-transform: uppercase; }
+
+/* Card Styling - The "Entry/Exit" Box */
+.card {
+    background-color: white;
+    padding: 40px;
+    border-radius: 15px;
+    box-shadow: 0 10px 30px silver;
+    text-align: center;
+    border-top: 8px solid darkgreen; /* Adds a professional accent line */
+}
+
+.card h1 {
+    color: darkgreen;
+    font-size: 28px;
+    margin-bottom: 30px;
+    text-transform: uppercase;
+}
+
+/* Form Elements */
+input[type="text"], input[type="password"], input[type="tel"] {
+    width: 100%;
+    padding: 14px 18px;
+    margin-bottom: 20px;
+    border-radius: 8px;
+    border: 2px solid lightgray;
+    font-size: 16px;
+    font-weight: 500;
+    text-align: center;
+    text-transform: uppercase;
+    box-sizing: border-box;
+    transition: border-color 0.3s, box-shadow 0.3s;
+}
+input[type="text"]:focus,
+input[type="password"]:focus,
+input[type="tel"]:focus {
+    outline: none;
+    border-color: #2d862d;
+    box-shadow: 0 0 5px rgba(45,134,45,0.5);
+}
+
+input[type="text"]:focus {
+    outline: none;
+    border-color: darkgreen;
+    background-color: seashell;
+}
+
+/* Button - The "Action" Element */
+button {
+    width: 100%;
+    padding: 14px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 17px;
+    transition: background-color 0.3s, transform 0.2s;
+    box-shadow: 0 4px 0 #0056b3;
+}
+
+button:hover {
+    background-color: #0069d9;
+    transform: translateY(-2px);
+}
+
+button:active {
+    transform: translateY(2px);
+    box-shadow: 0 2px 0 #0056b3;
+}
+
+button:hover {
+    background-color: gold;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 0 darkgoldenrod;
+}
+
+button:active {
+    transform: translateY(2px);
+    box-shadow: 0 2px 0 darkgoldenrod;
+}
+
+/* Success/Error States */
+.success { background-color: honeydew; color: darkgreen; padding: 15px; border-radius: 8px; margin-bottom: 20px; border: 1px solid green; }
+.error { background-color: mistyrose; color: darkred; padding: 15px; border-radius: 8px; margin-bottom: 20px; border: 1px solid red; }
+
+/* Utility & special components */
+.welcome-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: darkgreen;
+    display: none;
+    /* column direction simplifies vertical centering of inner box */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+    text-align: center;
+    color: white;
+    animation: fadeIn 0.5s ease-in-out;
+}
+
+.welcome-box {
+    padding: 50px;
+    border: 5px solid white;
+    border-radius: 20px;
+    background: rgba(0, 0, 0, 0.1);
+    margin: 0 auto;           /* center horizontally within overlay */
+    text-align: center;       /* ensure text inside is centered */
+    max-width: 90vw;          /* prevent overflow on narrow screens */
+}
+
+.welcome-box h1 { font-size: 80px; margin: 0; letter-spacing: 5px; }
+.welcome-box p { font-size: 24px; margin-top: 10px; font-weight: 300; }
+
+.dots::after {
+    content: ' .';
+    animation: dots 1.5s steps(5, end) infinite;
+}
+
+/* page footer */
+footer {
+    text-align: center;
+    padding: 20px 0;
+    background: #0a5a0a;
+    color: white;
+    font-size: 14px;
+    position: relative;
+    bottom: 0;
+    width: 100%;
+}
+
+.back-home {
+    text-decoration: none;
+    color: white;
+    border: 1px solid white;
+    padding: 6px 15px;
+    border-radius: 6px;
+    font-size: 14px;
+    transition: 0.3s;
+}
+.back-home:hover { background: white; color: darkgreen; }
+
+@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+@keyframes dots {
+    0%, 20% { content: ' .'; }
+    40% { content: ' ..'; }
+    60% { content: ' ...'; }
+    80%, 100% { content: ''; }
+}
+
+/* Admin/Report tables */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+    font-size: 16px;
+}
+table th, table td {
+    border: 1px solid lightgray;
+    padding: 12px 15px;
+    text-align: left;
+    min-width: 140px;        /* prevent columns from collapsing together */
+    white-space: nowrap;
+}
+table th {
+    background-color: whitesmoke;
+    color: darkslategray;
+    text-transform: uppercase;
+    font-weight: 600;
+}
+table tbody tr:nth-child(even) {
+    background: snow;
+}
+table tbody tr:hover {
+    background: aliceblue;
+}
+
+/* Dashboard summary boxes */
+.dashboard-container { display: flex; gap: 20px; flex-wrap: wrap; justify-content: center; }
+.dashboard-box { flex: 1 1 200px; background: white; border: 1px solid lightgray; padding: 20px; border-radius: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.05); }
+.dashboard-box h3 { margin-top:0; color: darkgreen; }
+.dashboard-box p { font-size: 24px; margin: 0; }
+
+/* Input used on payment page */
+.phone-input {
+    width: 100%;
+    padding: 15px;
+    margin-bottom: 20px;
+    border: 2px solid lightgray;
+    border-radius: 10px;
+    font-size: 18px;
+    box-sizing: border-box;
+    text-align: center;
+    transition: border-color 0.3s;
+}
+.phone-input:focus {
+    border-color: darkgreen;
+    outline: none;
+}
+
+.btn-pay {
+    background-color: mediumseagreen;
+    color: white;
+}
+.btn-pay:hover {
+    background-color: seagreen;
+}
+
+/* Footer */
+footer {
+    background-color: darkgreen;
+    color: white;
+    text-align: center;
+    padding: 20px;
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+}
