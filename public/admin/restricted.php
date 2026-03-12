@@ -66,8 +66,11 @@ try {
         <a href="staff.php">Staff Parking</a>
         <a href="owners.php">Owner Vehicles</a>
         <a href="restricted.php" class="active">Restricted List</a>
+<?php if (!empty($_SESSION['admin_role']) && $_SESSION['admin_role'] === 'super_admin'): ?>
         <a href="add_user.php">Add User</a>
         <a href="activity.php">Activity Log</a>
+        <a href="subadmin_activity.php">Sub-admin Logs</a>
+<?php endif; ?>
         <a href="logout.php" style="color:#f00;">Logout</a>
     </div>
 </nav>

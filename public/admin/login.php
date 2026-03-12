@@ -25,6 +25,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $_SESSION['admin_logged_in'] = true;
         $_SESSION['admin_id']       = $admin['id'];
         $_SESSION['admin_username'] = $admin['username'];
+        $_SESSION['admin_role']     = $admin['role'];
 
         require_once(__DIR__ . '/../../backend/app/services/AdminAudit.php');
         AdminAudit::log($pdo, $admin['username'], 'login');

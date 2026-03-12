@@ -1,6 +1,8 @@
 <?php
 session_start();
-if (!isset($_SESSION['admin_logged_in']) || $_SESSION['admin_logged_in'] !== true) {
+// only super_admin can access
+if (!isset($_SESSION['admin_logged_in']) || $_SESSION['admin_logged_in'] !== true ||
+    empty($_SESSION['admin_role']) || $_SESSION['admin_role'] !== 'super_admin') {
     header('Location: login.php');
     exit;
 }
@@ -16,23 +18,28 @@ if (!empty($_SESSION['admin_username'])) {
 }
 
 $message = '';
+// only super_admins may add other users
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $uname = strtolower(trim($_POST['username'] ?? ''));
-    $pwd = $_POST['password'] ?? '';
-    if ($uname && $pwd) {
-        // insert new administrator, avoid duplicates
-        $stmt = $pdo->prepare("SELECT id FROM administrators WHERE LOWER(username)=?");
-        $stmt->execute([$uname]);
-        if ($stmt->fetch()) {
-            $message = "A user with that username already exists.";
-        } else {
-            $hash = password_hash($pwd, PASSWORD_DEFAULT);
-        $stmt2 = $pdo->prepare("INSERT INTO administrators (username, password) VALUES (?, ?)");
-        $stmt2->execute([$uname, $hash]);
-        $message = "User '$uname' added successfully.";
-        }
+    if ($_SESSION['admin_role'] !== 'super_admin') {
+        $message = "Only the main admin can create new users.";
     } else {
-        $message = "Please provide both username and password.";
+        $uname = strtolower(trim($_POST['username'] ?? ''));
+        $pwd = $_POST['password'] ?? '';
+        if ($uname && $pwd) {
+            // insert new administrator, avoid duplicates
+            $stmt = $pdo->prepare("SELECT id FROM administrators WHERE LOWER(username)=?");
+            $stmt->execute([$uname]);
+            if ($stmt->fetch()) {
+                $message = "A user with that username already exists.";
+            } else {
+                $hash = password_hash($pwd, PASSWORD_DEFAULT);
+                $stmt2 = $pdo->prepare("INSERT INTO administrators (username, password, role) VALUES (?, ?, 'admin')");
+                $stmt2->execute([$uname, $hash]);
+                $message = "Sub‑admin '$uname' added successfully.";
+            }
+        } else {
+            $message = "Please provide both username and password.";
+        }
     }
 }
 ?>
@@ -54,7 +61,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <nav>
     <a href="dashboard.php">Dashboard</a> |
     <a href="restricted.php">Restricted List</a> |
+<?php if (!empty($_SESSION['admin_role']) && $_SESSION['admin_role'] === 'super_admin'): ?>
     <a href="activity.php">Activity Log</a> |
+    <a href="subadmin_activity.php">Sub-admin Logs</a> |
+<?php endif; ?>
     <a href="logout.php">Logout</a>
 </nav>
 

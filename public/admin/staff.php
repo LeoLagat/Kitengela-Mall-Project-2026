@@ -45,8 +45,11 @@ $staff = $stmt->fetchAll(PDO::FETCH_ASSOC);
     <div class="links">
         <a href="dashboard.php">Dashboard</a>
         <a href="restricted.php">Restricted List</a>
+<?php if (!empty($_SESSION['admin_role']) && $_SESSION['admin_role'] === 'super_admin'): ?>
         <a href="add_user.php">Add User</a>
         <a href="activity.php">Activity Log</a>
+        <a href="subadmin_activity.php">Sub-admin Logs</a>
+<?php endif; ?>
         <a href="logout.php" style="color:#f00;">Logout</a>
     </div>
 </nav>

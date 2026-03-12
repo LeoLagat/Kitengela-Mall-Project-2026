@@ -124,6 +124,16 @@ You can change these in `docker-compose.yml` or use a `.env` file.
   A convenient interface for viewing the audit log has been added at
   `admin/activity.php` – the admin menu now includes an “Activity Log” link
   where management can see timestamps, usernames, actions, and IP addresses.
+
+  **Roles:** the `administrators` table now has a `role` column (`super_admin` or `admin`).
+  Only one `super_admin` (the main owner, typically username `ADMIN`) may add new users. When the super_admin creates another account it is automatically given the `admin` role (sub-admin).
+  Sub-admins cannot add users, cannot see the full activity log, and cannot access the
+  `activity.php` or `subadmin_activity.php` pages; those menu items appear only for the super_admin.
+  The super_admin may filter/download sub-admin activity via `subadmin_activity.php`.
+
+  A new page `admin/subadmin_activity.php` allows the super‑admin to filter and
+  download activity records belonging to sub‑admins only (linked from the menu
+  when logged in as the super‑admin).
 - **Owners** (`admin/owners.php`): Add business owners, manage their invoicing and parking status.
 - **Staff** (`admin/staff.php`): Add and manage staff vehicles (free parking).
 - **Restricted** (`admin/restricted.php`): Ban or unban vehicles.

@@ -1,6 +1,8 @@
 <?php
 session_start();
-if (!isset($_SESSION['admin_logged_in']) || $_SESSION['admin_logged_in'] !== true) {
+// require login and super_admin only
+if (!isset($_SESSION['admin_logged_in']) || $_SESSION['admin_logged_in'] !== true ||
+    empty($_SESSION['admin_role']) || $_SESSION['admin_role'] !== 'super_admin') {
     header('Location: login.php');
     exit;
 }
@@ -38,6 +40,7 @@ $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
     <div class="links">
         <a href="dashboard.php">Dashboard</a>
         <a href="activity.php">Activity Log</a>
+        <a href="subadmin_activity.php">Sub-admin Logs</a>
         <a href="logout.php" style="color:#ffdddd;">Logout</a>
     </div>
 </nav>
