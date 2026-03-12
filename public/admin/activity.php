@@ -1,8 +1,7 @@
 <?php
 session_start();
-// require login and super_admin only
-if (!isset($_SESSION['admin_logged_in']) || $_SESSION['admin_logged_in'] !== true ||
-    empty($_SESSION['admin_role']) || $_SESSION['admin_role'] !== 'super_admin') {
+// require login (both super and sub admins may view own activity)
+if (!isset($_SESSION['admin_logged_in']) || $_SESSION['admin_logged_in'] !== true) {
     header('Location: login.php');
     exit;
 }
@@ -15,13 +14,65 @@ if (!empty($_SESSION['admin_username'])) {
     AdminAudit::log($pdo, $_SESSION['admin_username'], 'visited activity log');
 }
 
-// ensure table exists (AdminAudit will create or migrate as needed) then read
-$stmt = $pdo->query(
-    "SELECT created_at, username, action, ip_address
-     FROM admin_activity
-     ORDER BY created_at DESC
-     LIMIT 500"
-);
+// ensure table exists (AdminAudit will create or migrate as needed)
+// optionally handle clearing all logs if super_admin requested
+if (!empty($_SESSION['admin_role']) && $_SESSION['admin_role'] === 'super_admin' && isset($_POST['clear'])) {
+    $pdo->exec("TRUNCATE TABLE admin_activity");
+}
+
+// export CSV if requested via GET (dashboard form)
+if (isset($_GET['from']) && isset($_GET['to'])) {
+    $from = $_GET['from'];
+    $to = $_GET['to'];
+    // validate
+    if (!preg_match('/^\d{4}-\d{2}-\d{2}$/', $from) || !preg_match('/^\d{4}-\d{2}-\d{2}$/', $to)) {
+        die('Invalid date format');
+    }
+    // prepare statement depending on role
+    if (!empty($_SESSION['admin_role']) && $_SESSION['admin_role'] === 'super_admin') {
+        $stmtExport = $pdo->prepare(
+            "SELECT created_at, username, action, ip_address
+             FROM admin_activity
+             WHERE created_at BETWEEN ? AND ?");
+        $stmtExport->execute(["$from 00:00:00", "$to 23:59:59"]);
+    } else {
+        $stmtExport = $pdo->prepare(
+            "SELECT created_at, username, action, ip_address
+             FROM admin_activity
+             WHERE username = ?
+               AND created_at BETWEEN ? AND ?");
+        $stmtExport->execute([$_SESSION['admin_username'], "$from 00:00:00", "$to 23:59:59"]);
+    }
+    $rowsExport = $stmtExport->fetchAll(PDO::FETCH_ASSOC);
+    header('Content-Type: text/csv');
+    header('Content-Disposition: attachment;filename=activity_' . $from . '_to_' . $to . '.csv');
+    $out = fopen('php://output', 'w');
+    fputcsv($out, ['Time','Username','Action','IP']);
+    foreach ($rowsExport as $r) {
+        fputcsv($out, [$r['created_at'],$r['username'],$r['action'],$r['ip_address']]);
+    }
+    fclose($out);
+    exit;
+}
+
+// build query depending on role
+if (!empty($_SESSION['admin_role']) && $_SESSION['admin_role'] === 'super_admin') {
+    $stmt = $pdo->query(
+        "SELECT created_at, username, action, ip_address
+         FROM admin_activity
+         ORDER BY created_at DESC
+         LIMIT 500"
+    );
+} else {
+    $stmt = $pdo->prepare(
+        "SELECT created_at, username, action, ip_address
+         FROM admin_activity
+         WHERE username = ?
+         ORDER BY created_at DESC
+         LIMIT 500"
+    );
+    $stmt->execute([$_SESSION['admin_username']]);
+}
 $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 // simple UI
@@ -32,7 +83,19 @@ $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
     <meta charset="utf-8">
     <title>Admin Activity Log</title>
     <link rel="stylesheet" href="../assets/css/style.css">
-    <style>table{width:100%;border-collapse:collapse;}th,td{padding:8px;border:1px solid #ccc;text-align:left;}th{background:#f4f4f4;}</style>
+    <style>
+        .container {
+            display: block;
+            min-height: 0;
+            width: 95%;
+            max-width: 1000px;
+            margin: 20px auto 40px;
+        }
+        h2 { margin: 0 0 14px; }
+        table { width:100%; border-collapse:collapse; }
+        th, td { padding:8px; border:1px solid #ccc; text-align:left; }
+        th { background:#f4f4f4; }
+    </style>
 </head>
 <body>
 <nav>
@@ -47,7 +110,7 @@ $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 <div class="container" style="margin-top:20px;">
     <h2>Administrator Activity</h2>
-    <p>Listing most recent 500 actions. Contains logins, page visits, downloads, etc.</p>
+
     <table>
         <thead><tr><th>Time</th><th>Admin</th><th>Action</th><th>IP</th></tr></thead>
         <tbody>
@@ -61,6 +124,18 @@ $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
         <?php endforeach; ?>
         </tbody>
     </table>
+    <div style="display:flex;align-items:center;gap:10px;margin-top:14px;padding:10px 14px;background:#f8f9fa;border-left:4px solid #6c757d;border-radius:4px;">
+        <span style="font-size:18px;line-height:1;">&#128274;</span>
+        <span style="font-size:13px;color:#555;">
+            <strong style="color:#343a40;">Auto-purge enabled</strong> &mdash;
+            only the <strong>500 most recent</strong> entries are kept. Older records are removed automatically.
+        </span>
+    </div>
+    <?php if (!empty($_SESSION['admin_role']) && $_SESSION['admin_role'] === 'super_admin'): ?>
+        <form method="post" onsubmit="return confirm('Delete all activity logs?');" style="margin-top:10px;">
+            <button type="submit" name="clear" style="background:#dc3545;color:#fff;border:none;padding:8px 14px;border-radius:4px;cursor:pointer;">Clear Activity Log</button>
+        </form>
+    <?php endif; ?>
 </div>
 </body>
 </html>

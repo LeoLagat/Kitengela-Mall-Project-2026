@@ -10,7 +10,16 @@ if (!isset($_SESSION['admin_logged_in']) || $_SESSION['admin_logged_in'] !== tru
 require_once(__DIR__ . '/../../backend/app/config/database.php');
 $db = new DatabaseConnection();
 $pdo = $db->pdo;
-
+// handle clear logs
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['clear_logs'])) {
+    $pdo->exec("
+        DELETE a FROM admin_activity a
+        JOIN administrators ad ON ad.username = a.username
+        WHERE ad.role = 'admin'
+    ");
+    header('Location: subadmin_activity.php?cleared=1');
+    exit;
+}
 // allow filtering by date range
 $from = $_GET['from'] ?? null;
 $to = $_GET['to'] ?? null;
@@ -51,7 +60,19 @@ if ($from && $to && isset($_GET['download'])) {
     <meta charset="utf-8">
     <title>Sub‑admin Activity</title>
     <link rel="stylesheet" href="../assets/css/style.css">
-    <style>table{width:100%;border-collapse:collapse;}th,td{padding:8px;border:1px solid #ccc;text-align:left;}th{background:#f4f4f4;}</style>
+    <style>
+        .container {
+            display: block;
+            min-height: 0;
+            width: 95%;
+            max-width: 1000px;
+            margin: 20px auto 40px;
+        }
+        h2 { margin: 0 0 14px; }
+        table { width:100%; border-collapse:collapse; }
+        th, td { padding:8px; border:1px solid #ccc; text-align:left; }
+        th { background:#f4f4f4; }
+    </style>
 </head>
 <body>
 <nav>
@@ -63,17 +84,34 @@ if ($from && $to && isset($_GET['download'])) {
         <a href="logout.php" style="color:#ffdddd;">Logout</a>
     </div>
 </nav>
-
 <div class="container" style="margin-top:20px;">
     <h2>Sub‑administrator Activity</h2>
-    <form method="get" style="margin-bottom:15px;">
-        <label>From <input type="date" name="from" value="<?=htmlspecialchars($from)?>" required></label>
-        <label>To <input type="date" name="to" value="<?=htmlspecialchars($to)?>" required></label>
-        <button type="submit">Filter</button>
-        <?php if ($from && $to): ?>
-            <button name="download" value="1" style="margin-left:10px;">Download CSV</button>
-        <?php endif; ?>
-    </form>
+
+    <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;margin-bottom:15px;">
+        <form method="get" style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;">
+            <label style="display:flex;align-items:center;gap:5px;">From <input type="date" name="from" value="<?=htmlspecialchars($from ?? '')?>" required></label>
+            <label style="display:flex;align-items:center;gap:5px;">To <input type="date" name="to" value="<?=htmlspecialchars($to ?? '')?>" required></label>
+            <button type="submit">Filter</button>
+            <?php if ($from && $to): ?>
+                <button name="download" value="1">Download CSV</button>
+            <?php endif; ?>
+        </form>
+
+        <form method="post" onsubmit="return confirm('Are you sure you want to permanently clear ALL sub-admin activity logs? This cannot be undone.');">
+            <button type="submit" name="clear_logs" value="1"
+                style="background:#dc3545;color:#fff;border:none;padding:8px 14px;border-radius:4px;cursor:pointer;">
+                Clear All Logs
+            </button>
+        </form>
+    </div>
+
+     <?php if (isset($_GET['cleared'])): ?>
+        <div style="margin-bottom:12px;padding:10px;background:#d4edda;color:#155724;border:1px solid #c3e6cb;border-radius:4px;">
+            Sub-admin activity logs have been cleared successfully.
+        </div>
+    <?php endif; ?>
+
+    
     <table>
         <thead><tr><th>Time</th><th>User</th><th>Action</th><th>IP</th></tr></thead>
         <tbody>
@@ -87,6 +125,13 @@ if ($from && $to && isset($_GET['download'])) {
         <?php endforeach; ?>
         </tbody>
     </table>
+     <div style="display:flex;align-items:center;gap:10px;margin-top:14px;padding:10px 14px;background:#f8f9fa;border-left:4px solid #6c757d;border-radius:4px;">
+        <span style="font-size:18px;line-height:1;">&#128274;</span>
+        <span style="font-size:13px;color:#555;">
+            <strong style="color:#343a40;">Auto-purge enabled</strong> &mdash;
+            only the <strong>500 most recent</strong> entries are kept. Older records are removed automatically.
+        </span>
+    </div>
 </div>
 </body>
 </html>

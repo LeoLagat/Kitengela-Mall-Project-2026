@@ -55,6 +55,22 @@ class AdminAudit {
                 ':act'   => $action,
                 ':ip'    => $ip
             ]);
+
+            // trim table to most recent 500 entries globally
+            try {
+                $pdo->exec(
+                    "DELETE FROM admin_activity
+                     WHERE id NOT IN (
+                         SELECT id FROM (
+                             SELECT id FROM admin_activity
+                             ORDER BY created_at DESC
+                             LIMIT 500
+                         ) tmp
+                     )"
+                );
+            } catch (Exception $e) {
+                // safe to ignore cleanup failure
+            }
         } catch (Exception $e) {
             // if logging fails we intentionally do not block the user
             error_log("Audit log failure: " . $e->getMessage());

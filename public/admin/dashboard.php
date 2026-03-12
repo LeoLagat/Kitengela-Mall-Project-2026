@@ -250,6 +250,19 @@ if (isset($_GET['from']) && isset($_GET['to'])) {
     </form>
 </div>
 
+<?php if (!empty($_SESSION['admin_role']) && $_SESSION['admin_role'] === 'super_admin'): ?>
+<div class="dashboard-box">
+    <h3>Activity Log</h3>
+    <form method="get" action="activity.php">
+        <div style="display:flex;gap:8px;justify-content:center;flex-wrap:wrap;">
+            <label>From <input type="date" name="from" required></label>
+            <label>To <input type="date" name="to" required></label>
+            <button type="submit" style="padding:6px 12px;">Download</button>
+        </div>
+    </form>
+</div>
+<?php endif; ?>
+
 </div>
 
 

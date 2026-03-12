@@ -124,6 +124,11 @@ You can change these in `docker-compose.yml` or use a `.env` file.
   A convenient interface for viewing the audit log has been added at
   `admin/activity.php` – the admin menu now includes an “Activity Log” link
   where management can see timestamps, usernames, actions, and IP addresses.
+  Only the latest 500 entries are kept; older records are automatically purged
+  to prevent unbounded growth.
+
+  On the dashboard a super‑admin can now pick a date range and download the
+  full activity log (works like the revenue report).
 
   **Roles:** the `administrators` table now has a `role` column (`super_admin` or `admin`).
   Only one `super_admin` (the main owner, typically username `ADMIN`) may add new users. When the super_admin creates another account it is automatically given the `admin` role (sub-admin).
