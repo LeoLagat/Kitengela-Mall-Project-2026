@@ -9,6 +9,12 @@ require_once(__DIR__ . '/../../backend/app/config/database.php');
 $db = new DatabaseConnection();
 $pdo = $db->pdo;
 
+// audit this page visit
+require_once(__DIR__ . '/../../backend/app/services/AdminAudit.php');
+if (isset($_SESSION['admin_id'])) {
+    AdminAudit::log($pdo, $_SESSION['admin_id'], 'visited staff page');
+}
+
 // handle form submission
 $message = '';
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && !empty($_POST['plate'])) {
@@ -40,6 +46,7 @@ $staff = $stmt->fetchAll(PDO::FETCH_ASSOC);
         <a href="dashboard.php">Dashboard</a>
         <a href="restricted.php">Restricted List</a>
         <a href="add_user.php">Add User</a>
+        <a href="activity.php">Activity Log</a>
         <a href="logout.php" style="color:#f00;">Logout</a>
     </div>
 </nav>

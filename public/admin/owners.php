@@ -12,6 +12,11 @@ require_once(__DIR__ . '/../../backend/app/config/database.php');
 $db = new DatabaseConnection();
 $pdo = $db->pdo;
 
+require_once(__DIR__ . '/../../backend/app/services/AdminAudit.php');
+if (isset($_SESSION['admin_id'])) {
+    AdminAudit::log($pdo, $_SESSION['admin_id'], 'visited owners page');
+}
+
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && !empty($_POST['plate'])) {
     $plate = strtoupper(trim($_POST['plate']));
@@ -103,6 +108,7 @@ foreach ($plates as $plate) {
         <a href="restricted.php">Restricted List</a>
         <a href="staff.php">Staff Parking</a>
         <a href="add_user.php">Add User</a>
+        <a href="activity.php">Activity Log</a>
         <a href="logout.php" style="color:#f00;">Logout</a>
     </div>
 </nav>

@@ -7,32 +7,19 @@ if (!isset($_SESSION['admin_logged_in']) || $_SESSION['admin_logged_in'] !== tru
     exit;
 }
 
-// Centralized DB connection
-class DatabaseConnection {
-    private $host = "localhost";
-    private $user = "root";
-    private $pass = "";
-    private $dbname = "kitengela_mall_db";
-    public $pdo;
-
-    public function __construct() {
-        try {
-            $this->pdo = new PDO(
-                "mysql:host=$this->host;dbname=$this->dbname;charset=utf8mb4",
-                $this->user,
-                $this->pass,
-                [PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION]
-            );
-        } catch (PDOException $e) {
-            die("Critical: System connection failed.");
-        }
-    }
-}
+// use central database connection class
+require_once(__DIR__ . '/../../backend/app/config/database.php');
 
 require_once(__DIR__ . '/../../backend/app/models/Vehicle.php');
+require_once(__DIR__ . '/../../backend/app/services/AdminAudit.php');
 
 $db = new DatabaseConnection();
 $pdo = $db->pdo;
+
+// record that the current administrator accessed the dashboard
+if (isset($_SESSION['admin_id'])) {
+    AdminAudit::log($pdo, $_SESSION['admin_id'], 'viewed dashboard');
+}
 
 $vehicle = new Vehicle($pdo);
 
@@ -207,6 +194,16 @@ footer{
 
 
 <div class="container">
+<?php
+// show message when download page gets GET parameters
+if (isset($_GET['from']) && isset($_GET['to'])) {
+    // redirect to revenue_report to keep dashboard clean
+    $from = htmlspecialchars($_GET['from']);
+    $to   = htmlspecialchars($_GET['to']);
+    header("Location: revenue_report.php?from=$from&to=$to");
+    exit;
+}
+?>
 
 <h2>Parking Overview</h2>
 
@@ -235,6 +232,18 @@ footer{
 <div class="dashboard-box">
 <h3>Total Revenue</h3>
 <p>Ksh <?= number_format($totalRevenue,2) ?></p>
+</div>
+
+<!-- revenue report form -->
+<div class="dashboard-box">
+    <h3>Revenue Report</h3>
+    <form method="get" action="revenue_report.php">
+        <div style="display:flex;gap:8px;justify-content:center;flex-wrap:wrap;">
+            <label>From <input type="date" name="from" required></label>
+            <label>To <input type="date" name="to" required></label>
+            <button type="submit" style="padding:6px 12px;">Download</button>
+        </div>
+    </form>
 </div>
 
 </div>

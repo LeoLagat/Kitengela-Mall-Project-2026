@@ -1,6 +1,7 @@
 <?php
 // Centralized DB connection for Kitengela Mall
 // ensures PDO and timezone consistency
+if (!class_exists('DatabaseConnection')) {
 class DatabaseConnection {
     private $host = "localhost";
     private $user = "root";
@@ -138,4 +139,5 @@ class DatabaseConnection {
         }
     }
 }
+} // end class_exists guard
 ?>

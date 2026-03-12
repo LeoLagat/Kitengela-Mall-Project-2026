@@ -9,6 +9,11 @@ require_once(__DIR__ . '/../../backend/app/config/database.php');
 $db = new DatabaseConnection();
 $pdo = $db->pdo;
 
+require_once(__DIR__ . '/../../backend/app/services/AdminAudit.php');
+if (isset($_SESSION['admin_id'])) {
+    AdminAudit::log($pdo, $_SESSION['admin_id'], 'visited restricted page');
+}
+
 // make sure migration has run for restricted list (in case db.php was not loaded earlier)
 try {
     $pdo->exec("CREATE TABLE IF NOT EXISTS restricted_vehicles (\
@@ -62,6 +67,7 @@ try {
         <a href="owners.php">Owner Vehicles</a>
         <a href="restricted.php" class="active">Restricted List</a>
         <a href="add_user.php">Add User</a>
+        <a href="activity.php">Activity Log</a>
         <a href="logout.php" style="color:#f00;">Logout</a>
     </div>
 </nav>

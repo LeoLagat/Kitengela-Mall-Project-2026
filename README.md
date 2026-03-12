@@ -57,7 +57,7 @@ You can change these in `docker-compose.yml` or use a `.env` file.
 
 ### public/admin/
 
-- **dashboard.php**: Admin dashboard with system stats (vehicles inside, revenue, etc.).
+- **dashboard.php**: Admin dashboard with system stats (vehicles inside, revenue, etc.). Added a date-range form for downloading revenue reports as CSV.
 - **login.php**: Admin login page.
 - **logout.php**: Logs out the admin.
 - **owners.php**: Manage business owner vehicles, add owners, view status, and invoice info.
@@ -102,7 +102,27 @@ You can change these in `docker-compose.yml` or use a `.env` file.
 ### 1. Admin Panel
 
 - **Login** via `admin/login.php`.
-- **Dashboard** (`admin/dashboard.php`) shows stats: vehicles inside, revenue, etc.
+- **Dashboard** (`admin/dashboard.php`) shows stats: vehicles inside, revenue, etc.  There is also a link/form to generate and download a CSV report for a custom date range (opens `admin/revenue_report.php`).
+
+  The system now keeps an **audit trail** of administrator activity. Each successful login, page visit and revenue report download is recorded in a new
+  `admin_activity` table (created automatically). Management can inspect this table to see which admin accessed the system, when, and what actions they performed.
+
+  Example schema:
+  ```sql
+  CREATE TABLE admin_activity (
+      id INT AUTO_INCREMENT PRIMARY KEY,
+      admin_id INT NOT NULL,
+      action VARCHAR(255) NOT NULL,
+      ip_address VARCHAR(45),
+      created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+  );
+  ```
+
+  (the table is created on first use by `backend/app/services/AdminAudit.php`.)
+
+  A convenient interface for viewing the audit log has been added at
+  `admin/activity.php` – the admin menu now includes an “Activity Log” link
+  where management can see timestamps, usernames, actions, and IP addresses.
 - **Owners** (`admin/owners.php`): Add business owners, manage their invoicing and parking status.
 - **Staff** (`admin/staff.php`): Add and manage staff vehicles (free parking).
 - **Restricted** (`admin/restricted.php`): Ban or unban vehicles.

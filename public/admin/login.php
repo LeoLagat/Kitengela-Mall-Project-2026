@@ -21,7 +21,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $admin = $stmt->fetch(PDO::FETCH_ASSOC);
     // verify hashed password
     if ($admin && password_verify($pass, $admin['password'])) {
+        // successful login
         $_SESSION['admin_logged_in'] = true;
+        $_SESSION['admin_id']       = $admin['id'];
+        $_SESSION['admin_username'] = $admin['username'];
+
+        require_once(__DIR__ . '/../../backend/app/services/AdminAudit.php');
+        AdminAudit::log($pdo, $admin['id'], 'login');
+
         header('Location: dashboard.php');
         exit;
     } else {

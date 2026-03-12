@@ -9,6 +9,12 @@ require_once(__DIR__ . '/../../backend/app/config/database.php');
 $db = new DatabaseConnection();
 $pdo = $db->pdo;
 
+// log admin visiting the add-user page
+require_once(__DIR__ . '/../../backend/app/services/AdminAudit.php');
+if (isset($_SESSION['admin_id'])) {
+    AdminAudit::log($pdo, $_SESSION['admin_id'], 'visited add user page');
+}
+
 $message = '';
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $uname = strtolower(trim($_POST['username'] ?? ''));
@@ -48,6 +54,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <nav>
     <a href="dashboard.php">Dashboard</a> |
     <a href="restricted.php">Restricted List</a> |
+    <a href="activity.php">Activity Log</a> |
     <a href="logout.php">Logout</a>
 </nav>
 
