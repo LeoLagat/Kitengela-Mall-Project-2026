@@ -10,6 +10,12 @@ if (!isset($_SESSION['admin_logged_in']) || $_SESSION['admin_logged_in'] !== tru
 require_once(__DIR__ . '/../../backend/app/config/database.php');
 $db = new DatabaseConnection();
 $pdo = $db->pdo;
+
+require_once(__DIR__ . '/../../backend/app/services/AdminAudit.php');
+if (!empty($_SESSION['admin_username'])) {
+    AdminAudit::log($pdo, $_SESSION['admin_username'], 'visited sub-admin activity log');
+}
+
 // handle clear logs
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['clear_logs'])) {
     $pdo->exec("
@@ -70,8 +76,8 @@ if ($from && $to && isset($_GET['download'])) {
         }
         h2 { margin: 0 0 14px; }
         table { width:100%; border-collapse:collapse; }
-        th, td { padding:8px; border:1px solid #ccc; text-align:left; }
-        th { background:#f4f4f4; }
+        th, td { padding:8px; border:1px solid silver; text-align:left; }
+        th { background:whitesmoke; }
     </style>
 </head>
 <body>
@@ -81,7 +87,7 @@ if ($from && $to && isset($_GET['download'])) {
         <a href="dashboard.php">Dashboard</a>
         <a href="activity.php">Activity Log</a>
         <a href="subadmin_activity.php" class="active">Sub‑admin Logs</a>
-        <a href="logout.php" style="color:#ffdddd;">Logout</a>
+        <a href="logout.php" style="color:mistyrose;">Logout</a>
     </div>
 </nav>
 <div class="container" style="margin-top:20px;">
@@ -99,14 +105,14 @@ if ($from && $to && isset($_GET['download'])) {
 
         <form method="post" onsubmit="return confirm('Are you sure you want to permanently clear ALL sub-admin activity logs? This cannot be undone.');">
             <button type="submit" name="clear_logs" value="1"
-                style="background:#dc3545;color:#fff;border:none;padding:8px 14px;border-radius:4px;cursor:pointer;">
+                style="background:crimson;color:white;border:none;padding:8px 14px;border-radius:4px;cursor:pointer;">
                 Clear All Logs
             </button>
         </form>
     </div>
 
      <?php if (isset($_GET['cleared'])): ?>
-        <div style="margin-bottom:12px;padding:10px;background:#d4edda;color:#155724;border:1px solid #c3e6cb;border-radius:4px;">
+        <div style="margin-bottom:12px;padding:10px;background:honeydew;color:darkgreen;border:1px solid lightgreen;border-radius:4px;">
             Sub-admin activity logs have been cleared successfully.
         </div>
     <?php endif; ?>
@@ -125,10 +131,10 @@ if ($from && $to && isset($_GET['download'])) {
         <?php endforeach; ?>
         </tbody>
     </table>
-     <div style="display:flex;align-items:center;gap:10px;margin-top:14px;padding:10px 14px;background:#f8f9fa;border-left:4px solid #6c757d;border-radius:4px;">
+    <div style="display:flex;align-items:center;gap:10px;margin-top:14px;padding:10px 14px;background:whitesmoke;border-left:4px solid slategray;border-radius:4px;">
         <span style="font-size:18px;line-height:1;">&#128274;</span>
-        <span style="font-size:13px;color:#555;">
-            <strong style="color:#343a40;">Auto-purge enabled</strong> &mdash;
+        <span style="font-size:13px;color:dimgray;">
+            <strong style="color:darkslategray;">Auto-purge enabled</strong> &mdash;
             only the <strong>500 most recent</strong> entries are kept. Older records are removed automatically.
         </span>
     </div>

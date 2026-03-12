@@ -93,8 +93,8 @@ $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
         }
         h2 { margin: 0 0 14px; }
         table { width:100%; border-collapse:collapse; }
-        th, td { padding:8px; border:1px solid #ccc; text-align:left; }
-        th { background:#f4f4f4; }
+        th, td { padding:8px; border:1px solid silver; text-align:left; }
+        th { background:whitesmoke; }
     </style>
 </head>
 <body>
@@ -104,7 +104,7 @@ $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
         <a href="dashboard.php">Dashboard</a>
         <a href="activity.php">Activity Log</a>
         <a href="subadmin_activity.php">Sub-admin Logs</a>
-        <a href="logout.php" style="color:#ffdddd;">Logout</a>
+        <a href="logout.php" style="color:mistyrose;">Logout</a>
     </div>
 </nav>
 
@@ -124,16 +124,16 @@ $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
         <?php endforeach; ?>
         </tbody>
     </table>
-    <div style="display:flex;align-items:center;gap:10px;margin-top:14px;padding:10px 14px;background:#f8f9fa;border-left:4px solid #6c757d;border-radius:4px;">
+    <div style="display:flex;align-items:center;gap:10px;margin-top:14px;padding:10px 14px;background:whitesmoke;border-left:4px solid slategray;border-radius:4px;">
         <span style="font-size:18px;line-height:1;">&#128274;</span>
-        <span style="font-size:13px;color:#555;">
-            <strong style="color:#343a40;">Auto-purge enabled</strong> &mdash;
+        <span style="font-size:13px;color:dimgray;">
+            <strong style="color:darkslategray;">Auto-purge enabled</strong> &mdash;
             only the <strong>500 most recent</strong> entries are kept. Older records are removed automatically.
         </span>
     </div>
     <?php if (!empty($_SESSION['admin_role']) && $_SESSION['admin_role'] === 'super_admin'): ?>
         <form method="post" onsubmit="return confirm('Delete all activity logs?');" style="margin-top:10px;">
-            <button type="submit" name="clear" style="background:#dc3545;color:#fff;border:none;padding:8px 14px;border-radius:4px;cursor:pointer;">Clear Activity Log</button>
+            <button type="submit" name="clear" style="background:crimson;color:white;border:none;padding:8px 14px;border-radius:4px;cursor:pointer;">Clear Activity Log</button>
         </form>
     <?php endif; ?>
 </div>
