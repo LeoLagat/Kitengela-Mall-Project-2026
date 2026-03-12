@@ -27,7 +27,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $_SESSION['admin_username'] = $admin['username'];
 
         require_once(__DIR__ . '/../../backend/app/services/AdminAudit.php');
-        AdminAudit::log($pdo, $admin['id'], 'login');
+        AdminAudit::log($pdo, $admin['username'], 'login');
 
         header('Location: dashboard.php');
         exit;

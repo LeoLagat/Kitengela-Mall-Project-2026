@@ -11,8 +11,8 @@ $pdo = $db->pdo;
 
 // audit this page visit
 require_once(__DIR__ . '/../../backend/app/services/AdminAudit.php');
-if (isset($_SESSION['admin_id'])) {
-    AdminAudit::log($pdo, $_SESSION['admin_id'], 'visited staff page');
+if (!empty($_SESSION['admin_username'])) {
+    AdminAudit::log($pdo, $_SESSION['admin_username'], 'visited staff page');
 }
 
 // handle form submission

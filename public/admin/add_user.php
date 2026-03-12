@@ -11,8 +11,8 @@ $pdo = $db->pdo;
 
 // log admin visiting the add-user page
 require_once(__DIR__ . '/../../backend/app/services/AdminAudit.php');
-if (isset($_SESSION['admin_id'])) {
-    AdminAudit::log($pdo, $_SESSION['admin_id'], 'visited add user page');
+if (!empty($_SESSION['admin_username'])) {
+    AdminAudit::log($pdo, $_SESSION['admin_username'], 'visited add user page');
 }
 
 $message = '';

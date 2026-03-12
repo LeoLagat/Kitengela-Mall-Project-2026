@@ -13,8 +13,8 @@ $db = new DatabaseConnection();
 $pdo = $db->pdo;
 
 require_once(__DIR__ . '/../../backend/app/services/AdminAudit.php');
-if (isset($_SESSION['admin_id'])) {
-    AdminAudit::log($pdo, $_SESSION['admin_id'], 'visited owners page');
+if (!empty($_SESSION['admin_username'])) {
+    AdminAudit::log($pdo, $_SESSION['admin_username'], 'visited owners page');
 }
 
 

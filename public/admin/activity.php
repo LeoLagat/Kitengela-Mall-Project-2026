@@ -9,16 +9,15 @@ $db = new DatabaseConnection();
 $pdo = $db->pdo;
 
 require_once(__DIR__ . '/../../backend/app/services/AdminAudit.php');
-if (isset($_SESSION['admin_id'])) {
-    AdminAudit::log($pdo, $_SESSION['admin_id'], 'visited activity log');
+if (!empty($_SESSION['admin_username'])) {
+    AdminAudit::log($pdo, $_SESSION['admin_username'], 'visited activity log');
 }
 
-// ensure table exists (AdminAudit will create on first log) but we can just query
+// ensure table exists (AdminAudit will create or migrate as needed) then read
 $stmt = $pdo->query(
-    "SELECT a.created_at, ad.username, a.action, a.ip_address
-     FROM admin_activity a
-     LEFT JOIN administrators ad ON ad.id = a.admin_id
-     ORDER BY a.created_at DESC
+    "SELECT created_at, username, action, ip_address
+     FROM admin_activity
+     ORDER BY created_at DESC
      LIMIT 500"
 );
 $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);

@@ -107,14 +107,15 @@ You can change these in `docker-compose.yml` or use a `.env` file.
   The system now keeps an **audit trail** of administrator activity. Each successful login, page visit and revenue report download is recorded in a new
   `admin_activity` table (created automatically). Management can inspect this table to see which admin accessed the system, when, and what actions they performed.
 
-  Example schema:
+  Example schema (usernames stored directly):
   ```sql
   CREATE TABLE admin_activity (
       id INT AUTO_INCREMENT PRIMARY KEY,
-      admin_id INT NOT NULL,
+      username VARCHAR(100) NOT NULL,
       action VARCHAR(255) NOT NULL,
       ip_address VARCHAR(45),
-      created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+      created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+      INDEX(username)
   );
   ```
 

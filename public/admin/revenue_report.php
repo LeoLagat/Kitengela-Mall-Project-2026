@@ -22,8 +22,8 @@ require_once(__DIR__ . '/../../backend/app/services/AdminAudit.php');
 
 if ($from && $to) {
     // log download action (admin must be logged in by earlier check)
-    if (isset($_SESSION['admin_id'])) {
-        AdminAudit::log($pdo, $_SESSION['admin_id'], "downloaded revenue report $from to $to");
+    if (!empty($_SESSION['admin_username'])) {
+        AdminAudit::log($pdo, $_SESSION['admin_username'], "downloaded revenue report $from to $to");
     }
     // validate simple YYYY-MM-DD format
     if (!preg_match('/^\d{4}-\d{2}-\d{2}$/', $from) || !preg_match('/^\d{4}-\d{2}-\d{2}$/', $to)) {

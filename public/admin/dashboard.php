@@ -17,8 +17,8 @@ $db = new DatabaseConnection();
 $pdo = $db->pdo;
 
 // record that the current administrator accessed the dashboard
-if (isset($_SESSION['admin_id'])) {
-    AdminAudit::log($pdo, $_SESSION['admin_id'], 'viewed dashboard');
+if (!empty($_SESSION['admin_username'])) {
+    AdminAudit::log($pdo, $_SESSION['admin_username'], 'viewed dashboard');
 }
 
 $vehicle = new Vehicle($pdo);
