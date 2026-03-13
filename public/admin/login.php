@@ -55,180 +55,216 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Admin Login &mdash; Kitengela Parking</title>
-    <link rel="stylesheet" href="../assets/css/style.css">
     <style>
-        *, *::before, *::after { box-sizing: border-box; }
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
         body {
             min-height: 100vh;
             display: flex;
+            flex-direction: column;
             align-items: center;
             justify-content: center;
-            background: linear-gradient(135deg, #0a3d0a 0%, #1a6b1a 55%, #145214 100%);
-            padding: 20px;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(145deg, darkgreen 0%, #1a6b1a 50%, #0d4d0d 100%);
+            padding: 24px 16px;
+            line-height: 1.5;
+            color: darkslategray;
         }
 
+        /* ── Shell ───────────────────────────────── */
         .login-shell {
             width: 100%;
             max-width: 420px;
+            animation: slideUp .45s cubic-bezier(.22,.68,0,1.2) both;
+        }
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(28px); }
+            to   { opacity: 1; transform: translateY(0); }
         }
 
-        /* branding */
+        /* ── Branding ────────────────────────────── */
         .login-brand {
             text-align: center;
-            margin-bottom: 28px;
+            margin-bottom: 26px;
         }
-        .login-brand .brand-icon {
-            width: 62px;
-            height: 62px;
-            background: rgba(255,255,255,0.15);
-            border: 2px solid rgba(255,255,255,0.35);
+        .brand-icon {
+            width: 66px;
+            height: 66px;
+            background: rgba(255,255,255,.14);
+            border: 2px solid rgba(255,255,255,.32);
             border-radius: 50%;
             display: inline-flex;
             align-items: center;
             justify-content: center;
-            font-size: 28px;
-            margin-bottom: 12px;
-            backdrop-filter: blur(4px);
+            font-size: 30px;
+            margin-bottom: 14px;
+            backdrop-filter: blur(6px);
         }
         .login-brand h1 {
-            color: #fff;
-            font-size: 22px;
+            color: white;
+            font-size: 23px;
             font-weight: 700;
-            margin: 0 0 4px;
-            letter-spacing: .5px;
+            margin-bottom: 4px;
+            letter-spacing: .4px;
         }
         .login-brand p {
-            color: rgba(255,255,255,.7);
+            color: rgba(255,255,255,.68);
             font-size: 13px;
-            margin: 0;
         }
 
-        /* card */
+        /* ── Card ────────────────────────────────── */
         .login-card {
-            background: #fff;
-            border-radius: 14px;
-            box-shadow: 0 20px 60px rgba(0,0,0,0.30);
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 24px 64px rgba(0,0,0,.32), 0 4px 16px rgba(0,0,0,.16);
             overflow: hidden;
         }
         .login-card-body {
-            padding: 36px 36px 30px;
+            padding: 32px 32px 26px;
         }
 
+        /* ── Section title ───────────────────────── */
         .section-title {
-            font-size: 16px;
-            font-weight: 700;
-            color: #1a401a;
-            margin: 0 0 22px;
             display: flex;
             align-items: center;
-            gap: 8px;
+            gap: 9px;
+            font-size: 15px;
+            font-weight: 700;
+            color: darkslategray;
+            margin-bottom: 22px;
         }
         .section-title::after {
             content: '';
             flex: 1;
             height: 1px;
-            background: #e5e7eb;
+            background: gainsboro;
         }
 
-        /* alert */
+        /* ── Error alert ─────────────────────────── */
         .alert-error {
             display: flex;
             align-items: center;
             gap: 10px;
             padding: 11px 14px;
-            background: #fef2f2;
-            border: 1px solid #fecaca;
-            border-left: 4px solid #dc2626;
-            border-radius: 7px;
-            font-size: 14px;
-            color: #991b1b;
+            background: mistyrose;
+            border: 1px solid lightcoral;
+            border-left: 4px solid crimson;
+            border-radius: 8px;
+            font-size: 13.5px;
+            color: maroon;
             margin-bottom: 20px;
             animation: shake .35s ease;
         }
         @keyframes shake {
-            0%,100%{transform:translateX(0)}
-            25%{transform:translateX(-6px)}
-            75%{transform:translateX(6px)}
+            0%,100% { transform: translateX(0); }
+            25%      { transform: translateX(-5px); }
+            75%      { transform: translateX(5px); }
         }
 
-        /* fields */
+        /* ── Fields ──────────────────────────────── */
         .field-group {
             margin-bottom: 18px;
         }
         .field-group label {
             display: block;
-            font-size: 13px;
+            font-size: 12.5px;
             font-weight: 600;
-            color: #374151;
+            color: dimgray;
             margin-bottom: 6px;
+            letter-spacing: .3px;
         }
         .input-wrap {
             position: relative;
         }
         .input-icon {
             position: absolute;
-            left: 12px;
+            left: 13px;
             top: 50%;
             transform: translateY(-50%);
-            font-size: 15px;
-            color: #9ca3af;
+            font-size: 14px;
             pointer-events: none;
+            opacity: .55;
         }
         .field-group input {
+            /* layout */
+            display: block;
             width: 100%;
-            padding: 10px 12px 10px 38px;
-            border: 1.5px solid #d1d5db;
-            border-radius: 8px;
+            padding: 11px 42px 11px 40px;
+            box-sizing: border-box;
+            /* typography — override any global sheet */
+            font-family: inherit;
             font-size: 14px;
-            color: #111;
-            background: #f9fafb;
+            color: darkslategray;
+            text-transform: none;
+            text-align: left;
+            /* appearance */
+            background: whitesmoke;
+            border: 1.5px solid lightgray;
+            border-radius: 9px;
+            outline: none;
             transition: border-color .2s, box-shadow .2s, background .2s;
+            /* kill any browser/global margin */
+            margin: 0;
+        }
+        .field-group input::placeholder {
+            color: silver;
+            text-transform: none;
         }
         .field-group input:focus {
-            outline: none;
-            border-color: #16a34a;
-            box-shadow: 0 0 0 3px rgba(22,163,74,.15);
-            background: #fff;
+            border-color: seagreen;
+            box-shadow: 0 0 0 3px rgba(46,139,87,.18);
+            background: white;
         }
+
+        /* ── Password toggle ─────────────────────── */
         .toggle-pw {
+            /* reset ALL global button styles */
+            all: unset;
             position: absolute;
-            right: 11px;
+            right: 12px;
             top: 50%;
             transform: translateY(-50%);
-            background: none;
-            border: none;
             cursor: pointer;
-            font-size: 15px;
-            color: #9ca3af;
-            padding: 0;
+            font-size: 14px;
+            opacity: .5;
+            transition: opacity .2s;
             line-height: 1;
-            transition: color .2s;
         }
-        .toggle-pw:hover { color: #374151; }
+        .toggle-pw:hover { opacity: .9; }
 
-        /* submit */
+        /* ── Submit button ───────────────────────── */
         .btn-login {
+            /* reset global button */
+            all: unset;
+            box-sizing: border-box;
+            display: block;
             width: 100%;
-            padding: 12px;
-            background: linear-gradient(90deg, #0a5a0a 0%, #1a8a1a 100%);
-            color: #fff;
-            border: none;
-            border-radius: 8px;
+            padding: 13px;
+            margin-top: 8px;
+            background: linear-gradient(90deg, darkgreen 0%, seagreen 100%);
+            color: white;
+            border-radius: 9px;
+            font-family: inherit;
             font-size: 15px;
             font-weight: 700;
-            cursor: pointer;
+            text-align: center;
             letter-spacing: .4px;
-            transition: opacity .2s, transform .1s;
-            margin-top: 6px;
+            cursor: pointer;
+            transition: opacity .2s, transform .1s, box-shadow .2s;
+            box-shadow: 0 4px 14px rgba(0,100,0,.30);
         }
-        .btn-login:hover  { opacity: .88; }
-        .btn-login:active { transform: scale(.98); }
+        .btn-login:hover  { opacity: .88; box-shadow: 0 6px 18px rgba(0,100,0,.38); }
+        .btn-login:active { transform: scale(.98); box-shadow: none; }
+        .btn-login:disabled {
+            opacity: .6;
+            cursor: not-allowed;
+            transform: none;
+        }
 
-        /* footer */
+        /* ── Footer ──────────────────────────────── */
         .login-card-footer {
-            padding: 14px 36px 20px;
-            border-top: 1px solid #f3f4f6;
+            padding: 14px 32px 18px;
+            border-top: 1px solid ghostwhite;
             display: flex;
             justify-content: center;
         }
@@ -237,13 +273,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             align-items: center;
             gap: 6px;
             font-size: 13px;
-            color: #6b7280;
+            color: darkgray;
             text-decoration: none;
             padding: 6px 14px;
             border-radius: 6px;
-            transition: background .2s, color .2s;
+            transition: background .18s, color .18s;
         }
-        .btn-home:hover { background: #f3f4f6; color: #111; }
+        .btn-home:hover { background: ghostwhite; color: darkslategray; }
     </style>
 </head>
 <body>
@@ -306,6 +342,12 @@ function togglePw(btn) {
     input.type = input.type === 'password' ? 'text' : 'password';
     btn.textContent = input.type === 'password' ? '\u{1F441}' : '\u{1F648}';
 }
+
+document.querySelector('form').addEventListener('submit', function () {
+    const btn = document.querySelector('.btn-login');
+    btn.disabled = true;
+    btn.textContent = 'Signing in…';
+});
 </script>
 </body>
 </html>

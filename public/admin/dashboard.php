@@ -191,6 +191,7 @@ footer{
     <a href="activity.php">Activity Log</a>
     <a href="subadmin_activity.php">Sub-admin Logs</a>
 <?php endif; ?>
+<a href="profile.php">My Profile</a>
 <a href="logout.php" style="color:#ffdddd;">Logout</a>
 </div>
 
@@ -404,6 +405,7 @@ if (document.readyState === 'loading') {
 } else {
     updateDurations();
 }
+
 // Update every second
 setInterval(updateDurations, 1000);
 

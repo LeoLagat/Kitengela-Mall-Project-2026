@@ -87,6 +87,7 @@ if ($from && $to && isset($_GET['download'])) {
         <a href="dashboard.php">Dashboard</a>
         <a href="activity.php">Activity Log</a>
         <a href="subadmin_activity.php" class="active">Sub‑admin Logs</a>
+        <a href="profile.php">My Profile</a>
         <a href="logout.php" style="color:mistyrose;">Logout</a>
     </div>
 </nav>

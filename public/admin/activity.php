@@ -1,4 +1,4 @@
-<?php
+﻿<?php
 session_start();
 // require login (both super and sub admins may view own activity)
 if (!isset($_SESSION['admin_logged_in']) || $_SESSION['admin_logged_in'] !== true) {
@@ -13,6 +13,33 @@ require_once(__DIR__ . '/../../backend/app/services/AdminAudit.php');
 if (!empty($_SESSION['admin_username'])) {
     AdminAudit::log($pdo, $_SESSION['admin_username'], 'visited activity log');
 }
+
+// load profile details for current admin
+$profileStmt = $pdo->prepare(
+    "SELECT id, username, role, created_at
+     FROM administrators
+     WHERE id = ? OR username = ?
+     ORDER BY id = ? DESC
+     LIMIT 1"
+);
+$profileStmt->execute([
+    $_SESSION['admin_id'] ?? 0,
+    $_SESSION['admin_username'] ?? '',
+    $_SESSION['admin_id'] ?? 0
+]);
+$adminProfile = $profileStmt->fetch(PDO::FETCH_ASSOC) ?: [
+    'username' => $_SESSION['admin_username'] ?? 'unknown',
+    'role' => $_SESSION['admin_role'] ?? 'admin',
+    'created_at' => null,
+];
+
+$activityStatsStmt = $pdo->prepare(
+    "SELECT COUNT(*) AS total_actions, MAX(created_at) AS last_seen
+     FROM admin_activity
+     WHERE username = ?"
+);
+$activityStatsStmt->execute([$adminProfile['username']]);
+$activityStats = $activityStatsStmt->fetch(PDO::FETCH_ASSOC) ?: ['total_actions' => 0, 'last_seen' => null];
 
 // ensure table exists (AdminAudit will create or migrate as needed)
 // optionally handle clearing all logs if super_admin requested
@@ -92,6 +119,41 @@ $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
             margin: 20px auto 40px;
         }
         h2 { margin: 0 0 14px; }
+        .profile-card {
+            background: white;
+            border: 1px solid gainsboro;
+            border-left: 5px solid seagreen;
+            border-radius: 8px;
+            padding: 14px;
+            margin-bottom: 14px;
+        }
+        .profile-title {
+            margin: 0 0 10px;
+            color: darkslategray;
+            font-size: 16px;
+        }
+        .profile-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+            gap: 10px;
+        }
+        .profile-item {
+            background: whitesmoke;
+            border: 1px solid lightgray;
+            border-radius: 6px;
+            padding: 10px;
+        }
+        .profile-item .label {
+            display: block;
+            color: dimgray;
+            font-size: 12px;
+            margin-bottom: 4px;
+        }
+        .profile-item .value {
+            color: black;
+            font-size: 14px;
+            font-weight: 600;
+        }
         table { width:100%; border-collapse:collapse; }
         th, td { padding:8px; border:1px solid silver; text-align:left; }
         th { background:whitesmoke; }
@@ -104,12 +166,39 @@ $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
         <a href="dashboard.php">Dashboard</a>
         <a href="activity.php">Activity Log</a>
         <a href="subadmin_activity.php">Sub-admin Logs</a>
+        <a href="profile.php">My Profile</a>
         <a href="logout.php" style="color:mistyrose;">Logout</a>
     </div>
 </nav>
 
 <div class="container" style="margin-top:20px;">
     <h2>Administrator Activity</h2>
+
+    <div class="profile-card">
+        <h3 class="profile-title">Admin Profile</h3>
+        <div class="profile-grid">
+            <div class="profile-item">
+                <span class="label">Username</span>
+                <span class="value"><?= htmlspecialchars($adminProfile['username'] ?? 'unknown') ?></span>
+            </div>
+            <div class="profile-item">
+                <span class="label">Role</span>
+                <span class="value"><?= htmlspecialchars(str_replace('_', ' ', (string)($adminProfile['role'] ?? 'admin'))) ?></span>
+            </div>
+            <div class="profile-item">
+                <span class="label">Account Created</span>
+                <span class="value"><?= !empty($adminProfile['created_at']) ? htmlspecialchars($adminProfile['created_at']) : 'Not available' ?></span>
+            </div>
+            <div class="profile-item">
+                <span class="label">Total Logged Actions</span>
+                <span class="value"><?= (int)($activityStats['total_actions'] ?? 0) ?></span>
+            </div>
+            <div class="profile-item">
+                <span class="label">Last Activity</span>
+                <span class="value"><?= !empty($activityStats['last_seen']) ? htmlspecialchars($activityStats['last_seen']) : 'No activity yet' ?></span>
+            </div>
+        </div>
+    </div>
 
     <table>
         <thead><tr><th>Time</th><th>Admin</th><th>Action</th><th>IP</th></tr></thead>

@@ -183,6 +183,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <a href="activity.php">Activity Log</a>
             <a href="subadmin_activity.php">Sub-admin Logs</a>
         <?php endif; ?>
+        <a href="profile.php">My Profile</a>
         <a href="logout.php" style="color:#ffdddd;">Logout</a>
     </div>
 </nav>
