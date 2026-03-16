@@ -6,10 +6,7 @@ if (isset($_GET['error']) && $_GET['error'] == 'notfound') {
 }
 
 // free exit notification
-$freeNotice = '';
-if (isset($_GET['free']) && $_GET['free'] == '1') {
-    $freeNotice = "<div class='success'>Parking duration was under grace period; no payment required.</div>";
-}
+$isFreeExit = (isset($_GET['free']) && $_GET['free'] == '1');
 ?>
 
 <!DOCTYPE html>
@@ -22,124 +19,204 @@ if (isset($_GET['free']) && $_GET['free'] == '1') {
 
 <style>
 
-/* GENERAL */
-
-body{
-    font-family: Arial, sans-serif;
-    margin:0;
-    background:#f5f7fa;
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    margin: 0;
+    min-height: 100vh;
+    background: whitesmoke;
+    color: darkslategray;
+    display: flex;
+    flex-direction: column;
 }
 
-/* NAVBAR */
-
-nav{
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-    background:#2d862d;
-    padding:12px 25px;
+nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    background: linear-gradient(90deg, darkgreen 0%, seagreen 100%);
+    padding: 12px 24px;
+    position: sticky;
+    top: 0;
+    z-index: 100;
 }
 
-.logo{
-    color:white;
-    font-size:20px;
-    font-weight:bold;
+.logo {
+    color: white;
+    font-size: 24px;
+    font-weight: 700;
+    letter-spacing: 1px;
 }
 
-.links{
-    display:flex;
-    gap:20px;
+.links {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
 }
 
-.links a{
-    color:white;
-    text-decoration:none;
-    font-weight:600;
+.links a {
+    color: white;
+    text-decoration: none;
+    font-weight: 600;
+    padding: 6px 10px;
+    border-radius: 6px;
 }
 
-.links a.active{
-    border-bottom:2px solid white;
+.links a:hover {
+    background: forestgreen;
 }
 
-/* PAGE CENTER */
-
-.page{
-    display:flex;
-    justify-content:center;
-    align-items:center;
-    margin-top:60px;
+.links a.active {
+    background: white;
+    color: darkgreen;
 }
 
-/* CARD */
-
-.card{
-    background:white;
-    padding:35px;
-    border-radius:10px;
-    width:380px;
-    box-shadow:0 3px 10px rgba(0,0,0,0.1);
+.page {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    padding: 28px 16px;
 }
 
-/* SUBTITLE */
-
-.subtitle{
-    color:grey;
-    margin-bottom:25px;
+.card {
+    background: white;
+    padding: 26px;
+    border-radius: 14px;
+    width: 100%;
+    max-width: 440px;
+    border: 1px solid lightgray;
+    box-shadow: 0 12px 28px gainsboro;
+    text-align: center;
 }
 
-/* FORM */
-
-input{
-    width:100%;
-    padding:12px;
-    border:1px solid #ccc;
-    border-radius:5px;
-    font-size:16px;
+.card h2 {
+    margin: 0;
+    color: forestgreen;
+    font-size: 30px;
 }
 
-button{
-    width:100%;
-    padding:12px;
-    margin-top:15px;
-    background:#2d862d;
-    color:white;
-    border:none;
-    border-radius:5px;
-    font-size:16px;
-    cursor:pointer;
+.subtitle {
+    margin-top: 8px;
+    margin-bottom: 18px;
+    color: dimgray;
+    font-size: 14px;
 }
 
-button:hover{
-    background:#246b24;
+.status-error,
+.status-success {
+    padding: 12px;
+    border-radius: 10px;
+    margin-bottom: 16px;
+    font-weight: 700;
+    text-align: left;
 }
 
-/* ALERTS */
-
-.alert-danger{
-    background:#f8d7da;
-    color:#721c24;
-    padding:12px;
-    border-radius:6px;
-    border:1px solid #f5c6cb;
-    margin-bottom:20px;
+.status-error {
+    background: mistyrose;
+    color: maroon;
+    border: 1px solid lightcoral;
 }
 
-.success{
-    background:#d4edda;
-    color:#155724;
-    padding:12px;
-    border-radius:6px;
-    border:1px solid #c3e6cb;
-    margin-bottom:20px;
+.status-success {
+    background: honeydew;
+    color: darkgreen;
+    border: 1px solid palegreen;
+    text-align: center;
 }
 
-/* FOOTER */
+.progress {
+    width: 100%;
+    height: 8px;
+    border-radius: 999px;
+    background: gainsboro;
+    overflow: hidden;
+    margin-top: 12px;
+}
 
-footer{
-    margin-top:50px;
-    text-align:center;
-    padding:15px;
-    background:#eee;
+.progress > span {
+    display: block;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, seagreen, darkgreen);
+    animation: shrink 3s linear forwards;
+}
+
+@keyframes shrink {
+    from { width: 100%; }
+    to { width: 0%; }
+}
+
+.field {
+    text-align: left;
+    margin-bottom: 12px;
+}
+
+.field label {
+    display: block;
+    margin-bottom: 6px;
+    font-weight: 700;
+    color: dimgray;
+    font-size: 13px;
+}
+
+.field input {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid lightgray;
+    border-radius: 8px;
+    font-size: 16px;
+    text-transform: uppercase;
+    box-sizing: border-box;
+    background: whitesmoke;
+    text-align: left;
+}
+
+.field input:focus {
+    outline: none;
+    border-color: seagreen;
+    box-shadow: 0 0 0 3px lightgreen;
+    background: white;
+}
+
+button {
+    width: 100%;
+    padding: 12px;
+    margin-top: 4px;
+    background: linear-gradient(90deg, darkgreen, seagreen);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+button:hover {
+    opacity: 0.9;
+}
+
+button:disabled {
+    opacity: 0.7;
+    cursor: not-allowed;
+}
+
+footer {
+    text-align: center;
+    padding: 14px;
+    background: gainsboro;
+    color: darkslategray;
+}
+
+@media (max-width: 760px) {
+    nav {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .logo {
+        font-size: 22px;
+    }
 }
 
 </style>
@@ -171,61 +248,30 @@ footer{
 Enter the plate number to compute fees and open the barrier.
 </p>
 
-<?php if ($freeNotice): ?>
-<?= $freeNotice ?>
-<?php endif; ?>
-
-<?php if ($message): ?>
-<div class="alert-danger">
-⚠️ <?= $message ?>
+<?php if ($isFreeExit): ?>
+<div class="status-success">
+Parking duration was under grace period; no payment required.
+<div class="progress" aria-hidden="true"><span></span></div>
+<div style="margin-top:8px;color:dimgray;font-size:13px;">Refreshing exit screen...</div>
 </div>
 <?php endif; ?>
 
-
-<?php if ($freeNotice): ?>
-
-<script>
-
-document.addEventListener('DOMContentLoaded',()=>{
-
-const ov=document.createElement('div')
-
-ov.style.position='fixed'
-ov.style.top='0'
-ov.style.left='0'
-ov.style.width='100%'
-ov.style.height='100%'
-ov.style.background='rgba(0,0,0,0.7)'
-ov.style.color='white'
-ov.style.display='flex'
-ov.style.justifyContent='center'
-ov.style.alignItems='center'
-ov.style.zIndex='10000'
-
-ov.innerHTML='<div style="text-align:center;font-size:32px;"><p>Enjoy your stay!</p><p>Gate is opening...</p></div>'
-
-document.body.appendChild(ov)
-
-setTimeout(()=>{
-window.location='exit.php'
-},3000)
-
-})
-
-</script>
-
+<?php if ($message): ?>
+<div class="status-error">
+Warning: <?= htmlspecialchars($message) ?>
+</div>
 <?php endif; ?>
 
 
 <form action="../driver/pay.php" method="POST">
 
-<div style="margin-bottom:20px;">
+<div class="field">
 
-<label style="display:block;margin-bottom:8px;font-weight:bold;color:dimgray;">
-ENTER VEHICLE PLATE NUMBER
+<label for="plate">
+Enter Vehicle Plate Number
 </label>
 
-<input type="text" name="plate" placeholder="E.G. KAA 123A" required autofocus oninput="this.value = this.value.toUpperCase()" style="text-transform:uppercase;">
+<input id="plate" type="text" name="plate" placeholder="E.G. KAA 123A" required autofocus autocomplete="off" oninput="this.value = this.value.toUpperCase()">
 
 </div>
 
@@ -238,6 +284,22 @@ PROCESS EXIT
 </div>
 
 </div>
+
+<?php if ($isFreeExit): ?>
+<script>
+window.setTimeout(function () {
+    window.location = 'exit.php';
+}, 3000);
+</script>
+<?php endif; ?>
+
+<script>
+document.querySelector('form')?.addEventListener('submit', function() {
+    const submitBtn = this.querySelector('button[type="submit"]');
+    submitBtn.disabled = true;
+    submitBtn.textContent = 'Processing...';
+});
+</script>
 
 
 <footer>

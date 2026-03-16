@@ -48,125 +48,263 @@ $vacantBays   = (int)$bayCounts['vacant'];
 
 <style>
 
-/* GENERAL */
-body{
-    font-family: Arial, sans-serif;
-    margin:0;
-    background:#f5f7fa;
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    margin: 0;
+    background: whitesmoke;
+    color: darkslategray;
 }
 
-/* NAVBAR */
-nav{
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-    background:#2d862d;
-    padding:12px 25px;
+nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 16px;
+    background: linear-gradient(90deg, darkgreen 0%, seagreen 100%);
+    padding: 12px 24px;
+    position: sticky;
+    top: 0;
+    z-index: 100;
 }
 
-.logo{
-    color:white;
-    font-size:20px;
-    font-weight:bold;
+.logo {
+    color: white;
+    font-size: 26px;
+    font-weight: 700;
+    letter-spacing: 1px;
 }
 
-.links{
-    display:flex;
-    gap:18px;
+.links {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    justify-content: flex-end;
 }
 
-.links a{
-    color:white;
-    text-decoration:none;
-    font-weight:600;
+.links a {
+    color: white;
+    text-decoration: none;
+    font-weight: 600;
+    padding: 6px 10px;
+    border-radius: 6px;
 }
 
-/* CONTAINER */
-
-.container{
-    width:95%;
-    margin:auto;
-    margin-top:20px;
+.links a:hover {
+    background: forestgreen;
 }
 
-/* DASHBOARD GRID */
-
-.dashboard-container{
-    display:grid;
-    grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
-    gap:25px;
+.container {
+    width: 95%;
+    max-width: 1180px;
+    margin: 26px auto 50px auto;
+    display: grid;
+    gap: 18px;
 }
 
-.dashboard-box{
-    background:white;
-    padding:25px;
-    border-radius:10px;
-    text-align:center;
-    box-shadow:0 2px 8px rgba(0,0,0,0.08);
+.hero {
+    background: white;
+    border: 1px solid lightgray;
+    border-left: 8px solid darkgreen;
+    border-radius: 14px;
+    padding: 20px;
+    box-shadow: 0 10px 20px silver;
 }
 
-.dashboard-box h3{
-    margin-bottom:10px;
-    color:#2d862d;
+.hero h2 {
+    margin: 0;
+    font-size: 34px;
+    color: forestgreen;
+    line-height: 1.2;
 }
 
-.dashboard-box p{
-    font-size:28px;
-    font-weight:bold;
+.hero p {
+    margin: 8px 0 0 0;
+    color: dimgray;
+    font-size: 15px;
 }
 
-/* TABLE */
-
-table{
-    width:100%;
-    border-collapse:collapse;
-    margin-top:20px;
-    background:white;
-    table-layout:fixed;
+.summary-chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
 }
 
-th,td{
-    padding:12px;
-    border:1px solid #ddd;
-    text-align:center;
+.summary-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: mintcream;
+    border: 1px solid palegreen;
+    color: darkgreen;
+    border-radius: 999px;
+    padding: 6px 12px;
+    font-size: 13px;
+    font-weight: 700;
 }
 
-th{
-    background:#f4f4f4;
+.dashboard-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 16px;
 }
 
-/* BUTTON */
-
-.bypass-btn{
-    background:#28a745;
-    color:white;
-    border:none;
-    padding:6px 12px;
-    cursor:pointer;
-    border-radius:4px;
+.dashboard-box {
+    background: white;
+    padding: 20px;
+    border-radius: 12px;
+    border: 1px solid lightgray;
+    text-align: center;
+    box-shadow: 0 8px 18px gainsboro;
 }
 
-.bypass-btn:hover{
-    background:#218838;
+.dashboard-box h3 {
+    margin: 0 0 8px 0;
+    color: forestgreen;
+    font-size: 18px;
 }
 
-.status-paid{
-    color:green;
-    font-weight:bold;
+.dashboard-box p {
+    margin: 0;
+    font-size: 29px;
+    font-weight: 700;
+    color: darkslategray;
 }
 
-.status-pending{
-    color:orange;
-    font-weight:bold;
+.dashboard-box form label {
+    color: dimgray;
+    font-size: 13px;
+    font-weight: 600;
 }
 
-/* FOOTER */
+.dashboard-box form input[type="date"] {
+    margin-left: 4px;
+    padding: 6px 8px;
+    border: 1px solid lightgray;
+    border-radius: 6px;
+}
 
-footer{
-    margin-top:40px;
-    text-align:center;
-    padding:15px;
-    background:#eee;
+.quick-form {
+    display: flex;
+    gap: 8px;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.quick-btn {
+    padding: 8px 12px;
+    border: none;
+    border-radius: 6px;
+    background: darkgreen;
+    color: white;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+.quick-btn:hover {
+    background: seagreen;
+}
+
+.overstay-alert {
+    padding: 12px 14px;
+    background: mistyrose;
+    color: maroon;
+    border: 1px solid lightcoral;
+    border-left: 6px solid firebrick;
+    border-radius: 10px;
+}
+
+.section-card {
+    background: white;
+    border: 1px solid lightgray;
+    border-radius: 12px;
+    padding: 18px;
+    box-shadow: 0 8px 18px gainsboro;
+}
+
+.section-card h3 {
+    margin: 0;
+    color: forestgreen;
+}
+
+.table-wrap {
+    margin-top: 14px;
+    overflow-x: auto;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    background: white;
+    min-width: 760px;
+}
+
+th, td {
+    padding: 11px;
+    border: 1px solid lightgray;
+    text-align: center;
+}
+
+th {
+    background: whitesmoke;
+    color: darkslategray;
+}
+
+.bypass-btn {
+    background: darkgreen;
+    color: white;
+    border: none;
+    padding: 8px 12px;
+    cursor: pointer;
+    border-radius: 6px;
+    font-weight: 700;
+}
+
+.bypass-btn:hover {
+    background: seagreen;
+}
+
+.status-paid {
+    color: darkgreen;
+    font-weight: 700;
+}
+
+.status-pending {
+    color: darkorange;
+    font-weight: 700;
+}
+
+.empty-state {
+    margin-top: 14px;
+    padding: 16px;
+    border-radius: 10px;
+    border: 1px dashed burlywood;
+    background: floralwhite;
+    color: saddlebrown;
+    text-align: center;
+    font-weight: 700;
+}
+
+footer {
+    margin-top: 40px;
+    text-align: center;
+    padding: 15px;
+    background: gainsboro;
+    color: darkslategray;
+}
+
+@media (max-width: 920px) {
+    nav {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+
+    .links {
+        justify-content: flex-start;
+    }
+
+    .hero h2 {
+        font-size: 28px;
+    }
 }
 
 </style>
@@ -192,7 +330,7 @@ footer{
     <a href="subadmin_activity.php">Sub-admin Logs</a>
 <?php endif; ?>
 <a href="profile.php">My Profile</a>
-<a href="logout.php" style="color:#ffdddd;">Logout</a>
+<a href="logout.php" style="color:red;">Logout</a>
 </div>
 
 </nav>
@@ -210,7 +348,17 @@ if (isset($_GET['from']) && isset($_GET['to'])) {
 }
 ?>
 
-<h2>Parking Overview</h2>
+<section class="hero">
+    <h2>Parking Overview</h2>
+    <p>Monitor occupancy, revenue, overstay risk, and active gate traffic from one dashboard.</p>
+</section>
+
+<section class="summary-chips">
+    <span class="summary-chip">Inside: <?= (int)$vehiclesInside ?></span>
+    <span class="summary-chip">Occupied: <?= $occupiedBays ?></span>
+    <span class="summary-chip">Vacant: <?= $vacantBays ?></span>
+    <span class="summary-chip">Overstays: <?= count($overstays) ?></span>
+</section>
 
 <div class="dashboard-container">
 
@@ -243,10 +391,10 @@ if (isset($_GET['from']) && isset($_GET['to'])) {
 <div class="dashboard-box">
     <h3>Revenue Report</h3>
     <form method="get" action="revenue_report.php">
-        <div style="display:flex;gap:8px;justify-content:center;flex-wrap:wrap;">
+        <div class="quick-form">
             <label>From <input type="date" name="from" required></label>
             <label>To <input type="date" name="to" required></label>
-            <button type="submit" style="padding:6px 12px;">Download</button>
+            <button type="submit" class="quick-btn">Download</button>
         </div>
     </form>
 </div>
@@ -255,10 +403,10 @@ if (isset($_GET['from']) && isset($_GET['to'])) {
 <div class="dashboard-box">
     <h3>Activity Log</h3>
     <form method="get" action="activity.php">
-        <div style="display:flex;gap:8px;justify-content:center;flex-wrap:wrap;">
+        <div class="quick-form">
             <label>From <input type="date" name="from" required></label>
             <label>To <input type="date" name="to" required></label>
-            <button type="submit" style="padding:6px 12px;">Download</button>
+            <button type="submit" class="quick-btn">Download</button>
         </div>
     </form>
 </div>
@@ -268,15 +416,17 @@ if (isset($_GET['from']) && isset($_GET['to'])) {
 
 
 <?php if (!empty($overstays)): ?>
-<div style="margin-top:20px;padding:10px;background:#f8d7da;color:#721c24;border:1px solid #f5c6cb;">
+<div class="overstay-alert">
 <strong>Attention:</strong> <?= count($overstays) ?> vehicle(s) have been inside more than 8 hours.
 </div>
 <?php endif; ?>
 
 
-<div style="margin-top:30px">
+<div class="section-card">
 
 <h3>Active Vehicles & Manual Gate Control</h3>
+
+<div class="table-wrap">
 
 <table>
 
@@ -303,7 +453,21 @@ ORDER BY entry_time DESC
 
 $stmt->execute();
 
-while ($row = $stmt->fetch(PDO::FETCH_ASSOC)):
+$activeVehicles = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+if (empty($activeVehicles)):
+
+?>
+
+<tr>
+<td colspan="5"><div class="empty-state">No active vehicles are currently inside.</div></td>
+</tr>
+
+<?php
+
+else:
+
+foreach ($activeVehicles as $row):
 
 
 $entry = new DateTime($row['entry_time']);
@@ -343,11 +507,15 @@ Manual Bypass
 
 </tr>
 
-<?php endwhile; ?>
+<?php endforeach; ?>
+
+<?php endif; ?>
 
 </tbody>
 
 </table>
+
+</div>
 
 </div>
 
@@ -406,8 +574,8 @@ if (document.readyState === 'loading') {
     updateDurations();
 }
 
-// Update every second
-setInterval(updateDurations, 1000);
+// Update every 30 seconds
+setInterval(updateDurations, 30000);
 
 </script>
 

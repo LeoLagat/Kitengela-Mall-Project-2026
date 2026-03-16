@@ -112,6 +112,21 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             font-size: 13px;
         }
 
+        .security-tag {
+            margin-top: 9px;
+            display: inline-flex;
+            align-items: center;
+            gap: 7px;
+            color: white;
+            background: darkgreen;
+            border: 1px solid seagreen;
+            border-radius: 999px;
+            padding: 4px 10px;
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: .2px;
+        }
+
         /* ── Card ────────────────────────────────── */
         .login-card {
             background: white;
@@ -138,6 +153,21 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             flex: 1;
             height: 1px;
             background: gainsboro;
+        }
+
+        .section-subtitle {
+            font-size: 12px;
+            color: dimgray;
+            margin-top: -14px;
+            margin-bottom: 18px;
+        }
+
+        .assist-text {
+            margin-top: 10px;
+            margin-bottom: 2px;
+            color: dimgray;
+            font-size: 12px;
+            text-align: center;
         }
 
         /* ── Error alert ─────────────────────────── */
@@ -232,6 +262,21 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
         .toggle-pw:hover { opacity: .9; }
 
+        .caps-warning {
+            display: none;
+            margin-top: 8px;
+            font-size: 12px;
+            color: maroon;
+            background: mistyrose;
+            border: 1px solid lightcoral;
+            border-radius: 6px;
+            padding: 6px 8px;
+        }
+
+        .caps-warning.show {
+            display: block;
+        }
+
         /* ── Submit button ───────────────────────── */
         .btn-login {
             /* reset global button */
@@ -261,6 +306,28 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             transform: none;
         }
 
+        .btn-login.loading {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .btn-login.loading::before {
+            content: '';
+            width: 14px;
+            height: 14px;
+            border: 2px solid white;
+            border-right-color: transparent;
+            border-radius: 50%;
+            animation: spin .7s linear infinite;
+        }
+
+        @keyframes spin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
         /* ── Footer ──────────────────────────────── */
         .login-card-footer {
             padding: 14px 32px 18px;
@@ -280,6 +347,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             transition: background .18s, color .18s;
         }
         .btn-home:hover { background: ghostwhite; color: darkslategray; }
+
+        @media (max-width: 460px) {
+            .login-card-body {
+                padding: 24px 20px 20px;
+            }
+
+            .login-card-footer {
+                padding: 12px 20px 16px;
+            }
+
+            .login-brand h1 {
+                font-size: 21px;
+            }
+        }
     </style>
 </head>
 <body>
@@ -290,21 +371,23 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <div class="brand-icon">&#128663;</div>
         <h1>Kitengela Parking</h1>
         <p>Administrator Portal</p>
+        <div class="security-tag">&#128274; Secure Sign-In</div>
     </div>
 
     <!-- Card -->
     <div class="login-card">
         <div class="login-card-body">
             <div class="section-title">&#128274;&nbsp;Sign in</div>
+            <p class="section-subtitle">Use your admin credentials to access the control panel.</p>
 
             <?php if ($error): ?>
-            <div class="alert-error">
+            <div class="alert-error" role="alert" aria-live="assertive">
                 <span>&#9888;</span>
                 <span><?= htmlspecialchars($error) ?></span>
             </div>
             <?php endif; ?>
 
-            <form method="POST" autocomplete="off" novalidate>
+            <form method="POST" autocomplete="off">
                 <div class="field-group">
                     <label for="username">Username</label>
                     <div class="input-wrap">
@@ -312,7 +395,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         <input type="text" id="username" name="username"
                                placeholder="Enter your username"
                                value="<?= htmlspecialchars($_POST['username'] ?? '') ?>"
-                               required autofocus>
+                               required autofocus autocomplete="username" autocapitalize="none" spellcheck="false">
                     </div>
                 </div>
 
@@ -321,13 +404,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     <div class="input-wrap">
                         <span class="input-icon">&#128274;</span>
                         <input type="password" id="password" name="password"
-                               placeholder="Enter your password" required>
-                        <button type="button" class="toggle-pw" onclick="togglePw(this)" title="Show / hide password">&#128065;</button>
+                               placeholder="Enter your password" required autocomplete="current-password" aria-describedby="capsWarning">
+                        <button type="button" class="toggle-pw" onclick="togglePw(this)" title="Show password" aria-label="Show password" aria-pressed="false">&#128065;</button>
                     </div>
+                    <div id="capsWarning" class="caps-warning" aria-live="polite">Caps Lock appears to be ON.</div>
                 </div>
 
                 <button type="submit" class="btn-login">Log In &rarr;</button>
             </form>
+
+            <p class="assist-text">Need help accessing your account? Contact the super admin.</p>
         </div>
 
         <div class="login-card-footer">
@@ -341,11 +427,48 @@ function togglePw(btn) {
     const input = document.getElementById('password');
     input.type = input.type === 'password' ? 'text' : 'password';
     btn.textContent = input.type === 'password' ? '\u{1F441}' : '\u{1F648}';
+    btn.setAttribute('aria-pressed', input.type === 'text' ? 'true' : 'false');
+    btn.setAttribute('aria-label', input.type === 'text' ? 'Hide password' : 'Show password');
+    btn.title = input.type === 'text' ? 'Hide password' : 'Show password';
+}
+
+const passwordInput = document.getElementById('password');
+const capsWarning = document.getElementById('capsWarning');
+const usernameInput = document.getElementById('username');
+
+function updateCapsState(event) {
+    if (event.getModifierState && event.getModifierState('CapsLock')) {
+        capsWarning.classList.add('show');
+    } else {
+        capsWarning.classList.remove('show');
+    }
+}
+
+passwordInput.addEventListener('keydown', updateCapsState);
+passwordInput.addEventListener('keyup', updateCapsState);
+passwordInput.addEventListener('blur', function() {
+    capsWarning.classList.remove('show');
+});
+
+try {
+    const lastUsername = localStorage.getItem('adminLastUsername');
+    if (lastUsername && !usernameInput.value) {
+        usernameInput.value = lastUsername;
+    }
+} catch (e) {
+    // ignore storage access errors
 }
 
 document.querySelector('form').addEventListener('submit', function () {
     const btn = document.querySelector('.btn-login');
+    try {
+        localStorage.setItem('adminLastUsername', usernameInput.value.trim());
+    } catch (e) {
+        // ignore storage access errors
+    }
+
     btn.disabled = true;
+    btn.classList.add('loading');
     btn.textContent = 'Signing in…';
 });
 </script>

@@ -51,6 +51,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <title>Add Administrator</title>
     <link rel="stylesheet" href="../assets/css/style.css">
     <style>
+        body {
+            background: linear-gradient(135deg, honeydew, whitesmoke);
+        }
+
         .page-wrapper {
             min-height: calc(100vh - 60px);
             display: flex;
@@ -58,35 +62,56 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             justify-content: center;
             padding: 40px 16px;
         }
+
         .form-card {
             width: 100%;
-            max-width: 440px;
-            background: #fff;
-            border-radius: 12px;
-            box-shadow: 0 6px 28px rgba(0,0,0,0.10);
+            max-width: 480px;
+            background: white;
+            border-radius: 14px;
+            border: 1px solid lightgray;
+            box-shadow: 0 12px 30px gainsboro;
             overflow: hidden;
         }
+
         .form-card-header {
-            background: linear-gradient(90deg, #0a5a0a 0%, #074e07 100%);
+            background: linear-gradient(90deg, darkgreen 0%, seagreen 100%);
             padding: 28px 32px 22px;
-            color: #fff;
+            color: white;
         }
+
+        nav {
+            background: linear-gradient(90deg, darkgreen 0%, seagreen 100%);
+        }
+
         .form-card-header h2 {
             margin: 0 0 4px;
             font-size: 22px;
-            color: #fff;
+            color: white;
             display: flex;
             align-items: center;
             gap: 10px;
         }
+
         .form-card-header p {
             margin: 0;
             font-size: 13px;
             opacity: 0.82;
         }
+
         .form-card-body {
             padding: 28px 32px 32px;
         }
+
+        .security-note {
+            margin-bottom: 18px;
+            padding: 10px 12px;
+            border-radius: 8px;
+            background: mintcream;
+            border: 1px solid palegreen;
+            color: darkgreen;
+            font-size: 13px;
+        }
+
         .alert {
             display: flex;
             align-items: center;
@@ -96,80 +121,157 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             font-size: 14px;
             margin-bottom: 20px;
         }
-        .alert-success { background: #d4edda; color: #155724; border: 1px solid #c3e6cb; }
-        .alert-error   { background: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; }
-        .alert-info    { background: #f0f0f0; color: #333;    border: 1px solid #ddd; }
+
+        .alert-success { background: honeydew; color: darkgreen; border: 1px solid palegreen; }
+        .alert-error   { background: mistyrose; color: maroon; border: 1px solid lightcoral; }
+        .alert-info    { background: whitesmoke; color: darkslategray; border: 1px solid lightgray; }
+
         .field-group {
             margin-bottom: 18px;
         }
+
         .field-group label {
             display: block;
             font-size: 13px;
             font-weight: 600;
-            color: #444;
+            color: darkslategray;
             margin-bottom: 6px;
         }
+
         .field-group .input-wrap {
             position: relative;
         }
+
         .field-group .input-wrap span {
             position: absolute;
             left: 12px;
             top: 50%;
             transform: translateY(-50%);
             font-size: 15px;
-            color: #888;
+            color: dimgray;
             pointer-events: none;
         }
+
         .field-group input {
             width: 100%;
             padding: 10px 12px 10px 36px;
-            border: 1px solid #d0d5dd;
-            border-radius: 7px;
+            border: 1px solid lightgray;
+            border-radius: 8px;
             font-size: 14px;
-            color: #333;
-            background: #fafafa;
+            color: darkslategray;
+            background: whitesmoke;
             box-sizing: border-box;
-            transition: border-color .2s, box-shadow .2s;
+            transition: border-color .2s, box-shadow .2s, background .2s;
+            text-transform: none;
+            text-align: left;
         }
+
         .field-group input:focus {
             outline: none;
-            border-color: #2d862d;
-            box-shadow: 0 0 0 3px rgba(45,134,45,0.15);
-            background: #fff;
+            border-color: seagreen;
+            box-shadow: 0 0 0 3px lightgreen;
+            background: white;
         }
+
+        .field-hint {
+            margin-top: 6px;
+            font-size: 12px;
+            color: dimgray;
+        }
+
         .toggle-pw {
+            all: unset;
             position: absolute;
             right: 11px;
             top: 50%;
             transform: translateY(-50%);
-            background: none;
-            border: none;
             cursor: pointer;
             font-size: 15px;
-            color: #888;
+            color: dimgray;
             padding: 0;
+            line-height: 1;
         }
+
+        .toggle-pw:hover {
+            color: darkslategray;
+        }
+
+        .pw-meter {
+            height: 6px;
+            border-radius: 999px;
+            background: gainsboro;
+            margin-top: 8px;
+            overflow: hidden;
+        }
+
+        .pw-meter-fill {
+            height: 100%;
+            width: 0;
+            background: firebrick;
+            transition: width .2s, background .2s;
+        }
+
+        .pw-meter-label {
+            margin-top: 6px;
+            font-size: 12px;
+            color: dimgray;
+        }
+
+        .caps-warning {
+            display: none;
+            margin-top: 8px;
+            font-size: 12px;
+            color: maroon;
+            background: mistyrose;
+            border: 1px solid lightcoral;
+            border-radius: 6px;
+            padding: 6px 8px;
+        }
+
+        .caps-warning.show {
+            display: block;
+        }
+
         .btn-submit {
             width: 100%;
             padding: 11px;
-            background: linear-gradient(90deg, #0a5a0a 0%, #1a8a1a 100%);
-            color: #fff;
+            background: linear-gradient(90deg, darkgreen 0%, seagreen 100%);
+            color: white;
             border: none;
-            border-radius: 7px;
+            border-radius: 8px;
             font-size: 15px;
-            font-weight: 600;
+            font-weight: 700;
             cursor: pointer;
             letter-spacing: .3px;
-            transition: opacity .2s;
+            transition: opacity .2s, transform .1s;
             margin-top: 4px;
         }
+
         .btn-submit:hover { opacity: .88; }
+
+        .btn-submit:active { transform: scale(.99); }
+
+        .btn-submit:disabled {
+            opacity: .6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
         .form-hint {
             font-size: 12px;
-            color: #888;
+            color: dimgray;
             margin-top: 16px;
             text-align: center;
+        }
+
+        @media (max-width: 520px) {
+            .form-card-body {
+                padding: 22px 18px 22px;
+            }
+
+            .form-card-header {
+                padding: 22px 18px 18px;
+            }
         }
     </style>
 </head>
@@ -184,7 +286,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <a href="subadmin_activity.php">Sub-admin Logs</a>
         <?php endif; ?>
         <a href="profile.php">My Profile</a>
-        <a href="logout.php" style="color:#ffdddd;">Logout</a>
+        <a href="logout.php" style="color:red;">Logout</a>
     </div>
 </nav>
 
@@ -195,13 +297,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <p>New accounts are created with the <strong>sub-admin</strong> role by default.</p>
         </div>
         <div class="form-card-body">
+            <div class="security-note">Only trusted personnel should be granted admin access.</div>
+
             <?php if ($message):
                 $isSuccess = strpos($message, 'successfully') !== false;
                 $isError   = !$isSuccess;
                 $alertClass = $isSuccess ? 'alert-success' : 'alert-error';
                 $icon       = $isSuccess ? '&#9989;' : '&#9888;';
             ?>
-            <div class="alert <?= $alertClass ?>">
+            <div class="alert <?= $alertClass ?>" role="alert" aria-live="polite">
                 <span><?= $icon ?></span>
                 <span><?= htmlspecialchars($message) ?></span>
             </div>
@@ -215,8 +319,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         <input type="text" id="username" name="username"
                                placeholder="e.g. john_doe"
                                value="<?= htmlspecialchars($_POST['username'] ?? '') ?>"
-                               required autofocus>
+                               required autofocus autocomplete="username" autocapitalize="none" spellcheck="false">
                     </div>
+                    <p class="field-hint">Usernames are stored in lowercase.</p>
                 </div>
 
                 <div class="field-group">
@@ -224,9 +329,23 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     <div class="input-wrap">
                         <span>&#128274;</span>
                         <input type="password" id="password" name="password"
-                               placeholder="Enter a strong password" required>
-                        <button type="button" class="toggle-pw" onclick="togglePw()" title="Show/hide password">&#128065;</button>
+                               placeholder="Enter a strong password" required minlength="6" autocomplete="new-password">
+                        <button type="button" class="toggle-pw" onclick="togglePw(this, 'password')" title="Show password" aria-label="Show password" aria-pressed="false">&#128065;</button>
                     </div>
+                    <div class="pw-meter"><div id="pwMeterFill" class="pw-meter-fill"></div></div>
+                    <div id="pwMeterLabel" class="pw-meter-label">Password strength: too weak</div>
+                    <div id="capsWarning" class="caps-warning" aria-live="polite">Caps Lock appears to be ON.</div>
+                </div>
+
+                <div class="field-group">
+                    <label for="confirm_password">Confirm Password</label>
+                    <div class="input-wrap">
+                        <span>&#128274;</span>
+                        <input type="password" id="confirm_password" name="confirm_password"
+                               placeholder="Re-enter password" required minlength="6" autocomplete="new-password">
+                        <button type="button" class="toggle-pw" onclick="togglePw(this, 'confirm_password')" title="Show password" aria-label="Show password" aria-pressed="false">&#128065;</button>
+                    </div>
+                    <p id="passwordMatchHint" class="field-hint">Passwords must match before submission.</p>
                 </div>
 
                 <button type="submit" class="btn-submit">&#43; Add Administrator</button>
@@ -238,10 +357,100 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 </div>
 
 <script>
-function togglePw() {
-    const input = document.getElementById('password');
+function togglePw(btn, inputId) {
+    const input = document.getElementById(inputId);
     input.type = input.type === 'password' ? 'text' : 'password';
+    btn.setAttribute('aria-pressed', input.type === 'text' ? 'true' : 'false');
+    btn.setAttribute('aria-label', input.type === 'text' ? 'Hide password' : 'Show password');
+    btn.title = input.type === 'text' ? 'Hide password' : 'Show password';
+    btn.textContent = input.type === 'password' ? '\u{1F441}' : '\u{1F648}';
 }
+
+const form = document.querySelector('form');
+const passwordInput = document.getElementById('password');
+const confirmPasswordInput = document.getElementById('confirm_password');
+const meterFill = document.getElementById('pwMeterFill');
+const meterLabel = document.getElementById('pwMeterLabel');
+const matchHint = document.getElementById('passwordMatchHint');
+const capsWarning = document.getElementById('capsWarning');
+
+function updateStrength() {
+    const value = passwordInput.value;
+    let score = 0;
+
+    if (value.length >= 6) score++;
+    if (value.length >= 10) score++;
+    if (/[A-Z]/.test(value) && /[a-z]/.test(value)) score++;
+    if (/\d/.test(value)) score++;
+    if (/[^A-Za-z0-9]/.test(value)) score++;
+
+    const strengthLevels = [
+        { width: 20, label: 'too weak', color: 'firebrick' },
+        { width: 35, label: 'weak', color: 'orangered' },
+        { width: 55, label: 'fair', color: 'goldenrod' },
+        { width: 75, label: 'good', color: 'seagreen' },
+        { width: 100, label: 'strong', color: 'darkgreen' }
+    ];
+
+    const level = value.length === 0 ? strengthLevels[0] : strengthLevels[Math.min(score, 4)];
+    meterFill.style.width = level.width + '%';
+    meterFill.style.background = level.color;
+    meterLabel.textContent = 'Password strength: ' + level.label;
+}
+
+function updateMatchHint() {
+    const a = passwordInput.value;
+    const b = confirmPasswordInput.value;
+
+    if (!b) {
+        matchHint.textContent = 'Passwords must match before submission.';
+        matchHint.style.color = 'dimgray';
+        return;
+    }
+
+    if (a === b) {
+        matchHint.textContent = 'Passwords match.';
+        matchHint.style.color = 'darkgreen';
+    } else {
+        matchHint.textContent = 'Passwords do not match yet.';
+        matchHint.style.color = 'maroon';
+    }
+}
+
+function updateCapsState(event) {
+    if (event.getModifierState && event.getModifierState('CapsLock')) {
+        capsWarning.classList.add('show');
+    } else {
+        capsWarning.classList.remove('show');
+    }
+}
+
+passwordInput.addEventListener('input', function() {
+    updateStrength();
+    updateMatchHint();
+});
+confirmPasswordInput.addEventListener('input', updateMatchHint);
+passwordInput.addEventListener('keydown', updateCapsState);
+passwordInput.addEventListener('keyup', updateCapsState);
+passwordInput.addEventListener('blur', function() {
+    capsWarning.classList.remove('show');
+});
+
+form.addEventListener('submit', function(event) {
+    if (passwordInput.value !== confirmPasswordInput.value) {
+        event.preventDefault();
+        matchHint.textContent = 'Passwords do not match yet.';
+        matchHint.style.color = 'maroon';
+        confirmPasswordInput.focus();
+        return;
+    }
+
+    const submitBtn = form.querySelector('.btn-submit');
+    submitBtn.disabled = true;
+    submitBtn.textContent = 'Creating account...';
+});
+
+updateStrength();
 </script>
 </body>
 </html>

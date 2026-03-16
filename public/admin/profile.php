@@ -52,6 +52,7 @@ $recentStmt = $pdo->prepare(
 );
 $recentStmt->execute([$profile['username']]);
 $recentActivity = $recentStmt->fetchAll(PDO::FETCH_ASSOC);
+$recentCount = count($recentActivity);
 
 // ── Handle password change ────────────────────────────────────────────────
 $pwMessage = '';
@@ -102,6 +103,11 @@ $isSuperAdmin = ($profile['role'] === 'super_admin');
             margin: 24px auto 48px;
         }
 
+        .profile-shell {
+            display: grid;
+            gap: 16px;
+        }
+
         /* ── Page header ─────────────────────────── */
         .page-header {
             display: flex;
@@ -130,6 +136,26 @@ $isSuperAdmin = ($profile['role'] === 'super_admin');
             margin: 0;
             color: dimgray;
             font-size: 13px;
+        }
+
+        .stat-chips {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 2px;
+        }
+
+        .stat-chip {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: mintcream;
+            border: 1px solid palegreen;
+            color: darkgreen;
+            border-radius: 999px;
+            padding: 6px 12px;
+            font-size: 12px;
+            font-weight: 700;
         }
         .role-badge {
             display: inline-block;
@@ -199,6 +225,11 @@ $isSuperAdmin = ($profile['role'] === 'super_admin');
             width: 100%;
             border-collapse: collapse;
         }
+
+        .table-wrap {
+            overflow-x: auto;
+        }
+
         th, td {
             padding: 8px 10px;
             border: 1px solid gainsboro;
@@ -226,6 +257,21 @@ $isSuperAdmin = ($profile['role'] === 'super_admin');
             flex-direction: column;
             gap: 5px;
         }
+
+        .input-wrap {
+            position: relative;
+        }
+
+        .input-wrap .input-icon {
+            position: absolute;
+            left: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: dimgray;
+            font-size: 13px;
+            pointer-events: none;
+        }
+
         .field label {
             font-size: 12px;
             font-weight: 600;
@@ -241,13 +287,73 @@ $isSuperAdmin = ($profile['role'] === 'super_admin');
             box-sizing: border-box;
             text-transform: none;
             text-align: left;
+            padding-left: 30px;
+            padding-right: 34px;
         }
         .field input[type="password"]:focus {
             outline: none;
             border-color: steelblue;
             background: white;
-            box-shadow: 0 0 0 3px rgba(70,130,180,0.15);
+            box-shadow: 0 0 0 3px lightsteelblue;
         }
+
+        .toggle-pw {
+            all: unset;
+            position: absolute;
+            right: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            cursor: pointer;
+            color: dimgray;
+            line-height: 1;
+        }
+
+        .toggle-pw:hover {
+            color: darkslategray;
+        }
+
+        .pw-meter {
+            height: 6px;
+            border-radius: 999px;
+            background: gainsboro;
+            margin-top: 8px;
+            overflow: hidden;
+        }
+
+        .pw-meter-fill {
+            height: 100%;
+            width: 0;
+            background: firebrick;
+            transition: width .2s, background .2s;
+        }
+
+        .pw-meter-label {
+            margin-top: 6px;
+            font-size: 12px;
+            color: dimgray;
+        }
+
+        .caps-warning {
+            display: none;
+            margin-top: 8px;
+            font-size: 12px;
+            color: maroon;
+            background: mistyrose;
+            border: 1px solid lightcoral;
+            border-radius: 6px;
+            padding: 6px 8px;
+        }
+
+        .caps-warning.show {
+            display: block;
+        }
+
+        .match-hint {
+            margin-top: 6px;
+            font-size: 12px;
+            color: dimgray;
+        }
+
         .pw-submit {
             margin-top: 14px;
         }
@@ -261,8 +367,17 @@ $isSuperAdmin = ($profile['role'] === 'super_admin');
             font-weight: 600;
             cursor: pointer;
             width: auto;
+            transition: opacity .2s, transform .1s;
         }
         .btn-save:hover { background: royalblue; }
+
+        .btn-save:active { transform: scale(.99); }
+
+        .btn-save:disabled {
+            opacity: .6;
+            cursor: not-allowed;
+            transform: none;
+        }
 
         /* ── Alerts ──────────────────────────────── */
         .alert {
@@ -284,6 +399,16 @@ $isSuperAdmin = ($profile['role'] === 'super_admin');
             color: maroon;
             border: 1px solid lightcoral;
         }
+
+        @media (max-width: 700px) {
+            .page-header {
+                align-items: flex-start;
+            }
+
+            .page-header-text h2 {
+                font-size: 20px;
+            }
+        }
     </style>
 </head>
 <body>
@@ -298,11 +423,11 @@ $isSuperAdmin = ($profile['role'] === 'super_admin');
             <a href="activity.php">My Activity</a>
         <?php endif; ?>
         <a href="profile.php" class="active">My Profile</a>
-        <a href="logout.php" style="color:mistyrose;">Logout</a>
+        <a href="logout.php" style="color:red;">Logout</a>
     </div>
 </nav>
 
-<div class="container">
+<div class="container profile-shell">
 
     <!-- Page header -->
     <div class="page-header">
@@ -316,6 +441,12 @@ $isSuperAdmin = ($profile['role'] === 'super_admin');
             </h2>
             <p>Administrator account &mdash; Kitengela Parking</p>
         </div>
+    </div>
+
+    <div class="stat-chips">
+        <span class="stat-chip">Actions Logged: <?= (int)$stats['total_actions'] ?></span>
+        <span class="stat-chip">Recent Shown: <?= $recentCount ?></span>
+        <span class="stat-chip">Last Activity: <?= !empty($stats['last_seen']) ? htmlspecialchars($stats['last_seen']) : 'No activity yet' ?></span>
     </div>
 
     <!-- Profile details -->
@@ -355,20 +486,22 @@ $isSuperAdmin = ($profile['role'] === 'super_admin');
         <?php if (empty($recentActivity)): ?>
             <p class="no-rows">No activity recorded yet.</p>
         <?php else: ?>
-        <table>
-            <thead>
-                <tr><th>Time</th><th>Action</th><th>IP Address</th></tr>
-            </thead>
-            <tbody>
-            <?php foreach ($recentActivity as $a): ?>
-                <tr>
-                    <td><?= htmlspecialchars($a['created_at']) ?></td>
-                    <td><?= htmlspecialchars($a['action']) ?></td>
-                    <td><?= htmlspecialchars($a['ip_address'] ?? '—') ?></td>
-                </tr>
-            <?php endforeach; ?>
-            </tbody>
-        </table>
+        <div class="table-wrap">
+            <table>
+                <thead>
+                    <tr><th>Time</th><th>Action</th><th>IP Address</th></tr>
+                </thead>
+                <tbody>
+                <?php foreach ($recentActivity as $a): ?>
+                    <tr>
+                        <td><?= htmlspecialchars($a['created_at']) ?></td>
+                        <td><?= htmlspecialchars($a['action']) ?></td>
+                        <td><?= htmlspecialchars($a['ip_address'] ?? '—') ?></td>
+                    </tr>
+                <?php endforeach; ?>
+                </tbody>
+            </table>
+        </div>
         <?php endif; ?>
     </div>
 
@@ -377,25 +510,41 @@ $isSuperAdmin = ($profile['role'] === 'super_admin');
         <h3>&#128274; Change Password</h3>
 
         <?php if ($pwMessage): ?>
-            <div class="alert alert-success">&#9989; <?= htmlspecialchars($pwMessage) ?></div>
+            <div class="alert alert-success" role="alert" aria-live="polite">&#9989; <?= htmlspecialchars($pwMessage) ?></div>
         <?php endif; ?>
         <?php if ($pwError): ?>
-            <div class="alert alert-error">&#9888;&#65039; <?= htmlspecialchars($pwError) ?></div>
+            <div class="alert alert-error" role="alert" aria-live="assertive">&#9888;&#65039; <?= htmlspecialchars($pwError) ?></div>
         <?php endif; ?>
 
-        <form method="POST" autocomplete="off">
+        <form method="POST" autocomplete="off" id="passwordForm">
             <div class="pw-grid">
                 <div class="field">
                     <label for="current_password">Current Password</label>
-                    <input type="password" id="current_password" name="current_password" placeholder="Enter current password" required>
+                    <div class="input-wrap">
+                        <span class="input-icon">&#128274;</span>
+                        <input type="password" id="current_password" name="current_password" placeholder="Enter current password" required autocomplete="current-password">
+                        <button type="button" class="toggle-pw" onclick="togglePw(this, 'current_password')" title="Show password" aria-label="Show password" aria-pressed="false">&#128065;</button>
+                    </div>
                 </div>
                 <div class="field">
                     <label for="new_password">New Password</label>
-                    <input type="password" id="new_password" name="new_password" placeholder="Min. 6 characters" required>
+                    <div class="input-wrap">
+                        <span class="input-icon">&#128274;</span>
+                        <input type="password" id="new_password" name="new_password" placeholder="Min. 6 characters" required minlength="6" autocomplete="new-password">
+                        <button type="button" class="toggle-pw" onclick="togglePw(this, 'new_password')" title="Show password" aria-label="Show password" aria-pressed="false">&#128065;</button>
+                    </div>
+                    <div class="pw-meter"><div id="pwMeterFill" class="pw-meter-fill"></div></div>
+                    <div id="pwMeterLabel" class="pw-meter-label">Password strength: too weak</div>
+                    <div id="capsWarning" class="caps-warning" aria-live="polite">Caps Lock appears to be ON.</div>
                 </div>
                 <div class="field">
                     <label for="confirm_password">Confirm New Password</label>
-                    <input type="password" id="confirm_password" name="confirm_password" placeholder="Repeat new password" required>
+                    <div class="input-wrap">
+                        <span class="input-icon">&#128274;</span>
+                        <input type="password" id="confirm_password" name="confirm_password" placeholder="Repeat new password" required minlength="6" autocomplete="new-password">
+                        <button type="button" class="toggle-pw" onclick="togglePw(this, 'confirm_password')" title="Show password" aria-label="Show password" aria-pressed="false">&#128065;</button>
+                    </div>
+                    <div id="matchHint" class="match-hint">Passwords must match before update.</div>
                 </div>
             </div>
             <div class="pw-submit">
@@ -405,5 +554,98 @@ $isSuperAdmin = ($profile['role'] === 'super_admin');
     </div>
 
 </div>
+<script>
+function togglePw(btn, inputId) {
+    const input = document.getElementById(inputId);
+    input.type = input.type === 'password' ? 'text' : 'password';
+    btn.setAttribute('aria-pressed', input.type === 'text' ? 'true' : 'false');
+    btn.setAttribute('aria-label', input.type === 'text' ? 'Hide password' : 'Show password');
+    btn.title = input.type === 'text' ? 'Hide password' : 'Show password';
+    btn.textContent = input.type === 'password' ? '\u{1F441}' : '\u{1F648}';
+}
+
+const passwordForm = document.getElementById('passwordForm');
+const newPassword = document.getElementById('new_password');
+const confirmPassword = document.getElementById('confirm_password');
+const meterFill = document.getElementById('pwMeterFill');
+const meterLabel = document.getElementById('pwMeterLabel');
+const matchHint = document.getElementById('matchHint');
+const capsWarning = document.getElementById('capsWarning');
+
+function updateStrength() {
+    const value = newPassword.value;
+    let score = 0;
+
+    if (value.length >= 6) score++;
+    if (value.length >= 10) score++;
+    if (/[A-Z]/.test(value) && /[a-z]/.test(value)) score++;
+    if (/\d/.test(value)) score++;
+    if (/[^A-Za-z0-9]/.test(value)) score++;
+
+    const strengthLevels = [
+        { width: 20, label: 'too weak', color: 'firebrick' },
+        { width: 35, label: 'weak', color: 'orangered' },
+        { width: 55, label: 'fair', color: 'goldenrod' },
+        { width: 75, label: 'good', color: 'seagreen' },
+        { width: 100, label: 'strong', color: 'darkgreen' }
+    ];
+
+    const level = value.length === 0 ? strengthLevels[0] : strengthLevels[Math.min(score, 4)];
+    meterFill.style.width = level.width + '%';
+    meterFill.style.background = level.color;
+    meterLabel.textContent = 'Password strength: ' + level.label;
+}
+
+function updateMatchHint() {
+    if (!confirmPassword.value) {
+        matchHint.textContent = 'Passwords must match before update.';
+        matchHint.style.color = 'dimgray';
+        return;
+    }
+
+    if (newPassword.value === confirmPassword.value) {
+        matchHint.textContent = 'Passwords match.';
+        matchHint.style.color = 'darkgreen';
+    } else {
+        matchHint.textContent = 'Passwords do not match yet.';
+        matchHint.style.color = 'maroon';
+    }
+}
+
+function updateCapsState(event) {
+    if (event.getModifierState && event.getModifierState('CapsLock')) {
+        capsWarning.classList.add('show');
+    } else {
+        capsWarning.classList.remove('show');
+    }
+}
+
+newPassword.addEventListener('input', function() {
+    updateStrength();
+    updateMatchHint();
+});
+confirmPassword.addEventListener('input', updateMatchHint);
+newPassword.addEventListener('keydown', updateCapsState);
+newPassword.addEventListener('keyup', updateCapsState);
+newPassword.addEventListener('blur', function() {
+    capsWarning.classList.remove('show');
+});
+
+passwordForm.addEventListener('submit', function(event) {
+    if (newPassword.value !== confirmPassword.value) {
+        event.preventDefault();
+        matchHint.textContent = 'Passwords do not match yet.';
+        matchHint.style.color = 'maroon';
+        confirmPassword.focus();
+        return;
+    }
+
+    const submitBtn = passwordForm.querySelector('.btn-save');
+    submitBtn.disabled = true;
+    submitBtn.textContent = 'Updating...';
+});
+
+updateStrength();
+</script>
 </body>
 </html>

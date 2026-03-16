@@ -3,14 +3,22 @@ require_once "../../backend/app/controllers/GateController.php";
 
 $message = "";
 $success = false;
+$plateInput = '';
+$assignedBay = '';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $plate = strtoupper($_POST['plate']);
+    $plate = strtoupper(trim($_POST['plate'] ?? ''));
+    $plateInput = $plate;
     $controller = new GateController();
     $result = $controller->processEntry($plate);
 
     $message = $result['message'];
     $success = $result['success'];
+
+    if ($success) {
+        preg_match('/Assigned Bay:\s*([^ ]+)/', $message, $matches);
+        $assignedBay = isset($matches[1]) ? $matches[1] : '';
+    }
 }
 ?>
 <!DOCTYPE html>
@@ -23,114 +31,227 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 <style>
 
-/* GENERAL */
-
-body{
-    font-family: Arial, sans-serif;
-    margin:0;
-    background:#f5f7fa;
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    margin: 0;
+    min-height: 100vh;
+    background: whitesmoke;
+    color: darkslategray;
+    display: flex;
+    flex-direction: column;
 }
 
-/* NAVBAR */
-
-nav{
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-    background:#2d862d;
-    padding:12px 25px;
+nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    background: linear-gradient(90deg, darkgreen 0%, seagreen 100%);
+    padding: 12px 24px;
+    position: sticky;
+    top: 0;
+    z-index: 100;
 }
 
-.logo{
-    color:white;
-    font-size:20px;
-    font-weight:bold;
+.logo {
+    color: white;
+    font-size: 24px;
+    font-weight: 700;
+    letter-spacing: 1px;
 }
 
-.links{
-    display:flex;
-    gap:20px;
+.links {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
 }
 
-.links a{
-    color:white;
-    text-decoration:none;
-    font-weight:600;
+.links a {
+    color: white;
+    text-decoration: none;
+    font-weight: 600;
+    padding: 6px 10px;
+    border-radius: 6px;
 }
 
-.links a.active{
-    border-bottom:2px solid white;
+.links a:hover {
+    background: forestgreen;
 }
 
-/* SERVER TIME */
-
-.server-time{
-    font-size:14px;
-    color:grey;
-    text-align:center;
-    margin-top:5px;
+.links a.active {
+    background: white;
+    color: darkgreen;
 }
 
-/* PAGE CENTERING */
-
-.page{
-    display:flex;
-    justify-content:center;
-    align-items:center;
-    margin-top:50px;
+.server-time {
+    font-size: 14px;
+    color: dimgray;
+    text-align: center;
+    margin-top: 8px;
 }
 
-/* CARD */
-
-.card{
-    background:white;
-    padding:35px;
-    border-radius:10px;
-    box-shadow:0 3px 10px rgba(0,0,0,0.1);
-    width:350px;
-    text-align:center;
+.page {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    padding: 28px 16px;
 }
 
-/* FORM */
-
-input{
-    width:100%;
-    padding:12px;
-    margin-top:15px;
-    border:1px solid #ccc;
-    border-radius:5px;
-    font-size:16px;
+.card {
+    background: white;
+    padding: 26px;
+    border-radius: 14px;
+    box-shadow: 0 12px 28px gainsboro;
+    border: 1px solid lightgray;
+    width: 100%;
+    max-width: 430px;
+    text-align: center;
 }
 
-button{
-    width:100%;
-    padding:12px;
-    margin-top:15px;
-    background:#2d862d;
-    color:white;
-    border:none;
-    border-radius:5px;
-    font-size:16px;
-    cursor:pointer;
+.card h2 {
+    margin: 0;
+    color: forestgreen;
+    font-size: 30px;
 }
 
-button:hover{
-    background:#246b24;
+.subtitle {
+    margin-top: 8px;
+    margin-bottom: 18px;
+    color: dimgray;
+    font-size: 14px;
 }
 
-/* FOOTER */
-
-footer{
-    margin-top:40px;
-    text-align:center;
-    padding:15px;
-    background:#eee;
+.status-error,
+.status-success {
+    padding: 12px;
+    border-radius: 10px;
+    margin-bottom: 16px;
+    font-weight: 700;
+    text-align: left;
 }
 
-</style>
+.status-error {
+    color: maroon;
+    background: mistyrose;
+    border: 1px solid lightcoral;
+}
 
-<style>
-.server-time { display: <?php echo $success ? 'none' : 'block'; ?>; }
+.status-success {
+    color: darkgreen;
+    background: honeydew;
+    border: 1px solid palegreen;
+    text-align: center;
+}
+
+.bay-pill {
+    display: inline-block;
+    margin-top: 8px;
+    margin-bottom: 8px;
+    background: mintcream;
+    color: darkgreen;
+    border: 1px solid palegreen;
+    border-radius: 999px;
+    padding: 6px 12px;
+    font-size: 24px;
+    font-weight: 800;
+    letter-spacing: 1px;
+}
+
+.progress {
+    width: 100%;
+    height: 8px;
+    border-radius: 999px;
+    background: gainsboro;
+    overflow: hidden;
+    margin-top: 12px;
+}
+
+.progress > span {
+    display: block;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, seagreen, darkgreen);
+    animation: shrink 3s linear forwards;
+}
+
+@keyframes shrink {
+    from { width: 100%; }
+    to { width: 0%; }
+}
+
+.field {
+    text-align: left;
+    margin-bottom: 12px;
+}
+
+.field label {
+    display: block;
+    font-size: 13px;
+    color: dimgray;
+    font-weight: 700;
+    margin-bottom: 6px;
+}
+
+.field input {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid lightgray;
+    border-radius: 8px;
+    font-size: 16px;
+    text-transform: uppercase;
+    box-sizing: border-box;
+    text-align: left;
+    background: whitesmoke;
+}
+
+.field input:focus {
+    outline: none;
+    border-color: seagreen;
+    box-shadow: 0 0 0 3px lightgreen;
+    background: white;
+}
+
+button {
+    width: 100%;
+    padding: 12px;
+    margin-top: 4px;
+    background: linear-gradient(90deg, darkgreen, seagreen);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+button:hover {
+    opacity: 0.9;
+}
+
+button:disabled {
+    opacity: 0.7;
+    cursor: not-allowed;
+}
+
+footer {
+    text-align: center;
+    padding: 14px;
+    background: gainsboro;
+    color: darkslategray;
+}
+
+@media (max-width: 760px) {
+    nav {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .logo {
+        font-size: 22px;
+    }
+}
+
 </style>
 
 </head>
@@ -147,68 +268,73 @@ footer{
 </div>
 </nav>
 
+<?php if (!$success): ?>
 <p class="server-time">
 Server time: <?= date('Y-m-d H:i:s'); ?>
 </p>
+<?php endif; ?>
 
 <div class="page">
 
 <div class="card">
 
 <h2>Entry Gate</h2>
-<p>Enter the vehicle plate number below</p>
+<p class="subtitle">Enter the vehicle plate number to assign a parking bay.</p>
 
 <?php if (!$success && $message): ?>
 
-<div style="color:darkred;background:mistyrose;padding:15px;border-radius:8px;margin-bottom:20px;border:1px solid darkred;font-weight:bold;">
-⚠️ <?php echo $message; ?>
+<div class="status-error">
+Warning: <?= htmlspecialchars($message); ?>
 </div>
 
 <?php endif; ?>
 
+<?php if ($success): ?>
+
+<div class="status-success">
+    Entry recorded successfully.
+    <?php if ($assignedBay !== ''): ?>
+        <div class="bay-pill"><?= htmlspecialchars($assignedBay) ?></div>
+    <?php endif; ?>
+    <div><?= htmlspecialchars($message) ?></div>
+    <div class="progress" aria-hidden="true"><span></span></div>
+    <div style="margin-top:8px;color:dimgray;font-size:13px;">Returning to home screen...</div>
+</div>
+
+<?php else: ?>
+
 <form method="POST" id="entryForm">
 
-<input type="text" name="plate" placeholder="KBC 123A" required autofocus autocomplete="off" style="text-transform:uppercase;" oninput="this.value = this.value.toUpperCase()">
+<div class="field">
+    <label for="plate">Plate Number</label>
+    <input id="plate" type="text" name="plate" placeholder="KBC 123A" required autofocus autocomplete="off" value="<?= htmlspecialchars($plateInput) ?>" oninput="this.value = this.value.toUpperCase()">
+</div>
 
-<button type="submit">Confirm Plates</button>
+<button type="submit">Confirm Plate</button>
 
 </form>
+
+<?php endif; ?>
 
 </div>
 
 </div>
 
 <?php if ($success): ?>
-    <div style="background:#e6ffe6;color:#246b24;padding:20px;border-radius:10px;margin-bottom:20px;font-size:22px;font-weight:bold;">
-        <?php
-        // Extract assigned bay from message
-        preg_match('/Assigned Bay: ([^ ]+)/', $message, $matches);
-        $assignedBay = isset($matches[1]) ? $matches[1] : '';
-        ?>
-        Your parking bay: <span style="color:#2d862d;font-size:28px;"><?= htmlspecialchars($assignedBay) ?></span>
-    </div>
-    <script>
-    document.addEventListener('DOMContentLoaded',function(){
-        const ov=document.createElement('div');
-        ov.style.position='fixed';
-        ov.style.top='0';
-        ov.style.left='0';
-        ov.style.width='100%';
-        ov.style.height='100%';
-        ov.style.background='rgba(0,0,0,0.7)';
-        ov.style.color='white';
-        ov.style.display='flex';
-        ov.style.justifyContent='center';
-        ov.style.alignItems='center';
-        ov.style.zIndex='10000';
-        ov.innerHTML='<div style="text-align:center;font-size:32px;"><p>WELCOME</p><p>Gate is opening...</p></div>';
-        document.body.appendChild(ov);
-        setTimeout(function(){
-            window.location.href='../index.php';
-        },3000);
-    });
-    </script>
+<script>
+window.setTimeout(function() {
+    window.location.href = '../index.php';
+}, 3000);
+</script>
 <?php endif; ?>
+
+<script>
+document.getElementById('entryForm')?.addEventListener('submit', function() {
+    const submitBtn = this.querySelector('button[type="submit"]');
+    submitBtn.disabled = true;
+    submitBtn.textContent = 'Processing...';
+});
+</script>
 
 <footer>
 © <?= date("Y"); ?> Kitengela Mall Parking System
