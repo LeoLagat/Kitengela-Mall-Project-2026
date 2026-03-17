@@ -36,7 +36,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && !empty($_POST['plate'])) {
     }
 }
 
-// fetch current owner list, only show non-expired
+// fetch current owner list, only show non-expired (and non-deleted)
 $currentDate = date('Y-m-d');
 
 // Enhanced status logic:
@@ -59,6 +59,7 @@ SELECT a.plate_number, a.owner_name, a.invoice_monthly, a.created_at,
     END AS status
 FROM owner_accounts a
 LEFT JOIN owner_vehicle_fees f ON a.plate_number = f.plate_number
+WHERE a.deleted_at IS NULL
 ORDER BY a.plate_number");
 $stmt->execute([$currentDate, $currentDate]);
 $owners = $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -107,6 +108,20 @@ foreach ($plates as $plate) {
         $acc = $pdo->prepare("UPDATE owner_vehicle_fees SET nominal_fee = ? WHERE plate_number = ?");
         $acc->execute([$total, $plate]);
     }
+}
+
+// Fetch deleted vehicles (recycle bin) - only for super_admin
+$deletedVehicles = [];
+if (!empty($_SESSION['admin_role']) && $_SESSION['admin_role'] === 'super_admin') {
+    $stmt = $pdo->prepare("
+    SELECT a.plate_number, a.owner_name, a.invoice_monthly, a.created_at, a.deleted_at,
+        f.total_due
+    FROM owner_accounts a
+    LEFT JOIN owner_vehicle_fees f ON a.plate_number = f.plate_number
+    WHERE a.deleted_at IS NOT NULL
+    ORDER BY a.deleted_at DESC");
+    $stmt->execute();
+    $deletedVehicles = $stmt->fetchAll(PDO::FETCH_ASSOC);
 }
 
 ?>
@@ -294,6 +309,47 @@ foreach ($plates as $plate) {
             font-weight: 600;
         }
 
+        .action-btn {
+            padding: 6px 12px;
+            border: none;
+            border-radius: 6px;
+            font-size: 13px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .delete-btn {
+            background: crimson;
+            color: white;
+        }
+
+        .delete-btn:hover {
+            background: firebrick;
+        }
+
+        .restore-btn {
+            background: seagreen;
+            color: white;
+        }
+
+        .restore-btn:hover {
+            background: darkgreen;
+        }
+
+        .permanent-delete-btn {
+            background: darkred;
+            color: white;
+        }
+
+        .permanent-delete-btn:hover {
+            background: maroon;
+        }
+
+        .recycle-bin-section {
+            margin-top: 40px;
+        }
+
         @media (max-width: 980px) {
             .owners-grid {
                 grid-template-columns: 1fr;
@@ -397,6 +453,9 @@ foreach ($plates as $plate) {
                                 <th>Added</th>
                                 <th>Status</th>
                                 <th>Total Due</th>
+                                <?php if (!empty($_SESSION['admin_role']) && $_SESSION['admin_role'] === 'super_admin'): ?>
+                                    <th>Action</th>
+                                <?php endif; ?>
                             </tr>
                         </thead>
                         <tbody>
@@ -412,6 +471,11 @@ foreach ($plates as $plate) {
                                         </span>
                                     </td>
                                     <td>KES <?= isset($row['total_due']) ? number_format($row['total_due'], 2) : '0.00' ?></td>
+                                    <?php if (!empty($_SESSION['admin_role']) && $_SESSION['admin_role'] === 'super_admin'): ?>
+                                        <td>
+                                            <button class="action-btn delete-btn" onclick="deleteVehicle('<?= htmlspecialchars($row['plate_number']) ?>')">Delete</button>
+                                        </td>
+                                    <?php endif; ?>
                                 </tr>
                             <?php endforeach; ?>
                         </tbody>
@@ -420,6 +484,45 @@ foreach ($plates as $plate) {
             <?php endif; ?>
         </article>
     </section>
+
+    <?php if (!empty($_SESSION['admin_role']) && $_SESSION['admin_role'] === 'super_admin'): ?>
+    <section class="recycle-bin-section">
+        <article class="owners-card">
+            <h3>♻️ Recycle Bin (Deleted Vehicles)</h3>
+            <?php if (empty($deletedVehicles)): ?>
+                <div class="empty-state">No deleted vehicles in recycle bin.</div>
+            <?php else: ?>
+                <div class="table-wrap">
+                    <table class="owner-table">
+                        <thead>
+                            <tr>
+                                <th>Plate</th>
+                                <th>Name</th>
+                                <th>Deleted On</th>
+                                <th>Total Due</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?php foreach ($deletedVehicles as $row): ?>
+                                <tr style="opacity: 0.7;">
+                                    <td><?= htmlspecialchars($row['plate_number']) ?></td>
+                                    <td><?= htmlspecialchars($row['owner_name'] ?? 'N/A') ?></td>
+                                    <td><?= htmlspecialchars($row['deleted_at']) ?></td>
+                                    <td>KES <?= isset($row['total_due']) ? number_format($row['total_due'], 2) : '0.00' ?></td>
+                                    <td>
+                                        <button class="action-btn restore-btn" onclick="restoreVehicle('<?= htmlspecialchars($row['plate_number']) ?>')">Restore</button>
+                                        <button class="action-btn permanent-delete-btn" onclick="permanentlyDeleteVehicle('<?= htmlspecialchars($row['plate_number']) ?>')">Delete Permanently</button>
+                                    </td>
+                                </tr>
+                            <?php endforeach; ?>
+                        </tbody>
+                    </table>
+                </div>
+            <?php endif; ?>
+        </article>
+    </section>
+    <?php endif; ?>
 </main>
 <script>
 // Auto-uppercase all relevant text inputs
@@ -430,6 +533,58 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 });
+
+function deleteVehicle(plate) {
+    if (confirm(`Move vehicle ${plate} to recycle bin?\n\nYou can restore it later if needed.`)) {
+        fetch('manage_owner_vehicles.php', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+            body: 'action=soft_delete&plate=' + encodeURIComponent(plate)
+        })
+        .then(res => res.json())
+        .then(data => {
+            alert(data.message);
+            if (data.status === 'success') location.reload();
+        })
+        .catch(err => alert('Error: ' + err));
+    }
+}
+
+function restoreVehicle(plate) {
+    if (confirm(`Restore vehicle ${plate} from recycle bin?`)) {
+        fetch('manage_owner_vehicles.php', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+            body: 'action=restore&plate=' + encodeURIComponent(plate)
+        })
+        .then(res => res.json())
+        .then(data => {
+            alert(data.message);
+            if (data.status === 'success') location.reload();
+        })
+        .catch(err => alert('Error: ' + err));
+    }
+}
+
+function permanentlyDeleteVehicle(plate) {
+    const confirmMsg = `⚠️ WARNING: Permanently delete vehicle ${plate}?\n\nThis will completely remove this record and cannot be undone.`;
+    if (confirm(confirmMsg)) {
+        const doubleCheck = confirm('This is your FINAL confirmation. Click OK to permanently delete, or Cancel to abort.');
+        if (doubleCheck) {
+            fetch('manage_owner_vehicles.php', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+                body: 'action=permanent_delete&plate=' + encodeURIComponent(plate)
+            })
+            .then(res => res.json())
+            .then(data => {
+                alert(data.message);
+                if (data.status === 'success') location.reload();
+            })
+            .catch(err => alert('Error: ' + err));
+        }
+    }
+}
 </script>
 </body>
 </html>

@@ -204,6 +204,14 @@ nav {
     background: seagreen;
 }
 
+.danger-btn {
+    background: crimson;
+}
+
+.danger-btn:hover {
+    background: firebrick;
+}
+
 .overstay-alert {
     padding: 12px 14px;
     background: mistyrose;
@@ -410,6 +418,13 @@ if (isset($_GET['from']) && isset($_GET['to'])) {
         </div>
     </form>
 </div>
+
+<div class="dashboard-box">
+    <h3>Vehicle Logs Management</h3>
+    <div class="quick-form">
+        <button type="button" class="quick-btn danger-btn" onclick="clearVehicleLogs()">Clear Vehicle Logs</button>
+    </div>
+</div>
 <?php endif; ?>
 
 </div>
@@ -525,33 +540,59 @@ Manual Bypass
 <script>
 
 function bypassPayment(plate){
-
-if(confirm("Mark "+plate+" as PAID and open the gate?")){
-
-fetch('../../backend/app/services/admin_bypass.php',{
-
-method:'POST',
-
-headers:{'Content-Type':'application/x-www-form-urlencoded'},
-
-body:'plate='+encodeURIComponent(plate)
-
-})
-
-.then(res=>res.json())
-
-.then(data=>{
-
-alert(data.message)
-
-if(data.status==='success') location.reload()
-
-})
-
-.catch(()=>alert("Bypass service unavailable"))
-
+    const reminderMsg = `⚠️ MANUAL GATE BYPASS REMINDER\n\n` +
+        `Vehicle: ${plate}\n` +
+        `Action: FORCE GATE OPEN - Allow any vehicle to exit\n` +
+        `Effect: Vehicle will EXIT immediately (regardless of payment status)\n\n` +
+        `Use this ONLY for:\n` +
+        `• Pending M-Pesa transactions (payment delayed in database)\n` +
+        `• Authorized emergency exits\n` +
+        `• Pre-approved by manager/supervisor\n` +
+        `• Vehicles stuck due to system delays\n\n` +
+        `⚠️ This will mark the vehicle as PAID even if payment not yet confirmed!\n\n` +
+        `Are you sure you want to proceed?`;
+    
+    if(confirm(reminderMsg)){
+        const finalConfirm = confirm(`FINAL CONFIRMATION:\n\nForce gate open for ${plate}?\n\nThis action will:\n✓ Allow vehicle to exit\n✓ Mark as PAID\n✓ Be logged for audit\n\nContinue?`);
+        
+        if(finalConfirm){
+            fetch('../../backend/app/services/admin_bypass.php',{
+                method:'POST',
+                headers:{'Content-Type':'application/x-www-form-urlencoded'},
+                body:'plate='+encodeURIComponent(plate)
+            })
+            .then(res=>res.json())
+            .then(data=>{
+                alert(data.message);
+                if(data.status==='success') location.reload();
+            })
+            .catch(()=>alert("Bypass service unavailable"));
+        }
+    }
 }
 
+function clearVehicleLogs(){
+    const confirmMsg = "⚠️ WARNING: This will permanently delete ALL vehicle logs from the database. This action cannot be undone.\n\nAre you absolutely sure you want to continue?";
+    
+    if(confirm(confirmMsg)){
+        const doubleCheck = confirm("This is your FINAL confirmation. Click OK to clear all vehicle logs, or Cancel to abort.");
+        
+        if(doubleCheck){
+            fetch('clear_logs.php',{
+                method:'POST',
+                headers:{'Content-Type':'application/x-www-form-urlencoded'},
+                body:''
+            })
+            .then(res=>res.json())
+            .then(data=>{
+                alert(data.message);
+                if(data.status==='success') location.reload();
+            })
+            .catch(err=>{
+                alert("Error clearing logs: " + err);
+            });
+        }
+    }
 }
 
 /* LIVE DURATION */

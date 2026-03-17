@@ -32,10 +32,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && !empty($_POST['plate'])) {
 }
 
 // fetch current staff list
-$stmt = $pdo->query("SELECT plate_number, employee_name, created_at FROM staff_vehicles ORDER BY plate_number");
-
+$stmt = $pdo->prepare("SELECT plate_number, employee_name, created_at FROM staff_vehicles WHERE deleted_at IS NULL ORDER BY plate_number");
+$stmt->execute();
 $staff = $stmt->fetchAll(PDO::FETCH_ASSOC);
 $totalStaff = count($staff);
+
+// Fetch deleted staff vehicles (recycle bin) - only for super_admin
+$deletedStaff = [];
+if (!empty($_SESSION['admin_role']) && $_SESSION['admin_role'] === 'super_admin') {
+    $stmt = $pdo->prepare("SELECT plate_number, employee_name, created_at, deleted_at FROM staff_vehicles WHERE deleted_at IS NOT NULL ORDER BY deleted_at DESC");
+    $stmt->execute();
+    $deletedStaff = $stmt->fetchAll(PDO::FETCH_ASSOC);
+}
 ?>
 <!DOCTYPE html>
 <html>
@@ -159,6 +167,47 @@ $totalStaff = count($staff);
             font-weight: 600;
         }
 
+        .action-btn {
+            padding: 6px 12px;
+            border: none;
+            border-radius: 6px;
+            font-size: 13px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .delete-btn {
+            background: crimson;
+            color: white;
+        }
+
+        .delete-btn:hover {
+            background: firebrick;
+        }
+
+        .restore-btn {
+            background: seagreen;
+            color: white;
+        }
+
+        .restore-btn:hover {
+            background: darkgreen;
+        }
+
+        .permanent-delete-btn {
+            background: darkred;
+            color: white;
+        }
+
+        .permanent-delete-btn:hover {
+            background: maroon;
+        }
+
+        .recycle-bin-section {
+            margin-top: 40px;
+        }
+
         @media (max-width: 980px) {
             .staff-grid {
                 grid-template-columns: 1fr;
@@ -235,6 +284,9 @@ $totalStaff = count($staff);
                                 <th>Plate</th>
                                 <th>Name</th>
                                 <th>Added</th>
+                                <?php if (!empty($_SESSION['admin_role']) && $_SESSION['admin_role'] === 'super_admin'): ?>
+                                    <th>Action</th>
+                                <?php endif; ?>
                             </tr>
                         </thead>
                         <tbody>
@@ -243,6 +295,11 @@ $totalStaff = count($staff);
                                     <td><?= htmlspecialchars($row['plate_number']) ?></td>
                                     <td><?= htmlspecialchars($row['employee_name'] ?? 'N/A') ?></td>
                                     <td><?= htmlspecialchars($row['created_at']) ?></td>
+                                    <?php if (!empty($_SESSION['admin_role']) && $_SESSION['admin_role'] === 'super_admin'): ?>
+                                        <td>
+                                            <button class="action-btn delete-btn" onclick="deleteStaffVehicle('<?= htmlspecialchars($row['plate_number']) ?>')">Delete</button>
+                                        </td>
+                                    <?php endif; ?>
                                 </tr>
                             <?php endforeach; ?>
                         </tbody>
@@ -251,6 +308,43 @@ $totalStaff = count($staff);
             <?php endif; ?>
         </article>
     </section>
+
+    <?php if (!empty($_SESSION['admin_role']) && $_SESSION['admin_role'] === 'super_admin'): ?>
+    <section class="recycle-bin-section">
+        <article class="staff-card">
+            <h3>♻️ Recycle Bin (Deleted Staff)</h3>
+            <?php if (empty($deletedStaff)): ?>
+                <div class="empty-state">No deleted staff vehicles in recycle bin.</div>
+            <?php else: ?>
+                <div class="table-wrap">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Plate</th>
+                                <th>Name</th>
+                                <th>Deleted On</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?php foreach ($deletedStaff as $row): ?>
+                                <tr style="opacity: 0.7;">
+                                    <td><?= htmlspecialchars($row['plate_number']) ?></td>
+                                    <td><?= htmlspecialchars($row['employee_name'] ?? 'N/A') ?></td>
+                                    <td><?= htmlspecialchars($row['deleted_at']) ?></td>
+                                    <td>
+                                        <button class="action-btn restore-btn" onclick="restoreStaffVehicle('<?= htmlspecialchars($row['plate_number']) ?>')">Restore</button>
+                                        <button class="action-btn permanent-delete-btn" onclick="permanentlyDeleteStaffVehicle('<?= htmlspecialchars($row['plate_number']) ?>')">Delete Permanently</button>
+                                    </td>
+                                </tr>
+                            <?php endforeach; ?>
+                        </tbody>
+                    </table>
+                </div>
+            <?php endif; ?>
+        </article>
+    </section>
+    <?php endif; ?>
 </main>
 
 <script>
@@ -262,6 +356,58 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 });
+
+function deleteStaffVehicle(plate) {
+    if (confirm(`Move staff vehicle ${plate} to recycle bin?\n\nYou can restore it later if needed.`)) {
+        fetch('manage_staff_vehicles.php', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+            body: 'action=soft_delete&plate=' + encodeURIComponent(plate)
+        })
+        .then(res => res.json())
+        .then(data => {
+            alert(data.message);
+            if (data.status === 'success') location.reload();
+        })
+        .catch(err => alert('Error: ' + err));
+    }
+}
+
+function restoreStaffVehicle(plate) {
+    if (confirm(`Restore staff vehicle ${plate} from recycle bin?`)) {
+        fetch('manage_staff_vehicles.php', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+            body: 'action=restore&plate=' + encodeURIComponent(plate)
+        })
+        .then(res => res.json())
+        .then(data => {
+            alert(data.message);
+            if (data.status === 'success') location.reload();
+        })
+        .catch(err => alert('Error: ' + err));
+    }
+}
+
+function permanentlyDeleteStaffVehicle(plate) {
+    const confirmMsg = `⚠️ WARNING: Permanently delete staff vehicle ${plate}?\n\nThis will completely remove this record and cannot be undone.`;
+    if (confirm(confirmMsg)) {
+        const doubleCheck = confirm('This is your FINAL confirmation. Click OK to permanently delete, or Cancel to abort.');
+        if (doubleCheck) {
+            fetch('manage_staff_vehicles.php', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+                body: 'action=permanent_delete&plate=' + encodeURIComponent(plate)
+            })
+            .then(res => res.json())
+            .then(data => {
+                alert(data.message);
+                if (data.status === 'success') location.reload();
+            })
+            .catch(err => alert('Error: ' + err));
+        }
+    }
+}
 </script>
 </body>
 </html>

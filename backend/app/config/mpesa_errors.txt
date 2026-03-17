@@ -4900,3 +4900,915 @@ Migration error owner_accounts: SQLSTATE[42000]: Syntax error or access violatio
 Migration error restricted_vehicles: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near '\
                     CREATE TABLE IF NOT EXISTS restricted_vehicles (\
    ...' at line 1
+Migration error owner_accounts: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near '\
+                    CREATE TABLE IF NOT EXISTS owner_accounts (\
+        ...' at line 1
+Migration error restricted_vehicles: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near '\
+                    CREATE TABLE IF NOT EXISTS restricted_vehicles (\
+   ...' at line 1
+Migration error owner_accounts: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near '\
+                    CREATE TABLE IF NOT EXISTS owner_accounts (\
+        ...' at line 1
+Migration error restricted_vehicles: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near '\
+                    CREATE TABLE IF NOT EXISTS restricted_vehicles (\
+   ...' at line 1
+Migration error owner_accounts: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near '\
+                    CREATE TABLE IF NOT EXISTS owner_accounts (\
+        ...' at line 1
+Migration error restricted_vehicles: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near '\
+                    CREATE TABLE IF NOT EXISTS restricted_vehicles (\
+   ...' at line 1
+Migration error owner_accounts: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near '\
+                    CREATE TABLE IF NOT EXISTS owner_accounts (\
+        ...' at line 1
+Migration error restricted_vehicles: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near '\
+                    CREATE TABLE IF NOT EXISTS restricted_vehicles (\
+   ...' at line 1
+Migration error owner_accounts: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near '\
+                    CREATE TABLE IF NOT EXISTS owner_accounts (\
+        ...' at line 1
+Migration error restricted_vehicles: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near '\
+                    CREATE TABLE IF NOT EXISTS restricted_vehicles (\
+   ...' at line 1
+Migration error owner_accounts: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near '\
+                    CREATE TABLE IF NOT EXISTS owner_accounts (\
+        ...' at line 1
+Migration error restricted_vehicles: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near '\
+                    CREATE TABLE IF NOT EXISTS restricted_vehicles (\
+   ...' at line 1
+Migration error owner_accounts: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near '\
+                    CREATE TABLE IF NOT EXISTS owner_accounts (\
+        ...' at line 1
+Migration error restricted_vehicles: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near '\
+                    CREATE TABLE IF NOT EXISTS restricted_vehicles (\
+   ...' at line 1
+Migration error owner_accounts: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near '\
+                    CREATE TABLE IF NOT EXISTS owner_accounts (\
+        ...' at line 1
+Migration error restricted_vehicles: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near '\
+                    CREATE TABLE IF NOT EXISTS restricted_vehicles (\
+   ...' at line 1
+Migration error owner_accounts: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near '\
+                    CREATE TABLE IF NOT EXISTS owner_accounts (\
+        ...' at line 1
+Migration error restricted_vehicles: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near '\
+                    CREATE TABLE IF NOT EXISTS restricted_vehicles (\
+   ...' at line 1
+Migration error owner_accounts: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near '\
+                    CREATE TABLE IF NOT EXISTS owner_accounts (\
+        ...' at line 1
+Migration error restricted_vehicles: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near '\
+                    CREATE TABLE IF NOT EXISTS restricted_vehicles (\
+   ...' at line 1
+Migration error owner_accounts: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near '\
+                    CREATE TABLE IF NOT EXISTS owner_accounts (\
+        ...' at line 1
+Migration error restricted_vehicles: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near '\
+                    CREATE TABLE IF NOT EXISTS restricted_vehicles (\
+   ...' at line 1
+Migration error owner_accounts: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near '\
+                    CREATE TABLE IF NOT EXISTS owner_accounts (\
+        ...' at line 1
+Migration error restricted_vehicles: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near '\
+                    CREATE TABLE IF NOT EXISTS restricted_vehicles (\
+   ...' at line 1
+Migration error owner_accounts: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near '\
+                    CREATE TABLE IF NOT EXISTS owner_accounts (\
+        ...' at line 1
+Migration error restricted_vehicles: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near '\
+                    CREATE TABLE IF NOT EXISTS restricted_vehicles (\
+   ...' at line 1
+Migration error owner_accounts: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near '\
+                    CREATE TABLE IF NOT EXISTS owner_accounts (\
+        ...' at line 1
+Migration error restricted_vehicles: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near '\
+                    CREATE TABLE IF NOT EXISTS restricted_vehicles (\
+   ...' at line 1
+Migration error owner_accounts: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near '\
+                    CREATE TABLE IF NOT EXISTS owner_accounts (\
+        ...' at line 1
+Migration error restricted_vehicles: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near '\
+                    CREATE TABLE IF NOT EXISTS restricted_vehicles (\
+   ...' at line 1
+Migration error owner_accounts: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near '\
+                    CREATE TABLE IF NOT EXISTS owner_accounts (\
+        ...' at line 1
+Migration error restricted_vehicles: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near '\
+                    CREATE TABLE IF NOT EXISTS restricted_vehicles (\
+   ...' at line 1
+Migration error owner_accounts: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near '\
+                    CREATE TABLE IF NOT EXISTS owner_accounts (\
+        ...' at line 1
+Migration error restricted_vehicles: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near '\
+                    CREATE TABLE IF NOT EXISTS restricted_vehicles (\
+   ...' at line 1
+Migration error owner_accounts: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near '\
+                    CREATE TABLE IF NOT EXISTS owner_accounts (\
+        ...' at line 1
+Migration error restricted_vehicles: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near '\
+                    CREATE TABLE IF NOT EXISTS restricted_vehicles (\
+   ...' at line 1
+Migration error owner_accounts: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near '\
+                    CREATE TABLE IF NOT EXISTS owner_accounts (\
+        ...' at line 1
+Migration error restricted_vehicles: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near '\
+                    CREATE TABLE IF NOT EXISTS restricted_vehicles (\
+   ...' at line 1
+Migration error owner_accounts: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near '\
+                    CREATE TABLE IF NOT EXISTS owner_accounts (\
+        ...' at line 1
+Migration error restricted_vehicles: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near '\
+                    CREATE TABLE IF NOT EXISTS restricted_vehicles (\
+   ...' at line 1
+Migration error owner_accounts: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near '\
+                    CREATE TABLE IF NOT EXISTS owner_accounts (\
+        ...' at line 1
+Migration error restricted_vehicles: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near '\
+                    CREATE TABLE IF NOT EXISTS restricted_vehicles (\
+   ...' at line 1
+Migration error owner_accounts: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near '\
+                    CREATE TABLE IF NOT EXISTS owner_accounts (\
+        ...' at line 1
+Migration error restricted_vehicles: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near '\
+                    CREATE TABLE IF NOT EXISTS restricted_vehicles (\
+   ...' at line 1
+Migration error owner_accounts: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near '\
+                    CREATE TABLE IF NOT EXISTS owner_accounts (\
+        ...' at line 1
+Migration error restricted_vehicles: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near '\
+                    CREATE TABLE IF NOT EXISTS restricted_vehicles (\
+   ...' at line 1
+Migration error owner_accounts: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near '\
+                    CREATE TABLE IF NOT EXISTS owner_accounts (\
+        ...' at line 1
+Migration error restricted_vehicles: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near '\
+                    CREATE TABLE IF NOT EXISTS restricted_vehicles (\
+   ...' at line 1
+Migration error owner_accounts: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near '\
+                    CREATE TABLE IF NOT EXISTS owner_accounts (\
+        ...' at line 1
+Migration error restricted_vehicles: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near '\
+                    CREATE TABLE IF NOT EXISTS restricted_vehicles (\
+   ...' at line 1
+Migration error owner_accounts: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near '\
+                    CREATE TABLE IF NOT EXISTS owner_accounts (\
+        ...' at line 1
+Migration error restricted_vehicles: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near '\
+                    CREATE TABLE IF NOT EXISTS restricted_vehicles (\
+   ...' at line 1
+Migration error owner_accounts: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near '\
+                    CREATE TABLE IF NOT EXISTS owner_accounts (\
+        ...' at line 1
+Migration error restricted_vehicles: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near '\
+                    CREATE TABLE IF NOT EXISTS restricted_vehicles (\
+   ...' at line 1
+Migration error owner_accounts: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near '\
+                    CREATE TABLE IF NOT EXISTS owner_accounts (\
+        ...' at line 1
+Migration error restricted_vehicles: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near '\
+                    CREATE TABLE IF NOT EXISTS restricted_vehicles (\
+   ...' at line 1
+Migration error owner_accounts: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near '\
+                    CREATE TABLE IF NOT EXISTS owner_accounts (\
+        ...' at line 1
+Migration error restricted_vehicles: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near '\
+                    CREATE TABLE IF NOT EXISTS restricted_vehicles (\
+   ...' at line 1
+Migration error owner_accounts: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near '\
+                    CREATE TABLE IF NOT EXISTS owner_accounts (\
+        ...' at line 1
+Migration error restricted_vehicles: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near '\
+                    CREATE TABLE IF NOT EXISTS restricted_vehicles (\
+   ...' at line 1
+Migration error owner_accounts: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near '\
+                    CREATE TABLE IF NOT EXISTS owner_accounts (\
+        ...' at line 1
+Migration error restricted_vehicles: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near '\
+                    CREATE TABLE IF NOT EXISTS restricted_vehicles (\
+   ...' at line 1
+Migration error owner_accounts: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near '\
+                    CREATE TABLE IF NOT EXISTS owner_accounts (\
+        ...' at line 1
+Migration error restricted_vehicles: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near '\
+                    CREATE TABLE IF NOT EXISTS restricted_vehicles (\
+   ...' at line 1
+Migration error owner_accounts: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near '\
+                    CREATE TABLE IF NOT EXISTS owner_accounts (\
+        ...' at line 1
+Migration error restricted_vehicles: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near '\
+                    CREATE TABLE IF NOT EXISTS restricted_vehicles (\
+   ...' at line 1
+Migration error owner_accounts: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near '\
+                    CREATE TABLE IF NOT EXISTS owner_accounts (\
+        ...' at line 1
+Migration error restricted_vehicles: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near '\
+                    CREATE TABLE IF NOT EXISTS restricted_vehicles (\
+   ...' at line 1
+Migration error owner_accounts: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near '\
+                    CREATE TABLE IF NOT EXISTS owner_accounts (\
+        ...' at line 1
+Migration error restricted_vehicles: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near '\
+                    CREATE TABLE IF NOT EXISTS restricted_vehicles (\
+   ...' at line 1
+Migration error owner_accounts: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near '\
+                    CREATE TABLE IF NOT EXISTS owner_accounts (\
+        ...' at line 1
+Migration error restricted_vehicles: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near '\
+                    CREATE TABLE IF NOT EXISTS restricted_vehicles (\
+   ...' at line 1
+Migration error owner_accounts: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near '\
+                    CREATE TABLE IF NOT EXISTS owner_accounts (\
+        ...' at line 1
+Migration error restricted_vehicles: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near '\
+                    CREATE TABLE IF NOT EXISTS restricted_vehicles (\
+   ...' at line 1
+Migration error owner_accounts: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near '\
+                    CREATE TABLE IF NOT EXISTS owner_accounts (\
+        ...' at line 1
+Migration error restricted_vehicles: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near '\
+                    CREATE TABLE IF NOT EXISTS restricted_vehicles (\
+   ...' at line 1
+Migration error owner_accounts: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near '\
+                    CREATE TABLE IF NOT EXISTS owner_accounts (\
+        ...' at line 1
+Migration error restricted_vehicles: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near '\
+                    CREATE TABLE IF NOT EXISTS restricted_vehicles (\
+   ...' at line 1
+Migration error owner_accounts: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near '\
+                    CREATE TABLE IF NOT EXISTS owner_accounts (\
+        ...' at line 1
+Migration error restricted_vehicles: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near '\
+                    CREATE TABLE IF NOT EXISTS restricted_vehicles (\
+   ...' at line 1
+Migration error owner_accounts: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near '\
+                    CREATE TABLE IF NOT EXISTS owner_accounts (\
+        ...' at line 1
+Migration error restricted_vehicles: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near '\
+                    CREATE TABLE IF NOT EXISTS restricted_vehicles (\
+   ...' at line 1
+Migration error owner_accounts: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near '\
+                    CREATE TABLE IF NOT EXISTS owner_accounts (\
+        ...' at line 1
+Migration error restricted_vehicles: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near '\
+                    CREATE TABLE IF NOT EXISTS restricted_vehicles (\
+   ...' at line 1
+Migration error owner_accounts: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near '\
+                    CREATE TABLE IF NOT EXISTS owner_accounts (\
+        ...' at line 1
+Migration error restricted_vehicles: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near '\
+                    CREATE TABLE IF NOT EXISTS restricted_vehicles (\
+   ...' at line 1
+Migration error owner_accounts: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near '\
+                    CREATE TABLE IF NOT EXISTS owner_accounts (\
+        ...' at line 1
+Migration error restricted_vehicles: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near '\
+                    CREATE TABLE IF NOT EXISTS restricted_vehicles (\
+   ...' at line 1
+Migration error owner_accounts: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near '\
+                    CREATE TABLE IF NOT EXISTS owner_accounts (\
+        ...' at line 1
+Migration error restricted_vehicles: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near '\
+                    CREATE TABLE IF NOT EXISTS restricted_vehicles (\
+   ...' at line 1
+Migration error owner_accounts: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near '\
+                    CREATE TABLE IF NOT EXISTS owner_accounts (\
+        ...' at line 1
+Migration error restricted_vehicles: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near '\
+                    CREATE TABLE IF NOT EXISTS restricted_vehicles (\
+   ...' at line 1
+Migration error owner_accounts: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near '\
+                    CREATE TABLE IF NOT EXISTS owner_accounts (\
+        ...' at line 1
+Migration error restricted_vehicles: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near '\
+                    CREATE TABLE IF NOT EXISTS restricted_vehicles (\
+   ...' at line 1
+Migration error owner_accounts: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near '\
+                    CREATE TABLE IF NOT EXISTS owner_accounts (\
+        ...' at line 1
+Migration error restricted_vehicles: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near '\
+                    CREATE TABLE IF NOT EXISTS restricted_vehicles (\
+   ...' at line 1
+Migration error owner_accounts: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near '\
+                    CREATE TABLE IF NOT EXISTS owner_accounts (\
+        ...' at line 1
+Migration error restricted_vehicles: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near '\
+                    CREATE TABLE IF NOT EXISTS restricted_vehicles (\
+   ...' at line 1
+Migration error owner_accounts: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near '\
+                    CREATE TABLE IF NOT EXISTS owner_accounts (\
+        ...' at line 1
+Migration error restricted_vehicles: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near '\
+                    CREATE TABLE IF NOT EXISTS restricted_vehicles (\
+   ...' at line 1
+Migration error owner_accounts: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near '\
+                    CREATE TABLE IF NOT EXISTS owner_accounts (\
+        ...' at line 1
+Migration error restricted_vehicles: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near '\
+                    CREATE TABLE IF NOT EXISTS restricted_vehicles (\
+   ...' at line 1
+Migration error owner_accounts: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near '\
+                    CREATE TABLE IF NOT EXISTS owner_accounts (\
+        ...' at line 1
+Migration error restricted_vehicles: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near '\
+                    CREATE TABLE IF NOT EXISTS restricted_vehicles (\
+   ...' at line 1
+Migration error owner_accounts: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near '\
+                    CREATE TABLE IF NOT EXISTS owner_accounts (\
+        ...' at line 1
+Migration error restricted_vehicles: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near '\
+                    CREATE TABLE IF NOT EXISTS restricted_vehicles (\
+   ...' at line 1
+Migration error owner_accounts: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near '\
+                    CREATE TABLE IF NOT EXISTS owner_accounts (\
+        ...' at line 1
+Migration error restricted_vehicles: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near '\
+                    CREATE TABLE IF NOT EXISTS restricted_vehicles (\
+   ...' at line 1
+Migration error owner_accounts: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near '\
+                    CREATE TABLE IF NOT EXISTS owner_accounts (\
+        ...' at line 1
+Migration error restricted_vehicles: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near '\
+                    CREATE TABLE IF NOT EXISTS restricted_vehicles (\
+   ...' at line 1
+Migration error owner_accounts: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near '\
+                    CREATE TABLE IF NOT EXISTS owner_accounts (\
+        ...' at line 1
+Migration error restricted_vehicles: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near '\
+                    CREATE TABLE IF NOT EXISTS restricted_vehicles (\
+   ...' at line 1
+Migration error owner_accounts: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near '\
+                    CREATE TABLE IF NOT EXISTS owner_accounts (\
+        ...' at line 1
+Migration error restricted_vehicles: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near '\
+                    CREATE TABLE IF NOT EXISTS restricted_vehicles (\
+   ...' at line 1
+Migration error owner_accounts: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near '\
+                    CREATE TABLE IF NOT EXISTS owner_accounts (\
+        ...' at line 1
+Migration error restricted_vehicles: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near '\
+                    CREATE TABLE IF NOT EXISTS restricted_vehicles (\
+   ...' at line 1
+Migration error owner_accounts: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near '\
+                    CREATE TABLE IF NOT EXISTS owner_accounts (\
+        ...' at line 1
+Migration error restricted_vehicles: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near '\
+                    CREATE TABLE IF NOT EXISTS restricted_vehicles (\
+   ...' at line 1
+Migration error owner_accounts: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near '\
+                    CREATE TABLE IF NOT EXISTS owner_accounts (\
+        ...' at line 1
+Migration error restricted_vehicles: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near '\
+                    CREATE TABLE IF NOT EXISTS restricted_vehicles (\
+   ...' at line 1
+Migration error owner_accounts: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near '\
+                    CREATE TABLE IF NOT EXISTS owner_accounts (\
+        ...' at line 1
+Migration error restricted_vehicles: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near '\
+                    CREATE TABLE IF NOT EXISTS restricted_vehicles (\
+   ...' at line 1
+Migration error owner_accounts: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near '\
+                    CREATE TABLE IF NOT EXISTS owner_accounts (\
+        ...' at line 1
+Migration error restricted_vehicles: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near '\
+                    CREATE TABLE IF NOT EXISTS restricted_vehicles (\
+   ...' at line 1
+Migration error owner_accounts: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near '\
+                    CREATE TABLE IF NOT EXISTS owner_accounts (\
+        ...' at line 1
+Migration error restricted_vehicles: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near '\
+                    CREATE TABLE IF NOT EXISTS restricted_vehicles (\
+   ...' at line 1
+Migration error owner_accounts: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near '\
+                    CREATE TABLE IF NOT EXISTS owner_accounts (\
+        ...' at line 1
+Migration error restricted_vehicles: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near '\
+                    CREATE TABLE IF NOT EXISTS restricted_vehicles (\
+   ...' at line 1
+Migration error owner_accounts: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near '\
+                    CREATE TABLE IF NOT EXISTS owner_accounts (\
+        ...' at line 1
+Migration error restricted_vehicles: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near '\
+                    CREATE TABLE IF NOT EXISTS restricted_vehicles (\
+   ...' at line 1
+Migration error owner_accounts: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near '\
+                    CREATE TABLE IF NOT EXISTS owner_accounts (\
+        ...' at line 1
+Migration error restricted_vehicles: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near '\
+                    CREATE TABLE IF NOT EXISTS restricted_vehicles (\
+   ...' at line 1
+Migration error owner_accounts: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near '\
+                    CREATE TABLE IF NOT EXISTS owner_accounts (\
+        ...' at line 1
+Migration error restricted_vehicles: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near '\
+                    CREATE TABLE IF NOT EXISTS restricted_vehicles (\
+   ...' at line 1
+Migration error owner_accounts: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near '\
+                    CREATE TABLE IF NOT EXISTS owner_accounts (\
+        ...' at line 1
+Migration error restricted_vehicles: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near '\
+                    CREATE TABLE IF NOT EXISTS restricted_vehicles (\
+   ...' at line 1
+Migration error owner_accounts: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near '\
+                    CREATE TABLE IF NOT EXISTS owner_accounts (\
+        ...' at line 1
+Migration error restricted_vehicles: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near '\
+                    CREATE TABLE IF NOT EXISTS restricted_vehicles (\
+   ...' at line 1
+Migration error owner_accounts: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near '\
+                    CREATE TABLE IF NOT EXISTS owner_accounts (\
+        ...' at line 1
+Migration error restricted_vehicles: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near '\
+                    CREATE TABLE IF NOT EXISTS restricted_vehicles (\
+   ...' at line 1
+Migration error owner_accounts: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near '\
+                    CREATE TABLE IF NOT EXISTS owner_accounts (\
+        ...' at line 1
+Migration error restricted_vehicles: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near '\
+                    CREATE TABLE IF NOT EXISTS restricted_vehicles (\
+   ...' at line 1
+Migration error owner_accounts: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near '\
+                    CREATE TABLE IF NOT EXISTS owner_accounts (\
+        ...' at line 1
+Migration error restricted_vehicles: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near '\
+                    CREATE TABLE IF NOT EXISTS restricted_vehicles (\
+   ...' at line 1
+Migration error owner_accounts: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near '\
+                    CREATE TABLE IF NOT EXISTS owner_accounts (\
+        ...' at line 1
+Migration error restricted_vehicles: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near '\
+                    CREATE TABLE IF NOT EXISTS restricted_vehicles (\
+   ...' at line 1
+Migration error owner_accounts: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near '\
+                    CREATE TABLE IF NOT EXISTS owner_accounts (\
+        ...' at line 1
+Migration error restricted_vehicles: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near '\
+                    CREATE TABLE IF NOT EXISTS restricted_vehicles (\
+   ...' at line 1
+Migration error owner_accounts: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near '\
+                    CREATE TABLE IF NOT EXISTS owner_accounts (\
+        ...' at line 1
+Migration error restricted_vehicles: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near '\
+                    CREATE TABLE IF NOT EXISTS restricted_vehicles (\
+   ...' at line 1
+Migration error owner_accounts: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near '\
+                    CREATE TABLE IF NOT EXISTS owner_accounts (\
+        ...' at line 1
+Migration error restricted_vehicles: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near '\
+                    CREATE TABLE IF NOT EXISTS restricted_vehicles (\
+   ...' at line 1
+Migration error owner_accounts: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near '\
+                    CREATE TABLE IF NOT EXISTS owner_accounts (\
+        ...' at line 1
+Migration error restricted_vehicles: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near '\
+                    CREATE TABLE IF NOT EXISTS restricted_vehicles (\
+   ...' at line 1
+Migration error owner_accounts: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near '\
+                    CREATE TABLE IF NOT EXISTS owner_accounts (\
+        ...' at line 1
+Migration error restricted_vehicles: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near '\
+                    CREATE TABLE IF NOT EXISTS restricted_vehicles (\
+   ...' at line 1
+Migration error owner_accounts: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near '\
+                    CREATE TABLE IF NOT EXISTS owner_accounts (\
+        ...' at line 1
+Migration error restricted_vehicles: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near '\
+                    CREATE TABLE IF NOT EXISTS restricted_vehicles (\
+   ...' at line 1
+Migration error owner_accounts: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near '\
+                    CREATE TABLE IF NOT EXISTS owner_accounts (\
+        ...' at line 1
+Migration error restricted_vehicles: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near '\
+                    CREATE TABLE IF NOT EXISTS restricted_vehicles (\
+   ...' at line 1
+Migration error owner_accounts: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near '\
+                    CREATE TABLE IF NOT EXISTS owner_accounts (\
+        ...' at line 1
+Migration error restricted_vehicles: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near '\
+                    CREATE TABLE IF NOT EXISTS restricted_vehicles (\
+   ...' at line 1
+Migration error owner_accounts: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near '\
+                    CREATE TABLE IF NOT EXISTS owner_accounts (\
+        ...' at line 1
+Migration error restricted_vehicles: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near '\
+                    CREATE TABLE IF NOT EXISTS restricted_vehicles (\
+   ...' at line 1
+Migration error owner_accounts: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near '\
+                    CREATE TABLE IF NOT EXISTS owner_accounts (\
+        ...' at line 1
+Migration error restricted_vehicles: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near '\
+                    CREATE TABLE IF NOT EXISTS restricted_vehicles (\
+   ...' at line 1
+Migration error owner_accounts: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near '\
+                    CREATE TABLE IF NOT EXISTS owner_accounts (\
+        ...' at line 1
+Migration error restricted_vehicles: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near '\
+                    CREATE TABLE IF NOT EXISTS restricted_vehicles (\
+   ...' at line 1
+Migration error owner_accounts: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near '\
+                    CREATE TABLE IF NOT EXISTS owner_accounts (\
+        ...' at line 1
+Migration error restricted_vehicles: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near '\
+                    CREATE TABLE IF NOT EXISTS restricted_vehicles (\
+   ...' at line 1
+Migration error owner_accounts: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near '\
+                    CREATE TABLE IF NOT EXISTS owner_accounts (\
+        ...' at line 1
+Migration error restricted_vehicles: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near '\
+                    CREATE TABLE IF NOT EXISTS restricted_vehicles (\
+   ...' at line 1
+Migration error owner_accounts: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near '\
+                    CREATE TABLE IF NOT EXISTS owner_accounts (\
+        ...' at line 1
+Migration error restricted_vehicles: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near '\
+                    CREATE TABLE IF NOT EXISTS restricted_vehicles (\
+   ...' at line 1
+Migration error owner_accounts: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near '\
+                    CREATE TABLE IF NOT EXISTS owner_accounts (\
+        ...' at line 1
+Migration error restricted_vehicles: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near '\
+                    CREATE TABLE IF NOT EXISTS restricted_vehicles (\
+   ...' at line 1
+Migration error owner_accounts: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near '\
+                    CREATE TABLE IF NOT EXISTS owner_accounts (\
+        ...' at line 1
+Migration error restricted_vehicles: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near '\
+                    CREATE TABLE IF NOT EXISTS restricted_vehicles (\
+   ...' at line 1
+Migration error owner_accounts: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near '\
+                    CREATE TABLE IF NOT EXISTS owner_accounts (\
+        ...' at line 1
+Migration error restricted_vehicles: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near '\
+                    CREATE TABLE IF NOT EXISTS restricted_vehicles (\
+   ...' at line 1
+Migration error owner_accounts: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near '\
+                    CREATE TABLE IF NOT EXISTS owner_accounts (\
+        ...' at line 1
+Migration error restricted_vehicles: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near '\
+                    CREATE TABLE IF NOT EXISTS restricted_vehicles (\
+   ...' at line 1
+Migration error owner_accounts: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near '\
+                    CREATE TABLE IF NOT EXISTS owner_accounts (\
+        ...' at line 1
+Migration error restricted_vehicles: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near '\
+                    CREATE TABLE IF NOT EXISTS restricted_vehicles (\
+   ...' at line 1
+Migration error owner_accounts: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near '\
+                    CREATE TABLE IF NOT EXISTS owner_accounts (\
+        ...' at line 1
+Migration error restricted_vehicles: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near '\
+                    CREATE TABLE IF NOT EXISTS restricted_vehicles (\
+   ...' at line 1
+Migration error owner_accounts: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near '\
+                    CREATE TABLE IF NOT EXISTS owner_accounts (\
+        ...' at line 1
+Migration error restricted_vehicles: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near '\
+                    CREATE TABLE IF NOT EXISTS restricted_vehicles (\
+   ...' at line 1
+Migration error owner_accounts: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near '\
+                    CREATE TABLE IF NOT EXISTS owner_accounts (\
+        ...' at line 1
+Migration error restricted_vehicles: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near '\
+                    CREATE TABLE IF NOT EXISTS restricted_vehicles (\
+   ...' at line 1
+Migration error owner_accounts: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near '\
+                    CREATE TABLE IF NOT EXISTS owner_accounts (\
+        ...' at line 1
+Migration error restricted_vehicles: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near '\
+                    CREATE TABLE IF NOT EXISTS restricted_vehicles (\
+   ...' at line 1
+Migration error owner_accounts: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near '\
+                    CREATE TABLE IF NOT EXISTS owner_accounts (\
+        ...' at line 1
+Migration error restricted_vehicles: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near '\
+                    CREATE TABLE IF NOT EXISTS restricted_vehicles (\
+   ...' at line 1
+Migration error owner_accounts: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near '\
+                    CREATE TABLE IF NOT EXISTS owner_accounts (\
+        ...' at line 1
+Migration error restricted_vehicles: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near '\
+                    CREATE TABLE IF NOT EXISTS restricted_vehicles (\
+   ...' at line 1
+Migration error owner_accounts: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near '\
+                    CREATE TABLE IF NOT EXISTS owner_accounts (\
+        ...' at line 1
+Migration error restricted_vehicles: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near '\
+                    CREATE TABLE IF NOT EXISTS restricted_vehicles (\
+   ...' at line 1
+Migration error owner_accounts: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near '\
+                    CREATE TABLE IF NOT EXISTS owner_accounts (\
+        ...' at line 1
+Migration error restricted_vehicles: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near '\
+                    CREATE TABLE IF NOT EXISTS restricted_vehicles (\
+   ...' at line 1
+Migration error owner_accounts: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near '\
+                    CREATE TABLE IF NOT EXISTS owner_accounts (\
+        ...' at line 1
+Migration error restricted_vehicles: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near '\
+                    CREATE TABLE IF NOT EXISTS restricted_vehicles (\
+   ...' at line 1
+Migration error owner_accounts: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near '\
+                    CREATE TABLE IF NOT EXISTS owner_accounts (\
+        ...' at line 1
+Migration error restricted_vehicles: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near '\
+                    CREATE TABLE IF NOT EXISTS restricted_vehicles (\
+   ...' at line 1
+Migration error owner_accounts: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near '\
+                    CREATE TABLE IF NOT EXISTS owner_accounts (\
+        ...' at line 1
+Migration error restricted_vehicles: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near '\
+                    CREATE TABLE IF NOT EXISTS restricted_vehicles (\
+   ...' at line 1
+Migration error owner_accounts: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near '\
+                    CREATE TABLE IF NOT EXISTS owner_accounts (\
+        ...' at line 1
+Migration error restricted_vehicles: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near '\
+                    CREATE TABLE IF NOT EXISTS restricted_vehicles (\
+   ...' at line 1
+Migration error owner_accounts: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near '\
+                    CREATE TABLE IF NOT EXISTS owner_accounts (\
+        ...' at line 1
+Migration error restricted_vehicles: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near '\
+                    CREATE TABLE IF NOT EXISTS restricted_vehicles (\
+   ...' at line 1
+Migration error owner_accounts: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near '\
+                    CREATE TABLE IF NOT EXISTS owner_accounts (\
+        ...' at line 1
+Migration error restricted_vehicles: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near '\
+                    CREATE TABLE IF NOT EXISTS restricted_vehicles (\
+   ...' at line 1
+Migration error owner_accounts: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near '\
+                    CREATE TABLE IF NOT EXISTS owner_accounts (\
+        ...' at line 1
+Migration error restricted_vehicles: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near '\
+                    CREATE TABLE IF NOT EXISTS restricted_vehicles (\
+   ...' at line 1
+Migration error owner_accounts: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near '\
+                    CREATE TABLE IF NOT EXISTS owner_accounts (\
+        ...' at line 1
+Migration error restricted_vehicles: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near '\
+                    CREATE TABLE IF NOT EXISTS restricted_vehicles (\
+   ...' at line 1
+Migration error owner_accounts: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near '\
+                    CREATE TABLE IF NOT EXISTS owner_accounts (\
+        ...' at line 1
+Migration error restricted_vehicles: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near '\
+                    CREATE TABLE IF NOT EXISTS restricted_vehicles (\
+   ...' at line 1
+Migration error owner_accounts: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near '\
+                    CREATE TABLE IF NOT EXISTS owner_accounts (\
+        ...' at line 1
+Migration error restricted_vehicles: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near '\
+                    CREATE TABLE IF NOT EXISTS restricted_vehicles (\
+   ...' at line 1
+Migration error owner_accounts: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near '\
+                    CREATE TABLE IF NOT EXISTS owner_accounts (\
+        ...' at line 1
+Migration error restricted_vehicles: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near '\
+                    CREATE TABLE IF NOT EXISTS restricted_vehicles (\
+   ...' at line 1
+Migration error owner_accounts: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near '\
+                    CREATE TABLE IF NOT EXISTS owner_accounts (\
+        ...' at line 1
+Migration error restricted_vehicles: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near '\
+                    CREATE TABLE IF NOT EXISTS restricted_vehicles (\
+   ...' at line 1
+Migration error owner_accounts: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near '\
+                    CREATE TABLE IF NOT EXISTS owner_accounts (\
+        ...' at line 1
+Migration error restricted_vehicles: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near '\
+                    CREATE TABLE IF NOT EXISTS restricted_vehicles (\
+   ...' at line 1
+Migration error owner_accounts: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near '\
+                    CREATE TABLE IF NOT EXISTS owner_accounts (\
+        ...' at line 1
+Migration error restricted_vehicles: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near '\
+                    CREATE TABLE IF NOT EXISTS restricted_vehicles (\
+   ...' at line 1
+Migration error owner_accounts: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near '\
+                    CREATE TABLE IF NOT EXISTS owner_accounts (\
+        ...' at line 1
+Migration error restricted_vehicles: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near '\
+                    CREATE TABLE IF NOT EXISTS restricted_vehicles (\
+   ...' at line 1
+Migration error owner_accounts: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near '\
+                    CREATE TABLE IF NOT EXISTS owner_accounts (\
+        ...' at line 1
+Migration error restricted_vehicles: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near '\
+                    CREATE TABLE IF NOT EXISTS restricted_vehicles (\
+   ...' at line 1
+Migration error owner_accounts: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near '\
+                    CREATE TABLE IF NOT EXISTS owner_accounts (\
+        ...' at line 1
+Migration error restricted_vehicles: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near '\
+                    CREATE TABLE IF NOT EXISTS restricted_vehicles (\
+   ...' at line 1
+Migration error owner_accounts: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near '\
+                    CREATE TABLE IF NOT EXISTS owner_accounts (\
+        ...' at line 1
+Migration error restricted_vehicles: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near '\
+                    CREATE TABLE IF NOT EXISTS restricted_vehicles (\
+   ...' at line 1
+Migration error owner_accounts: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near '\
+                    CREATE TABLE IF NOT EXISTS owner_accounts (\
+        ...' at line 1
+Migration error restricted_vehicles: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near '\
+                    CREATE TABLE IF NOT EXISTS restricted_vehicles (\
+   ...' at line 1
+Migration error owner_accounts: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near '\
+                    CREATE TABLE IF NOT EXISTS owner_accounts (\
+        ...' at line 1
+Migration error restricted_vehicles: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near '\
+                    CREATE TABLE IF NOT EXISTS restricted_vehicles (\
+   ...' at line 1
+Migration error owner_accounts: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near '\
+                    CREATE TABLE IF NOT EXISTS owner_accounts (\
+        ...' at line 1
+Migration error restricted_vehicles: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near '\
+                    CREATE TABLE IF NOT EXISTS restricted_vehicles (\
+   ...' at line 1
+Migration error owner_accounts: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near '\
+                    CREATE TABLE IF NOT EXISTS owner_accounts (\
+        ...' at line 1
+Migration error restricted_vehicles: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near '\
+                    CREATE TABLE IF NOT EXISTS restricted_vehicles (\
+   ...' at line 1
+Migration error owner_accounts: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near '\
+                    CREATE TABLE IF NOT EXISTS owner_accounts (\
+        ...' at line 1
+Migration error restricted_vehicles: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near '\
+                    CREATE TABLE IF NOT EXISTS restricted_vehicles (\
+   ...' at line 1
+Migration error owner_accounts: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near '\
+                    CREATE TABLE IF NOT EXISTS owner_accounts (\
+        ...' at line 1
+Migration error restricted_vehicles: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near '\
+                    CREATE TABLE IF NOT EXISTS restricted_vehicles (\
+   ...' at line 1
+Migration error owner_accounts: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near '\
+                    CREATE TABLE IF NOT EXISTS owner_accounts (\
+        ...' at line 1
+Migration error restricted_vehicles: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near '\
+                    CREATE TABLE IF NOT EXISTS restricted_vehicles (\
+   ...' at line 1
+Migration error owner_accounts: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near '\
+                    CREATE TABLE IF NOT EXISTS owner_accounts (\
+        ...' at line 1
+Migration error restricted_vehicles: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near '\
+                    CREATE TABLE IF NOT EXISTS restricted_vehicles (\
+   ...' at line 1
+Migration error owner_accounts: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near '\
+                    CREATE TABLE IF NOT EXISTS owner_accounts (\
+        ...' at line 1
+Migration error restricted_vehicles: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near '\
+                    CREATE TABLE IF NOT EXISTS restricted_vehicles (\
+   ...' at line 1
+Migration error owner_accounts: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near '\
+                    CREATE TABLE IF NOT EXISTS owner_accounts (\
+        ...' at line 1
+Migration error restricted_vehicles: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near '\
+                    CREATE TABLE IF NOT EXISTS restricted_vehicles (\
+   ...' at line 1
+Migration error owner_accounts: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near '\
+                    CREATE TABLE IF NOT EXISTS owner_accounts (\
+        ...' at line 1
+Migration error restricted_vehicles: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near '\
+                    CREATE TABLE IF NOT EXISTS restricted_vehicles (\
+   ...' at line 1
+Migration error owner_accounts: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near '\
+                    CREATE TABLE IF NOT EXISTS owner_accounts (\
+        ...' at line 1
+Migration error restricted_vehicles: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near '\
+                    CREATE TABLE IF NOT EXISTS restricted_vehicles (\
+   ...' at line 1
+Migration error owner_accounts: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near '\
+                    CREATE TABLE IF NOT EXISTS owner_accounts (\
+        ...' at line 1
+Migration error restricted_vehicles: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near '\
+                    CREATE TABLE IF NOT EXISTS restricted_vehicles (\
+   ...' at line 1
+Migration error owner_accounts: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near '\
+                    CREATE TABLE IF NOT EXISTS owner_accounts (\
+        ...' at line 1
+Migration error restricted_vehicles: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near '\
+                    CREATE TABLE IF NOT EXISTS restricted_vehicles (\
+   ...' at line 1
+Migration error owner_accounts: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near '\
+                    CREATE TABLE IF NOT EXISTS owner_accounts (\
+        ...' at line 1
+Migration error restricted_vehicles: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near '\
+                    CREATE TABLE IF NOT EXISTS restricted_vehicles (\
+   ...' at line 1
+Migration error owner_accounts: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near '\
+                    CREATE TABLE IF NOT EXISTS owner_accounts (\
+        ...' at line 1
+Migration error restricted_vehicles: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near '\
+                    CREATE TABLE IF NOT EXISTS restricted_vehicles (\
+   ...' at line 1
+Migration error owner_accounts: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near '\
+                    CREATE TABLE IF NOT EXISTS owner_accounts (\
+        ...' at line 1
+Migration error restricted_vehicles: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near '\
+                    CREATE TABLE IF NOT EXISTS restricted_vehicles (\
+   ...' at line 1
+Migration error owner_accounts: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near '\
+                    CREATE TABLE IF NOT EXISTS owner_accounts (\
+        ...' at line 1
+Migration error restricted_vehicles: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near '\
+                    CREATE TABLE IF NOT EXISTS restricted_vehicles (\
+   ...' at line 1
+Migration error owner_accounts: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near '\
+                    CREATE TABLE IF NOT EXISTS owner_accounts (\
+        ...' at line 1
+Migration error restricted_vehicles: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near '\
+                    CREATE TABLE IF NOT EXISTS restricted_vehicles (\
+   ...' at line 1
+Migration error owner_accounts: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near '\
+                    CREATE TABLE IF NOT EXISTS owner_accounts (\
+        ...' at line 1
+Migration error restricted_vehicles: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near '\
+                    CREATE TABLE IF NOT EXISTS restricted_vehicles (\
+   ...' at line 1
+Migration error owner_accounts: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near '\
+                    CREATE TABLE IF NOT EXISTS owner_accounts (\
+        ...' at line 1
+Migration error restricted_vehicles: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near '\
+                    CREATE TABLE IF NOT EXISTS restricted_vehicles (\
+   ...' at line 1
+Migration error owner_accounts: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near '\
+                    CREATE TABLE IF NOT EXISTS owner_accounts (\
+        ...' at line 1
+Migration error restricted_vehicles: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near '\
+                    CREATE TABLE IF NOT EXISTS restricted_vehicles (\
+   ...' at line 1
+Migration error owner_accounts: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near '\
+                    CREATE TABLE IF NOT EXISTS owner_accounts (\
+        ...' at line 1
+Migration error restricted_vehicles: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near '\
+                    CREATE TABLE IF NOT EXISTS restricted_vehicles (\
+   ...' at line 1
+Migration error owner_accounts: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near '\
+                    CREATE TABLE IF NOT EXISTS owner_accounts (\
+        ...' at line 1
+Migration error restricted_vehicles: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near '\
+                    CREATE TABLE IF NOT EXISTS restricted_vehicles (\
+   ...' at line 1
+Migration error owner_accounts: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near '\
+                    CREATE TABLE IF NOT EXISTS owner_accounts (\
+        ...' at line 1
+Migration error restricted_vehicles: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near '\
+                    CREATE TABLE IF NOT EXISTS restricted_vehicles (\
+   ...' at line 1
+Migration error owner_accounts: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near '\
+                    CREATE TABLE IF NOT EXISTS owner_accounts (\
+        ...' at line 1
+Migration error restricted_vehicles: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near '\
+                    CREATE TABLE IF NOT EXISTS restricted_vehicles (\
+   ...' at line 1
+Migration error owner_accounts: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near '\
+                    CREATE TABLE IF NOT EXISTS owner_accounts (\
+        ...' at line 1
+Migration error restricted_vehicles: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near '\
+                    CREATE TABLE IF NOT EXISTS restricted_vehicles (\
+   ...' at line 1
+Migration error owner_accounts: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near '\
+                    CREATE TABLE IF NOT EXISTS owner_accounts (\
+        ...' at line 1
+Migration error restricted_vehicles: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near '\
+                    CREATE TABLE IF NOT EXISTS restricted_vehicles (\
+   ...' at line 1
+Migration error owner_accounts: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near '\
+                    CREATE TABLE IF NOT EXISTS owner_accounts (\
+        ...' at line 1
+Migration error restricted_vehicles: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near '\
+                    CREATE TABLE IF NOT EXISTS restricted_vehicles (\
+   ...' at line 1
+Migration error owner_accounts: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near '\
+                    CREATE TABLE IF NOT EXISTS owner_accounts (\
+        ...' at line 1
+Migration error restricted_vehicles: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near '\
+                    CREATE TABLE IF NOT EXISTS restricted_vehicles (\
+   ...' at line 1
+Migration error owner_accounts: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near '\
+                    CREATE TABLE IF NOT EXISTS owner_accounts (\
+        ...' at line 1
+Migration error restricted_vehicles: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near '\
+                    CREATE TABLE IF NOT EXISTS restricted_vehicles (\
+   ...' at line 1
+Migration error owner_accounts: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near '\
+                    CREATE TABLE IF NOT EXISTS owner_accounts (\
+        ...' at line 1
+Migration error restricted_vehicles: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near '\
+                    CREATE TABLE IF NOT EXISTS restricted_vehicles (\
+   ...' at line 1
+Migration error owner_accounts: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near '\
+                    CREATE TABLE IF NOT EXISTS owner_accounts (\
+        ...' at line 1
+Migration error restricted_vehicles: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near '\
+                    CREATE TABLE IF NOT EXISTS restricted_vehicles (\
+   ...' at line 1
+Migration error owner_accounts: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near '\
+                    CREATE TABLE IF NOT EXISTS owner_accounts (\
+        ...' at line 1
+Migration error restricted_vehicles: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near '\
+                    CREATE TABLE IF NOT EXISTS restricted_vehicles (\
+   ...' at line 1

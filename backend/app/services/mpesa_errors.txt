@@ -11,3 +11,4 @@ Mpesa DB insert error: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'r
 Inserted new mpesa_transaction for callback: ws_CO_16032026002325201727516126
 Mpesa DB insert error: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'receipt' in 'field list'
 Inserted new mpesa_transaction for callback: ws_CO_16032026205112196727516126
+Mpesa DB insert error: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'receipt' in 'field list'

@@ -133,6 +133,42 @@ class DatabaseConnection {
             } catch (PDOException $ignore) {
             }
 
+            // add soft delete column to owner_accounts (for recycle bin functionality)
+            try {
+                $this->pdo->exec("ALTER TABLE owner_accounts ADD COLUMN deleted_at DATETIME NULL DEFAULT NULL");
+            } catch (PDOException $ignore) {
+                // column already exists
+            }
+
+            // add soft delete column to staff_vehicles (for recycle bin functionality)
+            try {
+                $this->pdo->exec("ALTER TABLE staff_vehicles ADD COLUMN deleted_at DATETIME NULL DEFAULT NULL");
+            } catch (PDOException $ignore) {
+                // column already exists
+            }
+
+            // add soft delete column to restricted_vehicles (for recycle bin functionality)
+            try {
+                $this->pdo->exec("ALTER TABLE restricted_vehicles ADD COLUMN deleted_at DATETIME NULL DEFAULT NULL");
+            } catch (PDOException $ignore) {
+                // column already exists
+            }
+
+            // create revenue archive table to preserve revenue when clearing logs
+            try {
+                $this->pdo->exec("
+                    CREATE TABLE IF NOT EXISTS revenue_archive (
+                        id INT AUTO_INCREMENT PRIMARY KEY,
+                        archived_revenue DECIMAL(15,2) NOT NULL DEFAULT 0,
+                        archived_date DATETIME DEFAULT CURRENT_TIMESTAMP,
+                        admin_who_cleared VARCHAR(100) NULL,
+                        log_count_cleared INT DEFAULT 0,
+                        notes VARCHAR(500) NULL
+                    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4
+                ");
+            } catch (PDOException $ignore) {
+                // table may already exist
+            }
 
         } catch (PDOException $e) {
             die("Database connection failed.");

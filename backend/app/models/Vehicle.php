@@ -137,16 +137,27 @@ class Vehicle {
         return (int) $stmt->fetchColumn();
     }
 
-    // Calculate total revenue from paid vehicles
+    // Calculate total revenue from paid vehicles (including archived revenue from cleared logs)
    public function totalRevenue(): float {
+    // Get current revenue from active logs
     $stmt = $this->conn->prepare(
-        "SELECT COALESCE(SUM(total_fee), 0)
+        "SELECT COALESCE(SUM(total_fee), 0) as current_revenue
          FROM vehicle_logs
          WHERE payment_status = 'paid'"
     );
     $stmt->execute();
+    $currentRevenue = (float)$stmt->fetchColumn();
 
-    return (float) $stmt->fetchColumn();
+    // Get archived revenue from previous log clears
+    $stmtArchive = $this->conn->prepare(
+        "SELECT COALESCE(SUM(archived_revenue), 0) as archived_revenue
+         FROM revenue_archive"
+    );
+    $stmtArchive->execute();
+    $archivedRevenue = (float)$stmtArchive->fetchColumn();
+
+    // Return total of both
+    return $currentRevenue + $archivedRevenue;
 }
 
     // Get active vehicle details by plate number

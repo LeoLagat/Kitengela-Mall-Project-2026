@@ -8,35 +8,37 @@ if (!isset($_SESSION['admin_logged_in']) || $_SESSION['admin_logged_in'] !== tru
     exit;
 }
 require_once(__DIR__ . '/../config/database.php');
+require_once(__DIR__ . '/AdminAudit.php');
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['plate'])) {
-    $plate = $_POST['plate'];
+    $plate = strtoupper(trim($_POST['plate']));
     $db = new DatabaseConnection();
     $pdo = $db->pdo;
 
     try {
-        $pdo->beginTransaction(); // Use a transaction to ensure both updates happen together
+        $pdo->beginTransaction();
 
-        // 1. Find the bay_id associated with this active vehicle
-        $stmtFind = $pdo->prepare("SELECT bay_id FROM vehicle_logs WHERE plate_number = :plate AND exit_time IS NULL LIMIT 1");
+        // 1. Search for ANY active vehicle log for this plate (regardless of payment status)
+        $stmtFind = $pdo->prepare("SELECT id, bay_id, payment_status, entry_time FROM vehicle_logs WHERE plate_number = :plate AND exit_time IS NULL LIMIT 1");
         $stmtFind->execute([':plate' => $plate]);
         $vehicle = $stmtFind->fetch(PDO::FETCH_ASSOC);
 
         if ($vehicle) {
+            // Vehicle found and active - process the exit
+            $vehicleId = $vehicle['id'];
             $bayId = $vehicle['bay_id'];
+            $oldStatus = $vehicle['payment_status'];
 
-            // 2. Update vehicle_logs to mark as paid and exited
+            // 2. Update vehicle_logs: Mark as paid AND exited (even if payment was pending/incomplete)
             $stmtLog = $pdo->prepare("
                 UPDATE vehicle_logs 
                 SET payment_status = 'paid',
                     exit_time = NOW()
-                WHERE plate_number = :plate 
-                AND exit_time IS NULL
+                WHERE id = :id
             ");
-            $stmtLog->execute([':plate' => $plate]);
+            $stmtLog->execute([':id' => $vehicleId]);
 
             // 3. Update the parking bay status to 'vacant'
-            // Assuming your table is named 'parking_bays' and the column is 'current_status'
             $stmtBay = $pdo->prepare("
                 UPDATE parking_bays 
                 SET current_status = 'vacant' 
@@ -44,14 +46,54 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['plate'])) {
             ");
             $stmtBay->execute([':bay_id' => $bayId]);
 
+            // 4. Log this bypass action with previous status
+            if (!empty($_SESSION['admin_username'])) {
+                $auditMsg = "executed manual bypass for vehicle $plate (bay $bayId) | previous status: $oldStatus";
+                AdminAudit::log($pdo, $_SESSION['admin_username'], $auditMsg);
+            }
+
             $pdo->commit();
-            echo json_encode(['status' => 'success', 'message' => "Manual bypass successful. Bay $bayId is now vacant!"]);
+            echo json_encode([
+                'status' => 'success', 
+                'message' => "✓ Gate forced open for $plate. Bay $bayId is now vacant. (Previous payment status: $oldStatus)"
+            ]);
         } else {
-            $pdo->rollBack();
-            echo json_encode(['status' => 'error', 'message' => "No active vehicle found for $plate."]);
+            // Vehicle not found in active logs - try to find ANY record to verify it exists
+            $stmtCheck = $pdo->prepare("SELECT id, bay_id FROM vehicle_logs WHERE plate_number = :plate ORDER BY entry_time DESC LIMIT 1");
+            $stmtCheck->execute([':plate' => $plate]);
+            $existingRecord = $stmtCheck->fetch(PDO::FETCH_ASSOC);
+            
+            if ($existingRecord) {
+                // Vehicle exists in system but log shows it already exited
+                // Force open the gate anyway (for recovery/override scenarios)
+                if (!empty($_SESSION['admin_username'])) {
+                    AdminAudit::log($pdo, $_SESSION['admin_username'], "executed emergency bypass for vehicle $plate (vehicle already exited but gate forced open)");
+                }
+                if ($pdo->inTransaction()) {
+                    $pdo->rollBack();
+                }
+                echo json_encode([
+                    'status' => 'success', 
+                    'message' => "✓ EMERGENCY OVERRIDE: Gate forced open for $plate (vehicle already exited, but manual override applied)"
+                ]);
+            } else {
+                // Vehicle doesn't exist in system at all - still allow bypass
+                // This handles cases where vehicle entry wasn't logged or new vehicles need emergency exit
+                if (!empty($_SESSION['admin_username'])) {
+                    AdminAudit::log($pdo, $_SESSION['admin_username'], "executed bypass for unknown vehicle $plate (not in system - emergency access)");
+                }
+                if ($pdo->inTransaction()) {
+                    $pdo->rollBack();
+                }
+                echo json_encode([
+                    'status' => 'success', 
+                    'message' => "✓ EMERGENCY ACCESS: Gate forced open for $plate (vehicle not found in system, but access granted)"
+                ]);
+            }
         }
     } catch (Exception $e) {
         if ($pdo->inTransaction()) $pdo->rollBack();
         echo json_encode(['status' => 'error', 'message' => "Database Error: " . $e->getMessage()]);
     }
 }
+?>

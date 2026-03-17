@@ -31,22 +31,7 @@ try {
 $message = '';
 $messageType = 'success';
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    if (!empty($_POST['remove_plate'])) {
-        $plateToRemove = strtoupper(trim($_POST['remove_plate']));
-        try {
-            $stmt = $pdo->prepare("DELETE FROM restricted_vehicles WHERE plate_number = ?");
-            $stmt->execute([$plateToRemove]);
-            if ($stmt->rowCount() > 0) {
-                $message = "$plateToRemove removed from restricted list.";
-            } else {
-                $messageType = 'error';
-                $message = "$plateToRemove was not found in the restricted list.";
-            }
-        } catch (Exception $e) {
-            $messageType = 'error';
-            $message = "Error: " . $e->getMessage();
-        }
-    } elseif (!empty($_POST['plate'])) {
+    if (!empty($_POST['plate'])) {
         $plate = strtoupper(trim($_POST['plate']));
         $reason = trim($_POST['reason'] ?? '');
         try {
@@ -67,12 +52,23 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 // fetch restricted list (wrap in try/catch in case table still missing)
 $rows = [];
+$deletedRows = [];
 try {
-    $stmt = $pdo->query("SELECT plate_number, reason, added_at FROM restricted_vehicles ORDER BY plate_number");
+    $stmt = $pdo->query("SELECT plate_number, reason, added_at FROM restricted_vehicles WHERE deleted_at IS NULL ORDER BY plate_number");
     $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
 } catch (Exception $e) {
     // if table absence causes error, show empty list and message later
     $message = "Warning: restricted_vehicles table not found yet.";
+}
+
+// Fetch deleted restricted vehicles (recycle bin) - only for super_admin
+if (!empty($_SESSION['admin_role']) && $_SESSION['admin_role'] === 'super_admin') {
+    try {
+        $stmt = $pdo->query("SELECT plate_number, reason, added_at, deleted_at FROM restricted_vehicles WHERE deleted_at IS NOT NULL ORDER BY deleted_at DESC");
+        $deletedRows = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    } catch (Exception $e) {
+        // ignore if query fails
+    }
 }
 ?>
 <!DOCTYPE html>
@@ -209,6 +205,41 @@ try {
             box-shadow: 0 2px 0 firebrick;
         }
 
+        .action-btn {
+            padding: 6px 12px;
+            border: none;
+            border-radius: 6px;
+            font-size: 13px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s;
+            width: auto;
+            background: none;
+            box-shadow: none;
+        }
+
+        .restore-btn {
+            background: seagreen;
+            color: white;
+        }
+
+        .restore-btn:hover {
+            background: darkgreen;
+        }
+
+        .permanent-delete-btn {
+            background: darkred;
+            color: white;
+        }
+
+        .permanent-delete-btn:hover {
+            background: maroon;
+        }
+
+        .recycle-bin-section {
+            margin-top: 40px;
+        }
+
         .empty-state {
             background: floralwhite;
             border: 1px dashed burlywood;
@@ -307,10 +338,14 @@ try {
                                     <td><?= htmlspecialchars($row['reason'] ?? 'N/A') ?></td>
                                     <td><?= htmlspecialchars($row['added_at']) ?></td>
                                     <td>
-                                        <form method="POST" onsubmit="return confirm('Remove <?= htmlspecialchars($row['plate_number']) ?> from restricted list?');">
-                                            <input type="hidden" name="remove_plate" value="<?= htmlspecialchars($row['plate_number']) ?>">
-                                            <button type="submit" class="btn-remove">Remove</button>
-                                        </form>
+                                        <?php if (!empty($_SESSION['admin_role']) && $_SESSION['admin_role'] === 'super_admin'): ?>
+                                            <button class="action-btn btn-remove" onclick="deleteRestrictedVehicle('<?= htmlspecialchars($row['plate_number']) ?>')">Remove</button>
+                                        <?php else: ?>
+                                            <form method="POST" onsubmit="return confirm('Remove <?= htmlspecialchars($row['plate_number']) ?> from restricted list?');">
+                                                <input type="hidden" name="remove_plate" value="<?= htmlspecialchars($row['plate_number']) ?>">
+                                                <button type="submit" class="btn-remove">Remove</button>
+                                            </form>
+                                        <?php endif; ?>
                                     </td>
                                 </tr>
                             <?php endforeach; ?>
@@ -320,6 +355,43 @@ try {
             <?php endif; ?>
         </article>
     </section>
+
+    <?php if (!empty($_SESSION['admin_role']) && $_SESSION['admin_role'] === 'super_admin'): ?>
+    <section class="recycle-bin-section">
+        <article class="restricted-card">
+            <h3>♻️ Recycle Bin (Deleted Restricted Vehicles)</h3>
+            <?php if (empty($deletedRows)): ?>
+                <div class="empty-state">No deleted restricted vehicles in recycle bin.</div>
+            <?php else: ?>
+                <div class="table-wrap">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Plate</th>
+                                <th>Reason</th>
+                                <th>Deleted On</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?php foreach ($deletedRows as $row): ?>
+                                <tr style="opacity: 0.7;">
+                                    <td><?= htmlspecialchars($row['plate_number']) ?></td>
+                                    <td><?= htmlspecialchars($row['reason'] ?? 'N/A') ?></td>
+                                    <td><?= htmlspecialchars($row['deleted_at']) ?></td>
+                                    <td>
+                                        <button class="action-btn restore-btn" onclick="restoreRestrictedVehicle('<?= htmlspecialchars($row['plate_number']) ?>')">Restore</button>
+                                        <button class="action-btn permanent-delete-btn" onclick="permanentlyDeleteRestrictedVehicle('<?= htmlspecialchars($row['plate_number']) ?>')">Delete Permanently</button>
+                                    </td>
+                                </tr>
+                            <?php endforeach; ?>
+                        </tbody>
+                    </table>
+                </div>
+            <?php endif; ?>
+        </article>
+    </section>
+    <?php endif; ?>
 </main>
 <script>
 // Auto-uppercase all relevant text inputs
@@ -330,6 +402,58 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 });
+
+function deleteRestrictedVehicle(plate) {
+    if (confirm(`Move restricted vehicle ${plate} to recycle bin?\n\nYou can restore it later if needed.`)) {
+        fetch('manage_restricted_vehicles.php', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+            body: 'action=soft_delete&plate=' + encodeURIComponent(plate)
+        })
+        .then(res => res.json())
+        .then(data => {
+            alert(data.message);
+            if (data.status === 'success') location.reload();
+        })
+        .catch(err => alert('Error: ' + err));
+    }
+}
+
+function restoreRestrictedVehicle(plate) {
+    if (confirm(`Restore restricted vehicle ${plate} from recycle bin?`)) {
+        fetch('manage_restricted_vehicles.php', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+            body: 'action=restore&plate=' + encodeURIComponent(plate)
+        })
+        .then(res => res.json())
+        .then(data => {
+            alert(data.message);
+            if (data.status === 'success') location.reload();
+        })
+        .catch(err => alert('Error: ' + err));
+    }
+}
+
+function permanentlyDeleteRestrictedVehicle(plate) {
+    const confirmMsg = `⚠️ WARNING: Permanently delete restricted vehicle ${plate}?\n\nThis will completely remove this record and cannot be undone.`;
+    if (confirm(confirmMsg)) {
+        const doubleCheck = confirm('This is your FINAL confirmation. Click OK to permanently delete, or Cancel to abort.');
+        if (doubleCheck) {
+            fetch('manage_restricted_vehicles.php', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+                body: 'action=permanent_delete&plate=' + encodeURIComponent(plate)
+            })
+            .then(res => res.json())
+            .then(data => {
+                alert(data.message);
+                if (data.status === 'success') location.reload();
+            })
+            .catch(err => alert('Error: ' + err));
+        }
+    }
+}
 </script>
 </body>
 </html>
