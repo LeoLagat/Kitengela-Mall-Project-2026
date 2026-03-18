@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Mar 11, 2026 at 10:44 PM
+-- Generation Time: Mar 18, 2026 at 12:07 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -40,9 +40,40 @@ CREATE TABLE `administrators` (
 --
 
 INSERT INTO `administrators` (`id`, `username`, `password`, `role`, `created_at`) VALUES
-(1, 'ADMIN', 'admin123', 'super_admin', '2026-03-10 08:21:38'),
-(2, 'leolagat', '$2y$10$cwmACWBV/RYtcL6a.f237urGHWiiXTBLaQWoK7rcw2iUb8ZwZyJ7y', 'admin', '2026-03-10 08:52:41'),
+(2, 'leolagat', '$2y$10$cwmACWBV/RYtcL6a.f237urGHWiiXTBLaQWoK7rcw2iUb8ZwZyJ7y', 'super_admin', '2026-03-10 08:52:41'),
 (3, 'ryan', '$2y$10$ftKsEJM7v2HV0dR0CGwaPOcUc0q.XanzFx9rCHISefB74SnSlBlia', 'admin', '2026-03-10 08:54:58');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `admin_activity`
+--
+
+CREATE TABLE `admin_activity` (
+  `id` int(11) NOT NULL,
+  `action` varchar(255) NOT NULL,
+  `ip_address` varchar(45) DEFAULT NULL,
+  `created_at` datetime DEFAULT current_timestamp(),
+  `username` varchar(100) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `admin_activity`
+--
+
+INSERT INTO `admin_activity` (`id`, `action`, `ip_address`, `created_at`, `username`) VALUES
+(1, 'visited activity log', '::1', '2026-03-18 13:54:46', 'leolagat'),
+(2, 'visited activity log', '::1', '2026-03-18 13:54:51', 'leolagat'),
+(3, 'viewed dashboard', '::1', '2026-03-18 13:55:28', 'leolagat'),
+(4, 'viewed dashboard', '::1', '2026-03-18 14:02:02', 'leolagat'),
+(5, 'viewed dashboard', '::1', '2026-03-18 14:02:34', 'leolagat'),
+(6, 'executed manual bypass for vehicle KLH559Y (bay 1) | previous status: pending', '::1', '2026-03-18 14:02:42', 'leolagat'),
+(7, 'executed emergency bypass for vehicle KLH559Y (vehicle already exited but gate forced open)', '::1', '2026-03-18 14:02:52', 'leolagat'),
+(8, 'viewed dashboard', '::1', '2026-03-18 14:02:55', 'leolagat'),
+(9, 'visited add user page', '::1', '2026-03-18 14:02:58', 'leolagat'),
+(10, 'visited activity log', '::1', '2026-03-18 14:03:00', 'leolagat'),
+(11, 'viewed dashboard', '::1', '2026-03-18 14:03:18', 'leolagat'),
+(12, 'visited database search', '::1', '2026-03-18 14:03:22', 'leolagat');
 
 -- --------------------------------------------------------
 
@@ -68,7 +99,15 @@ CREATE TABLE `mpesa_transactions` (
 
 INSERT INTO `mpesa_transactions` (`id`, `plate_number`, `phone_number`, `amount`, `status`, `created_at`, `log_id`, `checkout_id`, `receipt_number`) VALUES
 (1, 'KDT657A', '254727516126', 50.00, 'Completed', '2026-03-11 19:37:47', 1, 'ws_CO_11032026223739340727516126', 'UCB6L90BP7'),
-(2, 'KGT457A', '254727516126', 70.00, 'Completed', '2026-03-11 21:08:12', 5, 'ws_CO_12032026000803085727516126', 'UCC6L90K44');
+(2, 'KGT457A', '254727516126', 70.00, 'Completed', '2026-03-11 21:08:12', 5, 'ws_CO_12032026000803085727516126', 'UCC6L90K44'),
+(3, 'KYT349T', '254727516126', 250.00, 'Completed', '2026-03-12 07:44:01', 6, 'ws_CO_12032026104353208727516126', 'UCC6L9155H'),
+(4, 'KFG456D', '254700000000', 1000.00, 'Completed', '2026-03-12 13:38:36', 7, 'SIM-1773322716', 'SIM-1773322716'),
+(5, 'KHH123T', '254700000000', 1000.00, 'Completed', '2026-03-15 11:30:00', 9, 'SIM-1773574200', 'SIM-1773574200'),
+(6, 'KDE125T', '254727516126', 90.00, 'Completed', '2026-03-15 21:23:33', 10, 'ws_CO_16032026002325201727516126', 'UCG6L9EGC8'),
+(7, 'KBA345G', '254727516126', 1000.00, 'Completed', '2026-03-16 17:51:22', 12, 'ws_CO_16032026205112196727516126', 'UCG6L9HMZB'),
+(8, 'KMB99R', '254700000000', 50.00, 'Completed', '2026-03-17 19:55:04', 17, 'SIM-1773777304', 'SIM-1773777304'),
+(9, 'KMM444M', '254727516126', 1000.00, 'Pending', '2026-03-18 10:52:30', 22, 'ws_CO_18032026135232093727516126', NULL),
+(10, 'KMM444M', '254700000000', 1000.00, 'Completed', '2026-03-18 10:52:50', 22, 'SIM-1773831170', 'SIM-1773831170');
 
 -- --------------------------------------------------------
 
@@ -81,17 +120,19 @@ CREATE TABLE `owner_accounts` (
   `plate_number` varchar(20) NOT NULL,
   `owner_name` varchar(100) DEFAULT NULL,
   `invoice_monthly` tinyint(1) DEFAULT 1,
-  `created_at` datetime DEFAULT current_timestamp()
+  `created_at` datetime DEFAULT current_timestamp(),
+  `deleted_at` datetime DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `owner_accounts`
 --
 
-INSERT INTO `owner_accounts` (`id`, `plate_number`, `owner_name`, `invoice_monthly`, `created_at`) VALUES
-(1, 'KCW546H', 'NAIVAS ', 1, '2026-03-11 22:33:39'),
-(2, 'KJU685', 'ARTCAFEE', 1, '2026-03-11 22:33:51'),
-(3, 'KMB999R', 'DR.MATRESS', 1, '2026-03-11 22:34:14');
+INSERT INTO `owner_accounts` (`id`, `plate_number`, `owner_name`, `invoice_monthly`, `created_at`, `deleted_at`) VALUES
+(1, 'KCW546H', 'NAIVAS ', 1, '2026-03-11 22:33:39', NULL),
+(2, 'KJU685', 'ARTCAFEE', 1, '2026-03-11 22:33:51', NULL),
+(3, 'KMB999R', 'DR.MATRESS', 1, '2026-03-11 22:34:14', NULL),
+(4, 'KHU456', 'GALITOS RESTAURANT ', 1, '2026-03-12 17:10:01', NULL);
 
 -- --------------------------------------------------------
 
@@ -115,9 +156,10 @@ CREATE TABLE `owner_vehicle_fees` (
 --
 
 INSERT INTO `owner_vehicle_fees` (`id`, `plate_number`, `owner_name`, `nominal_fee`, `discount_given`, `total_due`, `due_period`, `created_at`) VALUES
-(1, 'KCW546H', 'NAIVAS ', 50.00, 15.00, 35.00, '2026-03-11', '2026-03-11 23:02:43'),
-(2, 'KJU685', 'ARTCAFEE', 50.00, 15.00, 35.00, '2026-03-11', '2026-03-11 23:02:43'),
-(3, 'KMB999R', 'DR.MATRESS', 50.00, 15.00, 35.00, '2026-03-11', '2026-03-11 23:02:43');
+(1, 'KCW546H', 'NAIVAS ', 280.00, 84.00, 196.00, '2026-04-12', '2026-03-11 23:02:43'),
+(2, 'KJU685', 'ARTCAFEE', 0.00, 0.00, 0.00, '2026-04-11', '2026-03-11 23:02:43'),
+(3, 'KMB999R', 'DR.MATRESS', 0.00, 0.00, 0.00, '2026-04-11', '2026-03-11 23:02:43'),
+(4, 'KHU456', 'GALITOS RESTAURANT ', 1000.00, 300.00, 700.00, '2026-04-18', '2026-03-18 12:29:28');
 
 -- --------------------------------------------------------
 
@@ -137,7 +179,7 @@ CREATE TABLE `parking_bays` (
 --
 
 INSERT INTO `parking_bays` (`id`, `bay_number`, `floor_level`, `current_status`) VALUES
-(1, 'B1-001', 'Basement 1', 'occupied'),
+(1, 'B1-001', 'Basement 1', 'vacant'),
 (2, 'B1-002', 'Basement 1', 'vacant'),
 (3, 'B1-003', 'Basement 1', 'vacant'),
 (4, 'B1-004', 'Basement 1', 'vacant'),
@@ -410,16 +452,32 @@ CREATE TABLE `restricted_vehicles` (
   `id` int(11) NOT NULL,
   `plate_number` varchar(20) NOT NULL,
   `reason` varchar(255) DEFAULT NULL,
-  `added_at` datetime DEFAULT current_timestamp()
+  `added_at` datetime DEFAULT current_timestamp(),
+  `deleted_at` datetime DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `restricted_vehicles`
 --
 
-INSERT INTO `restricted_vehicles` (`id`, `plate_number`, `reason`, `added_at`) VALUES
-(1, 'KBV890E', 'PARKING_VIOLATION', '2026-03-11 22:31:13'),
-(2, 'KGG123G', 'THIEF', '2026-03-11 22:36:25');
+INSERT INTO `restricted_vehicles` (`id`, `plate_number`, `reason`, `added_at`, `deleted_at`) VALUES
+(1, 'KBV890E', 'PARKING_VIOLATION', '2026-03-11 22:31:13', NULL),
+(2, 'KGG123G', 'THIEF', '2026-03-11 22:36:25', NULL);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `revenue_archive`
+--
+
+CREATE TABLE `revenue_archive` (
+  `id` int(11) NOT NULL,
+  `archived_revenue` decimal(15,2) NOT NULL DEFAULT 0.00,
+  `archived_date` datetime DEFAULT current_timestamp(),
+  `admin_who_cleared` varchar(100) DEFAULT NULL,
+  `log_count_cleared` int(11) DEFAULT 0,
+  `notes` varchar(500) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -431,15 +489,16 @@ CREATE TABLE `staff_vehicles` (
   `id` int(11) NOT NULL,
   `plate_number` varchar(20) NOT NULL,
   `employee_name` varchar(100) DEFAULT NULL,
-  `created_at` datetime DEFAULT current_timestamp()
+  `created_at` datetime DEFAULT current_timestamp(),
+  `deleted_at` datetime DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `staff_vehicles`
 --
 
-INSERT INTO `staff_vehicles` (`id`, `plate_number`, `employee_name`, `created_at`) VALUES
-(1, 'KTT67Q', 'EMPLOYEE1', '2026-03-11 21:57:42');
+INSERT INTO `staff_vehicles` (`id`, `plate_number`, `employee_name`, `created_at`, `deleted_at`) VALUES
+(1, 'KTT67Q', 'EMPLOYEE1', '2026-03-11 21:57:42', NULL);
 
 -- --------------------------------------------------------
 
@@ -456,20 +515,41 @@ CREATE TABLE `vehicle_logs` (
   `total_fee` decimal(10,2) DEFAULT 0.00,
   `payment_status` enum('pending','paid') DEFAULT 'pending',
   `mpesa_checkout_id` varchar(255) DEFAULT NULL,
-  `nominal_fee` decimal(10,2) DEFAULT 0.00
+  `nominal_fee` decimal(10,2) DEFAULT 0.00,
+  `paid_at` datetime DEFAULT NULL,
+  `is_manual_bypass` tinyint(1) NOT NULL DEFAULT 0,
+  `bypassed_by` varchar(100) DEFAULT NULL,
+  `bypassed_at` datetime DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `vehicle_logs`
 --
 
-INSERT INTO `vehicle_logs` (`id`, `plate_number`, `bay_id`, `entry_time`, `exit_time`, `total_fee`, `payment_status`, `mpesa_checkout_id`, `nominal_fee`) VALUES
-(1, 'KDT657A', 1, '2026-03-11 21:55:15', '2026-03-11 22:37:47', 50.00, 'paid', 'ws_CO_11032026223739340727516126', 0.00),
-(2, 'KCW546H', 2, '2026-03-11 22:34:29', '2026-03-11 23:17:40', 0.00, '', NULL, 50.00),
-(3, 'KMB999R', 3, '2026-03-11 22:35:05', '2026-03-11 23:16:03', 0.00, '', NULL, 50.00),
-(4, 'KJU685', 4, '2026-03-11 22:35:37', '2026-03-11 23:17:12', 0.00, '', NULL, 50.00),
-(5, 'KGT457A', 1, '2026-03-11 22:39:37', '2026-03-12 00:08:12', 70.00, 'paid', 'ws_CO_12032026000803085727516126', 0.00),
-(6, 'KYT349T', 1, '2026-03-12 00:08:33', NULL, 0.00, 'pending', NULL, 0.00);
+INSERT INTO `vehicle_logs` (`id`, `plate_number`, `bay_id`, `entry_time`, `exit_time`, `total_fee`, `payment_status`, `mpesa_checkout_id`, `nominal_fee`, `paid_at`, `is_manual_bypass`, `bypassed_by`, `bypassed_at`) VALUES
+(1, 'KDT657A', 1, '2026-03-11 21:55:15', '2026-03-11 22:37:47', 50.00, 'paid', 'ws_CO_11032026223739340727516126', 0.00, NULL, 0, NULL, NULL),
+(2, 'KCW546H', 2, '2026-03-11 22:34:29', '2026-03-11 23:17:40', 35.00, '', NULL, 50.00, NULL, 0, NULL, NULL),
+(3, 'KMB999R', 3, '2026-03-11 22:35:05', '2026-03-11 23:16:03', 35.00, 'paid', NULL, 50.00, '2026-03-18 13:30:20', 0, NULL, NULL),
+(4, 'KJU685', 4, '2026-03-11 22:35:37', '2026-03-11 23:17:12', 35.00, 'paid', NULL, 50.00, NULL, 0, NULL, NULL),
+(5, 'KGT457A', 1, '2026-03-11 22:39:37', '2026-03-12 00:08:12', 70.00, 'paid', 'ws_CO_12032026000803085727516126', 0.00, NULL, 0, NULL, NULL),
+(6, 'KYT349T', 1, '2026-03-12 00:08:33', '2026-03-12 10:44:01', 250.00, 'paid', 'ws_CO_12032026104353208727516126', 0.00, NULL, 0, NULL, NULL),
+(7, 'KFG456D', 2, '2026-03-12 00:55:43', '2026-03-12 16:38:36', 1000.00, 'paid', 'ws_CO_12032026163817040727516126', 0.00, NULL, 0, NULL, NULL),
+(8, 'KCW546H', 3, '2026-03-12 00:56:22', '2026-03-12 10:42:15', 161.00, '', NULL, 230.00, NULL, 0, NULL, NULL),
+(9, 'KHH123T', 1, '2026-03-14 22:45:32', '2026-03-15 14:30:00', 1000.00, 'paid', NULL, 0.00, NULL, 0, NULL, NULL),
+(10, 'KDE125T', 1, '2026-03-15 21:58:48', '2026-03-16 00:23:33', 90.00, 'paid', 'ws_CO_16032026002325201727516126', 0.00, NULL, 0, NULL, NULL),
+(11, 'KDX 555H', 1, '2026-03-16 07:43:18', '2026-03-16 07:44:18', 0.00, 'paid', NULL, 0.00, NULL, 0, NULL, NULL),
+(12, 'KBA345G', 1, '2026-03-16 08:16:26', '2026-03-16 20:51:22', 1000.00, 'paid', 'ws_CO_16032026205112196727516126', 0.00, NULL, 0, NULL, NULL),
+(13, 'KDT657A', 1, '2026-03-17 22:14:27', '2026-03-17 22:14:50', 0.00, 'paid', NULL, 0.00, NULL, 0, NULL, NULL),
+(14, 'KJU685', 1, '2026-03-17 22:16:08', '2026-03-17 22:46:41', 0.00, '', NULL, 0.00, NULL, 0, NULL, NULL),
+(15, 'KCW546H', 2, '2026-03-17 22:16:50', '2026-03-17 22:46:58', 0.00, 'paid', NULL, 0.00, NULL, 0, NULL, NULL),
+(16, 'KHU456', 3, '2026-03-17 22:17:09', '2026-03-17 22:48:04', 0.00, '', NULL, 0.00, NULL, 0, NULL, NULL),
+(17, 'KMB99R', 4, '2026-03-17 22:17:23', '2026-03-17 22:55:04', 50.00, 'paid', 'ws_CO_17032026225443962727516126', 0.00, NULL, 0, NULL, NULL),
+(18, 'KMB999R', 5, '2026-03-17 22:17:42', '2026-03-17 22:50:17', 0.00, 'paid', NULL, 0.00, NULL, 0, NULL, NULL),
+(19, 'KGG456Y', 6, '2026-03-17 22:44:06', '2026-03-17 22:45:15', 0.00, 'paid', NULL, 0.00, NULL, 0, NULL, NULL),
+(20, 'KGT356Y', 1, '2026-03-17 22:55:49', '2026-03-17 22:56:05', 0.00, 'paid', NULL, 0.00, NULL, 0, NULL, NULL),
+(21, 'KHU456', 1, '2026-03-17 23:04:01', '2026-03-18 12:04:19', 700.00, 'paid', NULL, 1000.00, '2026-03-18 12:04:19', 0, NULL, NULL),
+(22, 'KMM444M', 2, '2026-03-17 23:08:50', '2026-03-18 13:52:50', 1000.00, 'paid', 'ws_CO_18032026135232093727516126', 0.00, NULL, 0, NULL, NULL),
+(23, 'KLH559Y', 1, '2026-03-18 14:02:30', '2026-03-18 14:02:42', 0.00, 'paid', NULL, 0.00, NULL, 1, 'leolagat', '2026-03-18 14:02:52');
 
 --
 -- Indexes for dumped tables
@@ -481,6 +561,12 @@ INSERT INTO `vehicle_logs` (`id`, `plate_number`, `bay_id`, `entry_time`, `exit_
 ALTER TABLE `administrators`
   ADD PRIMARY KEY (`id`),
   ADD UNIQUE KEY `username` (`username`);
+
+--
+-- Indexes for table `admin_activity`
+--
+ALTER TABLE `admin_activity`
+  ADD PRIMARY KEY (`id`);
 
 --
 -- Indexes for table `mpesa_transactions`
@@ -503,7 +589,7 @@ ALTER TABLE `owner_accounts`
 --
 ALTER TABLE `owner_vehicle_fees`
   ADD PRIMARY KEY (`id`),
-  ADD KEY `plate_number` (`plate_number`);
+  ADD UNIQUE KEY `unique_owner_fee_plate` (`plate_number`);
 
 --
 -- Indexes for table `parking_bays`
@@ -517,6 +603,12 @@ ALTER TABLE `parking_bays`
 ALTER TABLE `restricted_vehicles`
   ADD PRIMARY KEY (`id`),
   ADD UNIQUE KEY `plate_number` (`plate_number`);
+
+--
+-- Indexes for table `revenue_archive`
+--
+ALTER TABLE `revenue_archive`
+  ADD PRIMARY KEY (`id`);
 
 --
 -- Indexes for table `staff_vehicles`
@@ -545,22 +637,28 @@ ALTER TABLE `administrators`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
+-- AUTO_INCREMENT for table `admin_activity`
+--
+ALTER TABLE `admin_activity`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
+
+--
 -- AUTO_INCREMENT for table `mpesa_transactions`
 --
 ALTER TABLE `mpesa_transactions`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
 -- AUTO_INCREMENT for table `owner_accounts`
 --
 ALTER TABLE `owner_accounts`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT for table `owner_vehicle_fees`
 --
 ALTER TABLE `owner_vehicle_fees`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT for table `parking_bays`
@@ -575,6 +673,12 @@ ALTER TABLE `restricted_vehicles`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
+-- AUTO_INCREMENT for table `revenue_archive`
+--
+ALTER TABLE `revenue_archive`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
 -- AUTO_INCREMENT for table `staff_vehicles`
 --
 ALTER TABLE `staff_vehicles`
@@ -584,7 +688,7 @@ ALTER TABLE `staff_vehicles`
 -- AUTO_INCREMENT for table `vehicle_logs`
 --
 ALTER TABLE `vehicle_logs`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=24;
 
 --
 -- Constraints for dumped tables
