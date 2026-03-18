@@ -31,7 +31,25 @@ try {
 $message = '';
 $messageType = 'success';
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    if (!empty($_POST['plate'])) {
+    if (!empty($_POST['remove_plate'])) {
+        $removePlate = strtoupper(trim($_POST['remove_plate']));
+        try {
+            $stmt = $pdo->prepare("UPDATE restricted_vehicles SET deleted_at = NOW() WHERE plate_number = ? AND deleted_at IS NULL");
+            $stmt->execute([$removePlate]);
+            if ($stmt->rowCount() > 0) {
+                $message = "Removed $removePlate from restricted list.";
+                if (!empty($_SESSION['admin_username'])) {
+                    AdminAudit::log($pdo, $_SESSION['admin_username'], "removed restricted vehicle $removePlate");
+                }
+            } else {
+                $messageType = 'error';
+                $message = "$removePlate was not found in active restricted list.";
+            }
+        } catch (Exception $e) {
+            $messageType = 'error';
+            $message = "Error: " . $e->getMessage();
+        }
+    } elseif (!empty($_POST['plate'])) {
         $plate = strtoupper(trim($_POST['plate']));
         $reason = trim($_POST['reason'] ?? '');
         try {
@@ -277,6 +295,7 @@ if (!empty($_SESSION['admin_role']) && $_SESSION['admin_role'] === 'super_admin'
         <a href="add_user.php">Add User</a>
         <a href="activity.php">Activity Log</a>
         <a href="subadmin_activity.php">Sub-admin Logs</a>
+        <a href="database_search.php">Database Search</a>
 <?php endif; ?>
         <a href="logout.php" style="color:red;">Logout</a>
     </div>
@@ -338,14 +357,10 @@ if (!empty($_SESSION['admin_role']) && $_SESSION['admin_role'] === 'super_admin'
                                     <td><?= htmlspecialchars($row['reason'] ?? 'N/A') ?></td>
                                     <td><?= htmlspecialchars($row['added_at']) ?></td>
                                     <td>
-                                        <?php if (!empty($_SESSION['admin_role']) && $_SESSION['admin_role'] === 'super_admin'): ?>
-                                            <button class="action-btn btn-remove" onclick="deleteRestrictedVehicle('<?= htmlspecialchars($row['plate_number']) ?>')">Remove</button>
-                                        <?php else: ?>
-                                            <form method="POST" onsubmit="return confirm('Remove <?= htmlspecialchars($row['plate_number']) ?> from restricted list?');">
-                                                <input type="hidden" name="remove_plate" value="<?= htmlspecialchars($row['plate_number']) ?>">
-                                                <button type="submit" class="btn-remove">Remove</button>
-                                            </form>
-                                        <?php endif; ?>
+                                        <form method="POST" onsubmit="return confirm('Remove <?= htmlspecialchars($row['plate_number']) ?> from restricted list?');">
+                                            <input type="hidden" name="remove_plate" value="<?= htmlspecialchars($row['plate_number']) ?>">
+                                            <button type="submit" class="btn-remove">Remove</button>
+                                        </form>
                                     </td>
                                 </tr>
                             <?php endforeach; ?>

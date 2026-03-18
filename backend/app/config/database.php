@@ -100,6 +100,30 @@ class DatabaseConnection {
                 file_put_contents(__DIR__ . '/mpesa_errors.txt', "Migration error owner_accounts: " . $e->getMessage() . PHP_EOL, FILE_APPEND);
             }
 
+            // ensure owner fee ledger exists
+            try {
+                $this->pdo->exec("\
+                    CREATE TABLE IF NOT EXISTS owner_vehicle_fees (\
+                        id INT AUTO_INCREMENT PRIMARY KEY,\
+                        plate_number VARCHAR(20) NOT NULL,\
+                        owner_name VARCHAR(100) NULL,\
+                        nominal_fee DECIMAL(10,2) DEFAULT 0.00,\
+                        discount_given DECIMAL(10,2) DEFAULT 0.00,\
+                        total_due DECIMAL(10,2) DEFAULT 0.00,\
+                        due_period DATE NULL,\
+                        created_at DATETIME DEFAULT CURRENT_TIMESTAMP\
+                    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4");
+            } catch (PDOException $e) {
+                file_put_contents(__DIR__ . '/mpesa_errors.txt', "Migration error owner_vehicle_fees: " . $e->getMessage() . PHP_EOL, FILE_APPEND);
+            }
+
+            // enforce one fee ledger row per plate
+            try {
+                $this->pdo->exec("ALTER TABLE owner_vehicle_fees ADD UNIQUE KEY unique_owner_fee_plate (plate_number)");
+            } catch (PDOException $ignore) {
+                // key already exists or duplicates exist in legacy data
+            }
+
             // ensure restricted list exists for barred plates
             try {
                 $this->pdo->exec("\
@@ -116,6 +140,12 @@ class DatabaseConnection {
             // add nominal_fee column to vehicle_logs if missing
             try {
                 $this->pdo->exec("ALTER TABLE vehicle_logs ADD COLUMN nominal_fee DECIMAL(10,2) DEFAULT 0");
+            } catch (PDOException $ignore) {
+            }
+
+            // add paid_at column to vehicle_logs if missing
+            try {
+                $this->pdo->exec("ALTER TABLE vehicle_logs ADD COLUMN paid_at DATETIME NULL DEFAULT NULL");
             } catch (PDOException $ignore) {
             }
 

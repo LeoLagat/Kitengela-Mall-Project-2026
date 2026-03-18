@@ -233,6 +233,7 @@ if (!empty($_SESSION['admin_role']) && $_SESSION['admin_role'] === 'super_admin'
         <a href="add_user.php">Add User</a>
         <a href="activity.php">Activity Log</a>
         <a href="subadmin_activity.php">Sub-admin Logs</a>
+    <a href="database_search.php">Database Search</a>
 <?php endif; ?>
         <a href="logout.php" style="color:red;">Logout</a>
     </div>

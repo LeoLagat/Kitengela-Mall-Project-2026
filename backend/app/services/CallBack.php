@@ -74,10 +74,19 @@ if ($resultCode === 0) {
             exit;
         }
 
-        // Idempotency check
-        $stmtCheck = $pdo->prepare("SELECT id FROM mpesa_transactions WHERE checkout_id = ? LIMIT 1");
+        // Idempotency check: if this checkout was already marked completed with a receipt,
+        // do not process it again.
+        $stmtCheck = $pdo->prepare("\
+            SELECT id
+            FROM mpesa_transactions
+            WHERE checkout_id = ?
+              AND status = 'Completed'
+              AND receipt_number IS NOT NULL
+              AND receipt_number <> ''
+            LIMIT 1
+        ");
         $stmtCheck->execute([$checkoutRequestID]);
-        if ($stmtCheck->rowCount() > 0) {
+        if ($stmtCheck->fetchColumn()) {
             http_response_code(200);
             echo json_encode(['ResultCode' => 0, 'ResultDesc' => 'Transaction already processed']);
             exit;

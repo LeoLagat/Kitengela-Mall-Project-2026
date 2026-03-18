@@ -175,18 +175,18 @@ class Vehicle {
     }
 
     // Finish exit and free parking bay
-    // if $plate is an owner with invoice_monthly, we zero total_fee and mark as invoiced
+    // if $plate is an owner with invoice_monthly, we keep nominal_fee as full charge,
+    // set total_fee to current due (70% after 30% discount), and mark as invoiced
     public function completeExit($logId, $fee, $bayId, $plate = null) {
         $status = 'paid';
         $totalFee = $fee;
         $nominal = 0;
 
         if ($plate && $this->isOwner($plate)) {
-            // owners are invoiced later at half the nominal fee; store the full
-            // amount in nominal_fee and keep total_fee zero so they are exempt now
+            // Owners are billed monthly at 70% of nominal fee.
             $status = 'invoiced';
             $nominal = $fee;
-            $totalFee = 0;
+            $totalFee = round($fee * 0.7, 2);
         }
 
         // update using database clock to avoid drift

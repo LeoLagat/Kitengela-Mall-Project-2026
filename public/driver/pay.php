@@ -46,16 +46,22 @@ if ($plate) {
             // owners get invoiced; staff free get paid
             $status = ($vehicleModel->isOwner($plate) ? 'invoiced' : 'paid');
             $nominal = ($vehicleModel->isOwner($plate) ? $fee : 0);
+            $currentDue = ($vehicleModel->isOwner($plate) ? round($fee * 0.7, 2) : 0);
 
             $stmt = $pdo->prepare(
                 "UPDATE vehicle_logs 
                  SET payment_status = :status,
                      exit_time = NOW(),
-                     total_fee = 0,
+                     total_fee = :total_fee,
                      nominal_fee = :nominal
                  WHERE id = :id"
             );
-            $stmt->execute([':status' => $status, ':nominal' => $nominal, ':id' => $row['id']]);
+            $stmt->execute([
+                ':status' => $status,
+                ':total_fee' => $currentDue,
+                ':nominal' => $nominal,
+                ':id' => $row['id']
+            ]);
 
             // also free up the bay that was assigned
             if (!empty($row['bay_id'])) {

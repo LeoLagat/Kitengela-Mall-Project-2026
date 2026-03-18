@@ -39,14 +39,16 @@ if ($plate) {
         $upd->execute([':amt' => $amount, ':id' => $logId]);
 
         // insert a fake mpesa_transactions record so other parts of the app behave
+        $simRef = 'SIM-' . time();
         $ins = $pdo->prepare(
-            "INSERT INTO mpesa_transactions (log_id, phone_number, checkout_id, receipt_number, amount, status) VALUES (?, ?, ?, ?, ?, 'Completed')"
+            "INSERT INTO mpesa_transactions (log_id, plate_number, phone_number, checkout_id, receipt_number, amount, status) VALUES (?, ?, ?, ?, ?, ?, 'Completed')"
         );
         $ins->execute([
             $logId,
-            '',                             // phone unknown in simulation
-            'SIM-' . time(),                // synthetic checkout id
-            'SIM-' . time(),                // synthetic receipt
+            strtoupper($plate),             // keep simulated row linked to plate
+            '254700000000',                 // synthetic test phone
+            $simRef,                        // synthetic checkout id
+            $simRef,                        // synthetic receipt
             $amount
         ]);
 

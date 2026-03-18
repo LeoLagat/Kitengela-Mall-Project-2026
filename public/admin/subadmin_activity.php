@@ -234,6 +234,7 @@ if ($from && $to && isset($_GET['download'])) {
         <a href="dashboard.php">Dashboard</a>
         <a href="activity.php">Activity Log</a>
         <a href="subadmin_activity.php" class="active">Sub‑admin Logs</a>
+        <a href="database_search.php">Database Search</a>
         <a href="profile.php">My Profile</a>
         <a href="logout.php" style="color:red;">Logout</a>
     </div>

@@ -419,6 +419,7 @@ $isSuperAdmin = ($profile['role'] === 'super_admin');
         <?php if ($isSuperAdmin): ?>
             <a href="activity.php">Activity Log</a>
             <a href="subadmin_activity.php">Sub-admin Logs</a>
+            <a href="database_search.php">Database Search</a>
         <?php else: ?>
             <a href="activity.php">My Activity</a>
         <?php endif; ?>

@@ -362,7 +362,10 @@ $isFiltered = $validRange;
     <div class="links">
         <a href="dashboard.php">Dashboard</a>
         <a href="activity.php">Activity Log</a>
-        <a href="subadmin_activity.php">Sub-admin Logs</a>
+        <?php if ($isSuperAdmin): ?>
+            <a href="subadmin_activity.php">Sub-admin Logs</a>
+            <a href="database_search.php">Database Search</a>
+        <?php endif; ?>
         <a href="profile.php">My Profile</a>
         <a href="logout.php" style="color:red;">Logout</a>
     </div>

@@ -8,6 +8,7 @@ if (!isset($_SESSION['admin_logged_in']) || $_SESSION['admin_logged_in'] !== tru
 
 $message = null;
 $messageType = 'success';
+$lastComputedAt = $_SESSION['owners_last_computed_at'] ?? null;
 
 require_once(__DIR__ . '/../../backend/app/config/database.php');
 $db = new DatabaseConnection();
@@ -18,15 +19,278 @@ if (!empty($_SESSION['admin_username'])) {
     AdminAudit::log($pdo, $_SESSION['admin_username'], 'visited owners page');
 }
 
+function syncOwnerBilling(PDO $pdo): void {
+    // Ensure every active invoiced owner has a fee ledger row.
+    $ensureOwnerFeeRows = $pdo->prepare(
+        "INSERT INTO owner_vehicle_fees (plate_number, owner_name, nominal_fee, discount_given, total_due, due_period)
+         SELECT a.plate_number,
+             COALESCE(a.owner_name, ''),
+             0,
+             0,
+             0,
+             DATE_ADD(CURDATE(), INTERVAL 1 MONTH)
+         FROM owner_accounts a
+         LEFT JOIN owner_vehicle_fees f ON f.plate_number = a.plate_number
+         WHERE a.deleted_at IS NULL
+        AND a.invoice_monthly = 1
+        AND f.plate_number IS NULL"
+    );
+    $ensureOwnerFeeRows->execute();
+
+    // Backfill historical owner exits that were saved with total_fee = 0.
+    $backfillLogs = $pdo->prepare(
+        "UPDATE vehicle_logs vl
+         INNER JOIN owner_accounts oa
+             ON oa.plate_number = vl.plate_number
+            AND oa.invoice_monthly = 1
+            AND oa.deleted_at IS NULL
+         SET vl.total_fee = ROUND(vl.nominal_fee * 0.7, 2)
+             WHERE (vl.payment_status = 'invoiced' OR vl.payment_status IS NULL OR vl.payment_status = '')
+           AND vl.exit_time IS NOT NULL
+           AND COALESCE(vl.nominal_fee, 0) > 0
+           AND COALESCE(vl.total_fee, 0) = 0"
+    );
+    $backfillLogs->execute();
+
+    // Rebuild owner accumulated nominal fees from unpaid owner-invoice logs.
+    $syncOwnerFees = $pdo->prepare(
+        "UPDATE owner_vehicle_fees f
+         LEFT JOIN (
+             SELECT plate_number,
+                    COALESCE(SUM(nominal_fee), 0) AS nominal_total,
+                    MAX(exit_time) AS last_exit
+             FROM vehicle_logs
+             WHERE exit_time IS NOT NULL
+               AND COALESCE(nominal_fee, 0) > 0
+               AND (payment_status = 'invoiced' OR payment_status IS NULL OR payment_status = '')
+             GROUP BY plate_number
+         ) v ON v.plate_number = f.plate_number
+         LEFT JOIN owner_accounts a ON a.plate_number = f.plate_number
+         SET f.nominal_fee = COALESCE(v.nominal_total, 0),
+             f.due_period = CASE
+                 WHEN v.last_exit IS NULL THEN f.due_period
+                 ELSE DATE_ADD(v.last_exit, INTERVAL 1 MONTH)
+             END,
+             f.owner_name = COALESCE(a.owner_name, f.owner_name)
+         WHERE a.deleted_at IS NULL"
+    );
+    $syncOwnerFees->execute();
+
+    // Keep owner invoice balances in sync: total_due is nominal fee less 30%.
+    $update = $pdo->prepare("UPDATE owner_vehicle_fees SET discount_given = nominal_fee * 0.3, total_due = nominal_fee - (nominal_fee * 0.3)");
+    $update->execute();
+}
+
+if (isset($_GET['silent_sync']) && $_GET['silent_sync'] === '1') {
+    header('Content-Type: application/json');
+    try {
+        syncOwnerBilling($pdo);
+        $currentDate = date('Y-m-d');
+
+        $summaryStmt = $pdo->prepare(
+            "SELECT
+                SUM(
+                    CASE
+                        WHEN DATE_ADD(a.created_at, INTERVAL 1 MONTH) >= :currentDate THEN 1
+                        WHEN DATE_ADD(a.created_at, INTERVAL 1 MONTH) < :currentDate AND (f.total_due IS NULL OR f.total_due <= 0) THEN 1
+                        ELSE 0
+                    END
+                ) AS active_count,
+                SUM(
+                    CASE
+                        WHEN DATE_ADD(a.created_at, INTERVAL 1 MONTH) < :currentDate AND COALESCE(f.total_due, 0) > 0 THEN 1
+                        ELSE 0
+                    END
+                ) AS expired_count,
+                COALESCE(SUM(COALESCE(f.total_due, 0)), 0) AS total_due
+            FROM owner_accounts a
+            LEFT JOIN owner_vehicle_fees f ON a.plate_number = f.plate_number
+            WHERE a.deleted_at IS NULL"
+        );
+        $summaryStmt->execute([':currentDate' => $currentDate]);
+        $summary = $summaryStmt->fetch(PDO::FETCH_ASSOC) ?: [];
+
+        $dueStmt = $pdo->prepare(
+            "SELECT a.plate_number, COALESCE(f.total_due, 0) AS total_due
+             FROM owner_accounts a
+             LEFT JOIN owner_vehicle_fees f ON a.plate_number = f.plate_number
+             WHERE a.deleted_at IS NULL"
+        );
+        $dueStmt->execute();
+        $dueRows = $dueStmt->fetchAll(PDO::FETCH_ASSOC);
+
+        $dueByPlate = [];
+        foreach ($dueRows as $row) {
+            $dueByPlate[$row['plate_number']] = (float) $row['total_due'];
+        }
+
+        echo json_encode([
+            'status' => 'success',
+            'activeCount' => (int) ($summary['active_count'] ?? 0),
+            'expiredCount' => (int) ($summary['expired_count'] ?? 0),
+            'totalDue' => (float) ($summary['total_due'] ?? 0),
+            'dueByPlate' => $dueByPlate
+        ]);
+    } catch (Exception $e) {
+        http_response_code(500);
+        echo json_encode([
+            'status' => 'error',
+            'message' => 'Silent sync failed'
+        ]);
+    }
+    exit;
+}
+
+
+$ownerAction = $_POST['owner_action'] ?? '';
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && $ownerAction !== '') {
+    try {
+        if ($ownerAction === 'compute_total') {
+            syncOwnerBilling($pdo);
+            $lastComputedAt = date('Y-m-d H:i:s');
+            $_SESSION['owners_last_computed_at'] = $lastComputedAt;
+            $message = 'Owner totals recomputed successfully.';
+            if (!empty($_SESSION['admin_username'])) {
+                AdminAudit::log($pdo, $_SESSION['admin_username'], 'computed owner totals');
+            }
+        } elseif ($ownerAction === 'record_owner_payment') {
+            $payPlate = strtoupper(trim($_POST['pay_plate'] ?? ''));
+            if ($payPlate === '') {
+                throw new Exception('Owner plate number is required for payment.');
+            }
+
+            if (!$pdo->inTransaction()) {
+                $pdo->beginTransaction();
+            }
+
+            syncOwnerBilling($pdo);
+
+            $dueStmt = $pdo->prepare(
+                "SELECT COALESCE(f.total_due, 0) AS total_due
+                 FROM owner_vehicle_fees f
+                 INNER JOIN owner_accounts a ON a.plate_number = f.plate_number
+                 WHERE a.deleted_at IS NULL
+                   AND a.invoice_monthly = 1
+                   AND f.plate_number = ?
+                 LIMIT 1"
+            );
+            $dueStmt->execute([$payPlate]);
+            $dueRow = $dueStmt->fetch(PDO::FETCH_ASSOC);
+            $dueAmount = $dueRow ? (float) $dueRow['total_due'] : 0;
+
+            if ($dueAmount <= 0) {
+                $message = 'No outstanding balance found for ' . $payPlate . '.';
+            } else {
+                // Use the latest exited owner log as the payment evidence row.
+                $latestStmt = $pdo->prepare(
+                    "SELECT id
+                     FROM vehicle_logs
+                     WHERE plate_number = ?
+                       AND exit_time IS NOT NULL
+                       AND COALESCE(nominal_fee, 0) > 0
+                       AND (payment_status = 'invoiced' OR payment_status IS NULL OR payment_status = '')
+                     ORDER BY exit_time DESC, id DESC
+                     LIMIT 1"
+                );
+                $latestStmt->execute([$payPlate]);
+                $latestLogId = (int) $latestStmt->fetchColumn();
+
+                if ($latestLogId <= 0) {
+                    throw new Exception('No payable owner log found for ' . $payPlate . '.');
+                }
+
+                $settleOlderStmt = $pdo->prepare(
+                    "UPDATE vehicle_logs
+                     SET payment_status = 'paid',
+                         paid_at = NOW(),
+                         total_fee = 0
+                     WHERE plate_number = ?
+                       AND id <> ?
+                       AND exit_time IS NOT NULL
+                       AND COALESCE(nominal_fee, 0) > 0
+                       AND (payment_status = 'invoiced' OR payment_status IS NULL OR payment_status = '')"
+                );
+                $settleOlderStmt->execute([$payPlate, $latestLogId]);
+
+                $settleLatestStmt = $pdo->prepare(
+                    "UPDATE vehicle_logs
+                     SET payment_status = 'paid',
+                         paid_at = NOW(),
+                         total_fee = ?
+                     WHERE id = ?"
+                );
+                $settleLatestStmt->execute([$dueAmount, $latestLogId]);
+
+                syncOwnerBilling($pdo);
+
+                $advanceDueStmt = $pdo->prepare(
+                    "UPDATE owner_vehicle_fees
+                     SET due_period = DATE_ADD(CURDATE(), INTERVAL 1 MONTH)
+                     WHERE plate_number = ?"
+                );
+                $advanceDueStmt->execute([$payPlate]);
+
+                $message = 'Payment received for ' . $payPlate . ': KES ' . number_format($dueAmount, 2) . '. Balance updated to 0.00.';
+                if (!empty($_SESSION['admin_username'])) {
+                    AdminAudit::log(
+                        $pdo,
+                        $_SESSION['admin_username'],
+                        'received monthly owner payment for ' . $payPlate . ' (KES ' . number_format($dueAmount, 2) . ')'
+                    );
+                }
+            }
+
+            if ($pdo->inTransaction()) {
+                $pdo->commit();
+            }
+        }
+    } catch (Exception $e) {
+        if ($pdo->inTransaction()) {
+            $pdo->rollBack();
+        }
+        $messageType = 'error';
+        $message = 'Error: ' . $e->getMessage();
+    }
+}
+
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && !empty($_POST['plate'])) {
     $plate = strtoupper(trim($_POST['plate']));
     if ($plate !== '') {
         try {
+            $ownerName = $_POST['name'] ?? null;
+            $invoiceMonthly = isset($_POST['invoice']) ? 1 : 0;
+
+            if (!$pdo->inTransaction()) {
+                $pdo->beginTransaction();
+            }
+
             $stmt = $pdo->prepare("INSERT INTO owner_accounts (plate_number, owner_name, invoice_monthly) VALUES (?, ?, ?)");
-            $stmt->execute([$plate, $_POST['name'] ?? null, isset($_POST['invoice']) ? 1 : 0]);
+            $stmt->execute([$plate, $ownerName, $invoiceMonthly]);
+
+            if ($invoiceMonthly === 1) {
+                // Create ledger row immediately so totals always have a target row.
+                $ledgerInsert = $pdo->prepare(
+                    "INSERT INTO owner_vehicle_fees (plate_number, owner_name, nominal_fee, discount_given, total_due, due_period)
+                     SELECT ?, ?, 0, 0, 0, DATE_ADD(CURDATE(), INTERVAL 1 MONTH)
+                     WHERE NOT EXISTS (
+                         SELECT 1 FROM owner_vehicle_fees WHERE plate_number = ?
+                     )"
+                );
+                $ledgerInsert->execute([$plate, $ownerName, $plate]);
+
+                $ledgerNameSync = $pdo->prepare("UPDATE owner_vehicle_fees SET owner_name = ? WHERE plate_number = ?");
+                $ledgerNameSync->execute([$ownerName, $plate]);
+            }
+
+            if ($pdo->inTransaction()) {
+                $pdo->commit();
+            }
             $message = "Added owner $plate.";
         } catch (Exception $e) {
+            if ($pdo->inTransaction()) {
+                $pdo->rollBack();
+            }
             $messageType = 'error';
             $message = "Error: " . $e->getMessage();
         }
@@ -38,23 +302,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && !empty($_POST['plate'])) {
 
 // fetch current owner list, only show non-expired (and non-deleted)
 $currentDate = date('Y-m-d');
+syncOwnerBilling($pdo);
 
-// Enhanced status logic:
-// 1. If due_period (last exit + 1 month) is in the future, status is Active
-// 2. If due_period is past, but total_due <= 0, status is Active
-// 3. If due_period is past and total_due > 0, status is Expired
-
-// New status logic:
-// 1. Status is Active for 1 month after created_at
-// 2. After 1 month, if total_due <= 0, status is Active
-// 3. After 1 month, if total_due > 0, status is Expired
+// Status logic:
+// 1. If billing due date is in the future, status is Active
+// 2. If billing due date is past and total_due <= 0, status is Active
+// 3. If billing due date is past and total_due > 0, status is Expired
 $stmt = $pdo->prepare("
 SELECT a.plate_number, a.owner_name, a.invoice_monthly, a.created_at,
-    DATE_ADD(a.created_at, INTERVAL 1 MONTH) AS active_until,
+    COALESCE(f.due_period, DATE_ADD(a.created_at, INTERVAL 1 MONTH)) AS active_until,
     f.total_due,
     CASE
-        WHEN DATE_ADD(a.created_at, INTERVAL 1 MONTH) >= ? THEN 'Active'
-        WHEN DATE_ADD(a.created_at, INTERVAL 1 MONTH) < ? AND (f.total_due IS NULL OR f.total_due <= 0) THEN 'Active'
+        WHEN COALESCE(f.due_period, DATE_ADD(a.created_at, INTERVAL 1 MONTH)) >= ? THEN 'Active'
+        WHEN COALESCE(f.due_period, DATE_ADD(a.created_at, INTERVAL 1 MONTH)) < ? AND (f.total_due IS NULL OR f.total_due <= 0) THEN 'Active'
         ELSE 'Expired'
     END AS status
 FROM owner_accounts a
@@ -77,10 +337,6 @@ foreach ($owners as $owner) {
     $totalDue += isset($owner['total_due']) ? (float) $owner['total_due'] : 0;
 }
 
-// Apply a standard 30% discount to all owner_vehicle_fees using nominal_fee and update total_due
-$update = $pdo->prepare("UPDATE owner_vehicle_fees SET discount_given = nominal_fee * 0.3, total_due = nominal_fee - (nominal_fee * 0.3)");
-$update->execute();
-
 // Function to update logs and accumulated nominal_fee when owner exits
 function updateOwnerExit($pdo, $plate_number, $exit_time, $nominal_fee) {
     // Update vehicle_logs with exit and fee
@@ -92,22 +348,6 @@ function updateOwnerExit($pdo, $plate_number, $exit_time, $nominal_fee) {
     // Set due_period to 1 month after this exit
     $due = $pdo->prepare("UPDATE owner_vehicle_fees SET due_period = DATE_ADD(?, INTERVAL 1 MONTH) WHERE plate_number = ?");
     $due->execute([$exit_time, $plate_number]);
-}
-
-// TEMP: Reset nominal_fee and accumulate from all exited logs
-$plates = ['KCW546H', 'KJU685', 'KMB999R'];
-foreach ($plates as $plate) {
-    // Reset nominal_fee
-    $reset = $pdo->prepare("UPDATE owner_vehicle_fees SET nominal_fee = 0 WHERE plate_number = ?");
-    $reset->execute([$plate]);
-    // Sum all exited nominal fees
-    $sum = $pdo->prepare("SELECT SUM(nominal_fee) FROM vehicle_logs WHERE plate_number = ? AND exit_time IS NOT NULL");
-    $sum->execute([$plate]);
-    $total = $sum->fetchColumn();
-    if ($total !== false) {
-        $acc = $pdo->prepare("UPDATE owner_vehicle_fees SET nominal_fee = ? WHERE plate_number = ?");
-        $acc->execute([$total, $plate]);
-    }
 }
 
 // Fetch deleted vehicles (recycle bin) - only for super_admin
@@ -350,6 +590,63 @@ if (!empty($_SESSION['admin_role']) && $_SESSION['admin_role'] === 'super_admin'
             margin-top: 40px;
         }
 
+        .owners-actions {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .owners-actions form {
+            margin: 0;
+        }
+
+        .compute-meta {
+            margin: 10px 0 0 0;
+            color: dimgray;
+            font-size: 13px;
+            font-weight: 600;
+        }
+
+        .owners-actions button {
+            border: none;
+            border-radius: 8px;
+            padding: 10px 14px;
+            color: white;
+            font-weight: 700;
+            cursor: pointer;
+        }
+
+        .compute-btn {
+            background: steelblue;
+        }
+
+        .compute-btn:hover {
+            background: royalblue;
+        }
+
+        .revenue-btn {
+            background: darkgreen;
+        }
+
+        .revenue-btn:hover {
+            background: seagreen;
+        }
+
+        .pay-owner-btn {
+            background: darkgreen;
+            border: none;
+            border-radius: 6px;
+            color: white;
+            padding: 6px 10px;
+            font-weight: 700;
+            cursor: pointer;
+            font-size: 12px;
+        }
+
+        .pay-owner-btn:hover {
+            background: seagreen;
+        }
+
         @media (max-width: 980px) {
             .owners-grid {
                 grid-template-columns: 1fr;
@@ -380,6 +677,7 @@ if (!empty($_SESSION['admin_role']) && $_SESSION['admin_role'] === 'super_admin'
         <a href="add_user.php">Add User</a>
         <a href="activity.php">Activity Log</a>
         <a href="subadmin_activity.php">Sub-admin Logs</a>
+    <a href="database_search.php">Database Search</a>
 <?php endif; ?>
         <a href="logout.php" style="color:red;">Logout</a>
     </div>
@@ -394,15 +692,15 @@ if (!empty($_SESSION['admin_role']) && $_SESSION['admin_role'] === 'super_admin'
     <section class="owners-summary">
         <article class="summary-card">
             <span class="summary-title">Active Accounts</span>
-            <span class="summary-value"><?= $activeCount ?></span>
+            <span id="ownersActiveCount" class="summary-value"><?= $activeCount ?></span>
         </article>
         <article class="summary-card">
             <span class="summary-title">Expired Accounts</span>
-            <span class="summary-value"><?= $expiredCount ?></span>
+            <span id="ownersExpiredCount" class="summary-value"><?= $expiredCount ?></span>
         </article>
         <article class="summary-card">
             <span class="summary-title">Total Due</span>
-            <span class="summary-value">KES <?= number_format($totalDue, 2) ?></span>
+            <span id="ownersTotalDue" class="summary-value">KES <?= number_format($totalDue, 2) ?></span>
         </article>
     </section>
 
@@ -411,6 +709,19 @@ if (!empty($_SESSION['admin_role']) && $_SESSION['admin_role'] === 'super_admin'
             <?= htmlspecialchars($message) ?>
         </div>
     <?php endif; ?>
+
+    <section class="owners-card">
+        <h3>Owner Totals Actions</h3>
+        <div class="owners-actions">
+            <form method="POST">
+                <input type="hidden" name="owner_action" value="compute_total">
+                <button type="submit" class="compute-btn">Compute Total</button>
+            </form>
+        </div>
+        <p class="compute-meta">
+            Last computed: <?= $lastComputedAt ? htmlspecialchars($lastComputedAt) : 'Not computed manually yet' ?>
+        </p>
+    </section>
 
     <section class="owners-grid">
         <article class="owners-card">
@@ -453,6 +764,7 @@ if (!empty($_SESSION['admin_role']) && $_SESSION['admin_role'] === 'super_admin'
                                 <th>Added</th>
                                 <th>Status</th>
                                 <th>Total Due</th>
+                                <th>Payment</th>
                                 <?php if (!empty($_SESSION['admin_role']) && $_SESSION['admin_role'] === 'super_admin'): ?>
                                     <th>Action</th>
                                 <?php endif; ?>
@@ -470,7 +782,19 @@ if (!empty($_SESSION['admin_role']) && $_SESSION['admin_role'] === 'super_admin'
                                             <?= htmlspecialchars($row['status']) ?>
                                         </span>
                                     </td>
-                                    <td>KES <?= isset($row['total_due']) ? number_format($row['total_due'], 2) : '0.00' ?></td>
+                                    <td class="owner-due-cell" data-plate="<?= htmlspecialchars($row['plate_number']) ?>">KES <?= isset($row['total_due']) ? number_format($row['total_due'], 2) : '0.00' ?></td>
+                                    <td>
+                                        <?php $rowDue = isset($row['total_due']) ? (float) $row['total_due'] : 0; ?>
+                                        <?php if ($rowDue > 0): ?>
+                                            <form method="POST" onsubmit="return confirm('Receive payment of KES <?= number_format($rowDue, 2) ?> for <?= htmlspecialchars($row['plate_number']) ?>?');" style="margin:0;">
+                                                <input type="hidden" name="owner_action" value="record_owner_payment">
+                                                <input type="hidden" name="pay_plate" value="<?= htmlspecialchars($row['plate_number']) ?>">
+                                                <button type="submit" class="pay-owner-btn">Receive Payment</button>
+                                            </form>
+                                        <?php else: ?>
+                                            <span style="color: dimgray; font-size: 12px;">No Due</span>
+                                        <?php endif; ?>
+                                    </td>
                                     <?php if (!empty($_SESSION['admin_role']) && $_SESSION['admin_role'] === 'super_admin'): ?>
                                         <td>
                                             <button class="action-btn delete-btn" onclick="deleteVehicle('<?= htmlspecialchars($row['plate_number']) ?>')">Delete</button>
@@ -532,6 +856,57 @@ document.addEventListener('DOMContentLoaded', function() {
             this.value = this.value.toUpperCase();
         });
     });
+
+    function formatKes(amount) {
+        return 'KES ' + Number(amount || 0).toLocaleString(undefined, {
+            minimumFractionDigits: 2,
+            maximumFractionDigits: 2
+        });
+    }
+
+    function runSilentOwnerSync() {
+        const active = document.activeElement;
+        const isTyping = active && (active.tagName === 'INPUT' || active.tagName === 'TEXTAREA');
+        if (document.hidden || isTyping) {
+            return;
+        }
+
+        fetch('owners.php?silent_sync=1', {
+            headers: {
+                'X-Requested-With': 'XMLHttpRequest'
+            }
+        })
+        .then(function(res) {
+            return res.json();
+        })
+        .then(function(data) {
+            if (!data || data.status !== 'success') {
+                return;
+            }
+
+            const activeEl = document.getElementById('ownersActiveCount');
+            const expiredEl = document.getElementById('ownersExpiredCount');
+            const totalEl = document.getElementById('ownersTotalDue');
+
+            if (activeEl) activeEl.textContent = String(data.activeCount || 0);
+            if (expiredEl) expiredEl.textContent = String(data.expiredCount || 0);
+            if (totalEl) totalEl.textContent = formatKes(data.totalDue || 0);
+
+            if (data.dueByPlate) {
+                document.querySelectorAll('.owner-due-cell[data-plate]').forEach(function(cell) {
+                    const plate = cell.getAttribute('data-plate') || '';
+                    if (Object.prototype.hasOwnProperty.call(data.dueByPlate, plate)) {
+                        cell.textContent = formatKes(data.dueByPlate[plate]);
+                    }
+                });
+            }
+        })
+        .catch(function() {
+            // ignore intermittent sync failures to keep UX smooth
+        });
+    }
+
+    setInterval(runSilentOwnerSync, 15000);
 });
 
 function deleteVehicle(plate) {

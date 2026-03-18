@@ -18,13 +18,70 @@ if (!empty($_SESSION['admin_username'])) {
 }
 
 $message = '';
+$currentUsername = strtolower($_SESSION['admin_username'] ?? '');
 // only super_admins may add other users
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if ($_SESSION['admin_role'] !== 'super_admin') {
         $message = "Only the main admin can create new users.";
+    } elseif (isset($_POST['remove_admin_id'])) {
+        $removeId = (int) ($_POST['remove_admin_id'] ?? 0);
+        $removeRole = $_POST['remove_role'] ?? 'admin';
+        if (!in_array($removeRole, ['admin', 'super_admin'], true)) {
+            $removeRole = 'admin';
+        }
+        if ($removeId <= 0) {
+            $message = "Invalid administrator selected.";
+        } else {
+            $checkStmt = $pdo->prepare("SELECT id, username, role FROM administrators WHERE id = ?");
+            $checkStmt->execute([$removeId]);
+            $targetAdmin = $checkStmt->fetch(PDO::FETCH_ASSOC);
+
+            if (!$targetAdmin) {
+                $message = "Administrator account not found.";
+            } elseif (($targetAdmin['role'] ?? '') !== $removeRole) {
+                $message = "Role mismatch for selected administrator.";
+            } elseif (!empty($_SESSION['admin_username']) && strtolower($targetAdmin['username']) === $currentUsername) {
+                $message = "You cannot remove your own account while logged in.";
+            } elseif ($removeRole === 'super_admin') {
+                $countStmt = $pdo->prepare("SELECT COUNT(*) FROM administrators WHERE role = 'super_admin'");
+                $countStmt->execute();
+                $superCount = (int) $countStmt->fetchColumn();
+                if ($superCount <= 1) {
+                    $message = "Cannot remove the last super-admin account.";
+                } else {
+                    $deleteStmt = $pdo->prepare("DELETE FROM administrators WHERE id = ? AND role = 'super_admin'");
+                    $deleteStmt->execute([$removeId]);
+                    if ($deleteStmt->rowCount() > 0) {
+                        $removedUser = $targetAdmin['username'];
+                        $message = "Super-admin '$removedUser' removed successfully.";
+                        if (!empty($_SESSION['admin_username'])) {
+                            AdminAudit::log($pdo, $_SESSION['admin_username'], "removed super-admin user $removedUser");
+                        }
+                    } else {
+                        $message = "No super-admin was removed.";
+                    }
+                }
+            } else {
+                $deleteStmt = $pdo->prepare("DELETE FROM administrators WHERE id = ? AND role = 'admin'");
+                $deleteStmt->execute([$removeId]);
+                if ($deleteStmt->rowCount() > 0) {
+                    $removedUser = $targetAdmin['username'];
+                    $message = "Sub-admin '$removedUser' removed successfully.";
+                    if (!empty($_SESSION['admin_username'])) {
+                        AdminAudit::log($pdo, $_SESSION['admin_username'], "removed sub-admin user $removedUser");
+                    }
+                } else {
+                    $message = "No sub-admin was removed.";
+                }
+            }
+        }
     } else {
         $uname = strtolower(trim($_POST['username'] ?? ''));
         $pwd = $_POST['password'] ?? '';
+        $newRole = $_POST['new_role'] ?? 'admin';
+        if (!in_array($newRole, ['admin', 'super_admin'], true)) {
+            $newRole = 'admin';
+        }
         if ($uname && $pwd) {
             // insert new administrator, avoid duplicates
             $stmt = $pdo->prepare("SELECT id FROM administrators WHERE LOWER(username)=?");
@@ -33,15 +90,36 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $message = "A user with that username already exists.";
             } else {
                 $hash = password_hash($pwd, PASSWORD_DEFAULT);
-                $stmt2 = $pdo->prepare("INSERT INTO administrators (username, password, role) VALUES (?, ?, 'admin')");
-                $stmt2->execute([$uname, $hash]);
-                $message = "Sub‑admin '$uname' added successfully.";
+                $stmt2 = $pdo->prepare("INSERT INTO administrators (username, password, role) VALUES (?, ?, ?)");
+                $stmt2->execute([$uname, $hash, $newRole]);
+                if ($newRole === 'super_admin') {
+                    $message = "Super-admin '$uname' added successfully.";
+                    if (!empty($_SESSION['admin_username'])) {
+                        AdminAudit::log($pdo, $_SESSION['admin_username'], "added super-admin user $uname");
+                    }
+                } else {
+                    $message = "Sub-admin '$uname' added successfully.";
+                    if (!empty($_SESSION['admin_username'])) {
+                        AdminAudit::log($pdo, $_SESSION['admin_username'], "added sub-admin user $uname");
+                    }
+                }
             }
         } else {
             $message = "Please provide both username and password.";
         }
     }
 }
+
+$subAdmins = [];
+$subAdminStmt = $pdo->prepare("SELECT id, username, created_at FROM administrators WHERE role = 'admin' ORDER BY created_at DESC, username ASC");
+$subAdminStmt->execute();
+$subAdmins = $subAdminStmt->fetchAll(PDO::FETCH_ASSOC);
+
+$superAdmins = [];
+$superAdminStmt = $pdo->prepare("SELECT id, username, created_at FROM administrators WHERE role = 'super_admin' ORDER BY created_at DESC, username ASC");
+$superAdminStmt->execute();
+$superAdmins = $superAdminStmt->fetchAll(PDO::FETCH_ASSOC);
+$superAdminCount = count($superAdmins);
 ?>
 <!DOCTYPE html>
 <html>
@@ -264,6 +342,100 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             text-align: center;
         }
 
+        .subadmin-list {
+            margin-top: 22px;
+            padding-top: 16px;
+            border-top: 1px solid lightgray;
+        }
+
+        .subadmin-list h3 {
+            margin: 0 0 10px 0;
+            font-size: 18px;
+            color: forestgreen;
+        }
+
+        .role-select {
+            width: 100%;
+            padding: 10px 12px;
+            border: 1px solid lightgray;
+            border-radius: 8px;
+            font-size: 14px;
+            color: darkslategray;
+            background: whitesmoke;
+            box-sizing: border-box;
+        }
+
+        .role-select:focus {
+            outline: none;
+            border-color: seagreen;
+            box-shadow: 0 0 0 3px lightgreen;
+            background: white;
+        }
+
+        .subadmin-list table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 8px;
+        }
+
+        .subadmin-list th,
+        .subadmin-list td {
+            border: 1px solid lightgray;
+            padding: 8px;
+            text-align: left;
+            font-size: 13px;
+        }
+
+        .subadmin-list th {
+            background: whitesmoke;
+            color: darkslategray;
+        }
+
+        .remove-admin-btn {
+            border: none;
+            border-radius: 6px;
+            padding: 7px 10px;
+            background: firebrick;
+            color: white;
+            font-weight: 700;
+            cursor: pointer;
+            font-size: 12px;
+        }
+
+        .remove-admin-btn:hover {
+            background: red;
+        }
+
+        .remove-super-btn {
+            border: none;
+            border-radius: 6px;
+            padding: 7px 10px;
+            background: saddlebrown;
+            color: white;
+            font-weight: 700;
+            cursor: pointer;
+            font-size: 12px;
+        }
+
+        .remove-super-btn:hover {
+            background: sienna;
+        }
+
+        .remove-super-btn:disabled {
+            background: darkgray;
+            cursor: not-allowed;
+        }
+
+        .subadmin-empty {
+            background: floralwhite;
+            border: 1px dashed burlywood;
+            color: saddlebrown;
+            border-radius: 8px;
+            padding: 10px 12px;
+            font-size: 13px;
+            font-weight: 600;
+        }
+
         @media (max-width: 520px) {
             .form-card-body {
                 padding: 22px 18px 22px;
@@ -284,6 +456,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <?php if (!empty($_SESSION['admin_role']) && $_SESSION['admin_role'] === 'super_admin'): ?>
             <a href="activity.php">Activity Log</a>
             <a href="subadmin_activity.php">Sub-admin Logs</a>
+            <a href="database_search.php">Database Search</a>
         <?php endif; ?>
         <a href="profile.php">My Profile</a>
         <a href="logout.php" style="color:red;">Logout</a>
@@ -293,8 +466,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <div class="page-wrapper">
     <div class="form-card">
         <div class="form-card-header">
-            <h2>&#128100; Add Sub-Administrator</h2>
-            <p>New accounts are created with the <strong>sub-admin</strong> role by default.</p>
+            <h2>&#128100; Manage Administrators</h2>
+            <p>Create sub-admin or super-admin accounts and manage removals safely.</p>
         </div>
         <div class="form-card-body">
             <div class="security-note">Only trusted personnel should be granted admin access.</div>
@@ -311,7 +484,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             </div>
             <?php endif; ?>
 
-            <form method="POST" autocomplete="off">
+            <form id="addAdminForm" method="POST" autocomplete="off">
                 <div class="field-group">
                     <label for="username">Username</label>
                     <div class="input-wrap">
@@ -348,10 +521,92 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     <p id="passwordMatchHint" class="field-hint">Passwords must match before submission.</p>
                 </div>
 
+                <div class="field-group">
+                    <label for="new_role">Account Role</label>
+                    <select id="new_role" name="new_role" class="role-select">
+                        <option value="admin" <?= (($_POST['new_role'] ?? 'admin') === 'admin') ? 'selected' : '' ?>>Sub-admin</option>
+                        <option value="super_admin" <?= (($_POST['new_role'] ?? '') === 'super_admin') ? 'selected' : '' ?>>Super-admin</option>
+                    </select>
+                    <p class="field-hint">Use super-admin only for fully trusted top-level administrators.</p>
+                </div>
+
                 <button type="submit" class="btn-submit">&#43; Add Administrator</button>
             </form>
 
-            <p class="form-hint">Only super-admins can create new accounts. New users will be assigned the <em>sub-admin</em> role.</p>
+            <p class="form-hint">Only super-admins can create and remove administrator accounts.</p>
+
+            <section class="subadmin-list">
+                <h3>Existing Sub-admins</h3>
+                <?php if (empty($subAdmins)): ?>
+                    <div class="subadmin-empty">No sub-admin accounts found.</div>
+                <?php else: ?>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Username</th>
+                                <th>Created</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?php foreach ($subAdmins as $admin): ?>
+                                <tr>
+                                    <td><?= htmlspecialchars($admin['username']) ?></td>
+                                    <td><?= htmlspecialchars($admin['created_at']) ?></td>
+                                    <td>
+                                        <form method="POST" onsubmit="return confirm('Remove sub-admin <?= htmlspecialchars($admin['username']) ?>?');" style="margin:0;">
+                                            <input type="hidden" name="remove_admin_id" value="<?= (int) $admin['id'] ?>">
+                                            <button type="submit" class="remove-admin-btn">Remove</button>
+                                        </form>
+                                    </td>
+                                </tr>
+                            <?php endforeach; ?>
+                        </tbody>
+                    </table>
+                <?php endif; ?>
+            </section>
+
+            <section class="subadmin-list">
+                <h3>Existing Super-admins</h3>
+                <?php if (empty($superAdmins)): ?>
+                    <div class="subadmin-empty">No super-admin accounts found.</div>
+                <?php else: ?>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Username</th>
+                                <th>Created</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?php foreach ($superAdmins as $admin): ?>
+                                <?php
+                                    $isCurrent = !empty($_SESSION['admin_username']) && strtolower($admin['username']) === $currentUsername;
+                                    $canRemoveSuper = (!$isCurrent && $superAdminCount > 1);
+                                ?>
+                                <tr>
+                                    <td>
+                                        <?= htmlspecialchars($admin['username']) ?>
+                                        <?php if ($isCurrent): ?>
+                                            (you)
+                                        <?php endif; ?>
+                                    </td>
+                                    <td><?= htmlspecialchars($admin['created_at']) ?></td>
+                                    <td>
+                                        <form method="POST" onsubmit="return confirm('Remove super-admin <?= htmlspecialchars($admin['username']) ?>?');" style="margin:0;">
+                                            <input type="hidden" name="remove_admin_id" value="<?= (int) $admin['id'] ?>">
+                                            <input type="hidden" name="remove_role" value="super_admin">
+                                            <button type="submit" class="remove-super-btn" <?= $canRemoveSuper ? '' : 'disabled' ?>>Remove</button>
+                                        </form>
+                                    </td>
+                                </tr>
+                            <?php endforeach; ?>
+                        </tbody>
+                    </table>
+                    <p class="field-hint">Protection rules: you cannot remove your own account or the last remaining super-admin.</p>
+                <?php endif; ?>
+            </section>
         </div>
     </div>
 </div>
@@ -366,7 +621,7 @@ function togglePw(btn, inputId) {
     btn.textContent = input.type === 'password' ? '\u{1F441}' : '\u{1F648}';
 }
 
-const form = document.querySelector('form');
+const form = document.getElementById('addAdminForm');
 const passwordInput = document.getElementById('password');
 const confirmPasswordInput = document.getElementById('confirm_password');
 const meterFill = document.getElementById('pwMeterFill');
