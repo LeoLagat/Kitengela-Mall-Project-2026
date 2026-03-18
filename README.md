@@ -8,6 +8,27 @@
 
 This is a web-based parking management system for Kitengela Mall. It supports admin, staff, and driver roles, manages parking bays, invoicing, payments (including M-Pesa integration), and provides real-time parking status displays.
 
+## Latest Updates (March 2026)
+
+- Added owner monthly billing controls in `admin/owners.php`:
+  - `Compute Total` recomputes owner dues on demand.
+  - `Receive Payment` records owner payment and settles due balances.
+- Owner status now follows monthly billing due date (`due_period`):
+  - unpaid past due = `Expired`
+  - paid (or no due) = `Active`
+- Added silent background sync on owners page:
+  - dues and summary counters refresh without visible page reload.
+- Added payment evidence timestamp in `vehicle_logs`:
+  - `paid_at` is set when payment is confirmed.
+- Added `Database Search` admin page (`admin/database_search.php`):
+  - super-admin read-only search across selected tables.
+- Expanded admin management:
+  - create sub-admin or super-admin from `admin/add_user.php`.
+  - remove sub-admin/super-admin with lockout safeguards.
+- Improved restricted list remove flow and owner/staff recycle-bin actions.
+- Fixed M-Pesa transaction data consistency:
+  - `plate_number`, `phone_number`, `checkout_id`, `receipt_number` are now consistently populated.
+
 ---
 
 ## Quick Start (Docker)
@@ -58,11 +79,12 @@ You can change these in `docker-compose.yml` or use a `.env` file.
 ### public/admin/
 
 - **dashboard.php**: Admin dashboard with system stats (vehicles inside, revenue, etc.). Added a date-range form for downloading revenue reports as CSV.
+- **database_search.php**: Super-admin read-only database search across selected tables.
 - **login.php**: Admin login page.
 - **logout.php**: Logs out the admin.
-- **owners.php**: Manage business owner vehicles, add owners, view status, and invoice info.
+- **owners.php**: Manage business owner vehicles, monthly dues, payment receipt, and account status.
 - **restricted.php**: Manage restricted/banned vehicles (add, view, remove).
-- **add_user.php**: Add new admin users.
+- **add_user.php**: Manage admin users (create/remove sub-admin and super-admin with safeguards).
 - **reset_admin.php**: Reset admin credentials (use with caution).
 - **staff.php**: Manage staff vehicles (add, view, remove).
 
@@ -158,6 +180,8 @@ You can change these in `docker-compose.yml` or use a `.env` file.
 ### 4. Owner Parking
 
 - **Owners** are invoiced monthly. Their status and dues are managed in `admin/owners.php`.
+- After one month, owners with unpaid due become `Expired`.
+- Once admin clicks `Receive Payment`, owner invoice logs are marked paid, due is cleared, and status returns to `Active`.
 
 ### 5. Public Display
 
@@ -175,6 +199,7 @@ You can change these in `docker-compose.yml` or use a `.env` file.
 | public/led_display.php     | Public display for available parking spots                                          |
 | public/staff.php           | Staff parking view                                                                  |
 | public/admin/dashboard.php | Admin dashboard                                                                     |
+| public/admin/database_search.php | Super-admin read-only database search                                        |
 | public/admin/login.php     | Admin login page                                                                    |
 | public/admin/logout.php    | Admin logout                                                                        |
 | public/admin/owners.php    | Manage business owner vehicles                                                      |

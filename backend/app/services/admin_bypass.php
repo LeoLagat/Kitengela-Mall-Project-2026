@@ -28,15 +28,22 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['plate'])) {
             $vehicleId = $vehicle['id'];
             $bayId = $vehicle['bay_id'];
             $oldStatus = $vehicle['payment_status'];
+            $bypassedBy = $_SESSION['admin_username'] ?? null;
 
             // 2. Update vehicle_logs: Mark as paid AND exited (even if payment was pending/incomplete)
             $stmtLog = $pdo->prepare("
                 UPDATE vehicle_logs 
                 SET payment_status = 'paid',
-                    exit_time = NOW()
+                    exit_time = NOW(),
+                    is_manual_bypass = 1,
+                    bypassed_by = :bypassed_by,
+                    bypassed_at = NOW()
                 WHERE id = :id
             ");
-            $stmtLog->execute([':id' => $vehicleId]);
+            $stmtLog->execute([
+                ':id' => $vehicleId,
+                ':bypassed_by' => $bypassedBy
+            ]);
 
             // 3. Update the parking bay status to 'vacant'
             $stmtBay = $pdo->prepare("
@@ -66,11 +73,23 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['plate'])) {
             if ($existingRecord) {
                 // Vehicle exists in system but log shows it already exited
                 // Force open the gate anyway (for recovery/override scenarios)
+                $stmtMark = $pdo->prepare(
+                    "UPDATE vehicle_logs
+                     SET is_manual_bypass = 1,
+                         bypassed_by = :bypassed_by,
+                         bypassed_at = NOW()
+                     WHERE id = :id"
+                );
+                $stmtMark->execute([
+                    ':id' => $existingRecord['id'],
+                    ':bypassed_by' => $_SESSION['admin_username'] ?? null
+                ]);
+
                 if (!empty($_SESSION['admin_username'])) {
                     AdminAudit::log($pdo, $_SESSION['admin_username'], "executed emergency bypass for vehicle $plate (vehicle already exited but gate forced open)");
                 }
                 if ($pdo->inTransaction()) {
-                    $pdo->rollBack();
+                    $pdo->commit();
                 }
                 echo json_encode([
                     'status' => 'success', 
@@ -83,7 +102,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['plate'])) {
                     AdminAudit::log($pdo, $_SESSION['admin_username'], "executed bypass for unknown vehicle $plate (not in system - emergency access)");
                 }
                 if ($pdo->inTransaction()) {
-                    $pdo->rollBack();
+                    $pdo->commit();
                 }
                 echo json_encode([
                     'status' => 'success', 

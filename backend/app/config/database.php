@@ -149,6 +149,20 @@ class DatabaseConnection {
             } catch (PDOException $ignore) {
             }
 
+            // add manual bypass tracking columns to vehicle_logs if missing
+            try {
+                $this->pdo->exec("ALTER TABLE vehicle_logs ADD COLUMN is_manual_bypass TINYINT(1) NOT NULL DEFAULT 0");
+            } catch (PDOException $ignore) {
+            }
+            try {
+                $this->pdo->exec("ALTER TABLE vehicle_logs ADD COLUMN bypassed_by VARCHAR(100) NULL DEFAULT NULL");
+            } catch (PDOException $ignore) {
+            }
+            try {
+                $this->pdo->exec("ALTER TABLE vehicle_logs ADD COLUMN bypassed_at DATETIME NULL DEFAULT NULL");
+            } catch (PDOException $ignore) {
+            }
+
             // ensure mpesa_transactions has required columns
             try {
                 $this->pdo->exec("ALTER TABLE mpesa_transactions ADD COLUMN log_id INT NULL");

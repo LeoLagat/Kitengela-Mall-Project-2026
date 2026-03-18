@@ -22,8 +22,8 @@ if (!empty($_SESSION['admin_username'])) {
 $tables = [
     'vehicle_logs' => [
         'label' => 'Vehicle Logs',
-        'columns' => ['id', 'plate_number', 'bay_id', 'entry_time', 'exit_time', 'total_fee', 'payment_status', 'nominal_fee', 'paid_at'],
-        'searchable' => ['plate_number', 'payment_status']
+        'columns' => ['id', 'plate_number', 'bay_id', 'entry_time', 'exit_time', 'total_fee', 'payment_status', 'nominal_fee', 'paid_at', 'is_manual_bypass', 'bypassed_by', 'bypassed_at'],
+        'searchable' => ['plate_number', 'payment_status', 'bypassed_by']
     ],
     'owner_accounts' => [
         'label' => 'Owner Accounts',
