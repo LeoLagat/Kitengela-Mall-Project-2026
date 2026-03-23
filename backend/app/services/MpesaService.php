@@ -102,35 +102,8 @@ class MpesaService
     {
         // support a local mock mode for offline testing
         if (getenv('MPESA_MOCK') === '1') {
-            // simulate successful STK push and immediately mark the log paid
-            $result = [
-                'ResponseCode' => '0',
-                'CheckoutRequestID' => 'MOCK' . time(),
-                'CustomerMessage' => 'Simulated success (mock mode)'
-            ];
-
-            // update the vehicle log to simulate a payment callback
-            try {
-                $db = new DatabaseConnection();
-                $pdo = $db->pdo;
-                // store checkout id
-                $stmt = $pdo->prepare(
-                    "UPDATE vehicle_logs 
-                     SET mpesa_checkout_id = :checkout_id,
-                         payment_status = 'paid',
-                         exit_time = NOW(),
-                         total_fee = :amount
-                     WHERE plate_number = :plate 
-                     AND exit_time IS NULL"
-                );
-                $stmt->execute([
-                    ':checkout_id' => $result['CheckoutRequestID'],
-                    ':amount' => $amount,
-                    ':plate' => $plateNumber
-                ]);
-            } catch (Exception $e) {
-                // ignore errors in mock update
-            }
+            file_put_contents(__DIR__ . '/mpesa_errors.txt', "MPESA_MOCK blocked: refusing auto-success for plate $plateNumber" . PHP_EOL, FILE_APPEND);
+            return ['error' => 'MPESA_MOCK is disabled for gate authorization. Use real STK callback to complete payment.'];
         } else {
             $accessToken = $this->getAccessToken();
             if (is_array($accessToken) && isset($accessToken['error'])) {
@@ -235,32 +208,10 @@ class MpesaService
             }
 
             // after a retry we may still have a 5xx server error and no usable body
-            // automatically fall back to a simulated success so the UI can continue
+            // fail closed: never auto-mark success without genuine callback
             if ($httpCode >= 500) {
-                file_put_contents(__DIR__ . '/mpesa_errors.txt', "Server error $httpCode; automatically using mock fallback\n", FILE_APPEND);
-                $result = [
-                    'ResponseCode' => '0',
-                    'CheckoutRequestID' => 'AUTO' . time(),
-                    'CustomerMessage' => 'Auto-simulated success (fallback mock)'
-                ];
-                // persist the simulated checkout id so callback logic (or SSE) will work
-                try {
-                    $db = new DatabaseConnection();
-                    $pdo = $db->pdo;
-                    $stmt = $pdo->prepare(
-                        "UPDATE vehicle_logs 
-                         SET mpesa_checkout_id = :checkout_id 
-                         WHERE plate_number = :plate 
-                         AND exit_time IS NULL"
-                    );
-                    $stmt->execute([
-                        ':checkout_id' => $result['CheckoutRequestID'],
-                        ':plate' => $plateNumber
-                    ]);
-                } catch (Exception $e) {
-                    // ignore write errors
-                }
-                return $result;
+                file_put_contents(__DIR__ . '/mpesa_errors.txt', "Server error $httpCode; refusing simulated success fallback\n", FILE_APPEND);
+                return ['error' => "Daraja temporarily unavailable (HTTP $httpCode). Please try again later."];
             }
 
             // attempt to decode JSON regardless of status
