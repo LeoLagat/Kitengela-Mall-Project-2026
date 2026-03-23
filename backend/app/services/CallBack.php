@@ -59,13 +59,15 @@ if ($resultCode === 0) {
     try {
         // 1. Find vehicle log id and bay_id
         // fetch the related vehicle log so we can capture plate_number as well
-        $stmtFind = $pdo->prepare("SELECT id AS log_id, bay_id, plate_number FROM vehicle_logs WHERE mpesa_checkout_id = :checkout_id LIMIT 1");
+        $stmtFind = $pdo->prepare("SELECT id AS log_id, bay_id, plate_number, phone_number FROM vehicle_logs WHERE mpesa_checkout_id = :checkout_id LIMIT 1");
         $stmtFind->execute([':checkout_id' => $checkoutRequestID]);
         $vehicle = $stmtFind->fetch(PDO::FETCH_ASSOC);
 
         $logId = $vehicle['log_id'] ?? null;
         $bayId = $vehicle['bay_id'] ?? null;
         $plateNumber = $vehicle['plate_number'] ?? null;
+        // Use the phone stored at STK-push time; callback gives sandbox dummy numbers
+        if (!empty($vehicle['phone_number'])) { $phoneNumber = $vehicle['phone_number']; }
 
         if (!$logId) {
             file_put_contents(__DIR__ . '/mpesa_errors.txt', "No vehicle log found for checkout_id: $checkoutRequestID" . PHP_EOL, FILE_APPEND);
@@ -172,14 +174,9 @@ if ($resultCode === 0) {
             ");
             $stmt->execute([':checkout_id' => $checkoutRequestID]);
 
-            // defensive cleanup – free the bay if the log exists
-            $stmtBay = $pdo->prepare("\
-                    UPDATE parking_bays pb
-                    JOIN vehicle_logs vl ON vl.bay_id = pb.id
-                    SET pb.current_status = 'vacant'
-                    WHERE vl.mpesa_checkout_id = :checkout_id
-            ");
-            $stmtBay->execute([':checkout_id' => $checkoutRequestID]);
+            // NOTE: parking bay is intentionally NOT freed here.
+            // The car is still physically in the lot; the bay stays occupied
+            // until the driver pays successfully and exit_time is stamped.
 
             http_response_code(200);
             echo json_encode(['ResultCode' => 1, 'ResultDesc' => 'Payment Failed Logged']);

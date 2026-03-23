@@ -250,9 +250,11 @@ Enter the plate number to compute fees and open the barrier.
 
 <?php if ($isFreeExit): ?>
 <div class="status-success">
-Parking duration was under grace period; no payment required.
+<div style="font-size:23px;font-weight:800;color:forestgreen;letter-spacing:0.3px;">Exit Approved</div>
+<div style="margin-top:6px;color:darkslategray;font-size:14px;font-weight:600;">No payment required under the grace period.</div>
+<div style="display:inline-block;margin-top:10px;background:mintcream;border:1px solid palegreen;border-radius:999px;color:darkgreen;padding:6px 14px;font-size:13px;font-weight:800;">Thank you for visiting Kitengela Mall</div>
 <div class="progress" aria-hidden="true"><span></span></div>
-<div style="margin-top:8px;color:dimgray;font-size:13px;">Refreshing exit screen...</div>
+<div style="margin-top:8px;color:dimgray;font-size:13px;">Returning to home screen...</div>
 </div>
 <?php endif; ?>
 
@@ -288,7 +290,7 @@ PROCESS EXIT
 <?php if ($isFreeExit): ?>
 <script>
 window.setTimeout(function () {
-    window.location = 'exit.php';
+    window.location = '../index.php?welcome=exit';
 }, 3000);
 </script>
 <?php endif; ?>

@@ -10,6 +10,27 @@ This is a web-based parking management system for Kitengela Mall. It supports ad
 
 ## Latest Updates (March 2026)
 
+### M-Pesa Payment Reliability
+- **Fixed wrong PIN / cancel flow**: When a driver cancels the STK prompt or enters the wrong PIN, the waiting page now shows a styled "Payment Not Completed" card with a **Try Again** button instead of a jarring browser `alert()`.
+- **Fixed retry loop after failure**: `MpesaService.php` now resets `payment_status = 'pending'` every time a new STK push is sent, so the SSE stream doesn't immediately re-read the old `'failed'` status and bounce the driver back before Safaricom responds.
+- **Fixed bay wrongly freed on failure**: `CallBack.php` no longer releases the parking bay when a payment fails. The bay stays occupied until the driver successfully pays and `exit_time` is stamped.
+- **Fixed duplicate M-Pesa transaction rows**: Removed the speculative `Pending` INSERT from `MpesaService.php`. `mpesa_transactions` is now only written by `CallBack.php` once a payment is confirmed `Completed`.
+- **Fixed sandbox dummy phone number**: Real phone is saved to `vehicle_logs.phone_number` at STK-push time; `CallBack.php` now reads it back instead of trusting the Safaricom sandbox dummy (`254700000000`).
+
+### Admin Panel — Database Search
+- Added `mpesa_transactions` table to the DB search interface (searchable by plate, phone, receipt, checkout ID).
+- Added `phone_number` and `mpesa_checkout_id` columns to the `vehicle_logs` search view.
+- Added **Clear Table Data** panel (collapsible, hidden by default to avoid distraction):
+  - CSRF-protected form to clear one selected table or all clearable tables at once.
+  - `administrators` table is fully protected and cannot be cleared.
+  - Bulk "clear all" option automatically excludes `revenue_archive` to preserve historical totals.
+  - Clearing `vehicle_logs` auto-archives revenue before deletion.
+  - All clear actions are recorded in the admin audit log.
+
+### Revenue Calculations
+- `totalRevenue()` in `Vehicle.php` and the `clear_logs.php` archiving query now include `invoiced` payment status alongside `paid`, so owner parking fees are correctly counted in revenue totals and archives.
+
+### Earlier March 2026
 - Added owner monthly billing controls in `admin/owners.php`:
   - `Compute Total` recomputes owner dues on demand.
   - `Receive Payment` records owner payment and settles due balances.
@@ -26,8 +47,6 @@ This is a web-based parking management system for Kitengela Mall. It supports ad
   - create sub-admin or super-admin from `admin/add_user.php`.
   - remove sub-admin/super-admin with lockout safeguards.
 - Improved restricted list remove flow and owner/staff recycle-bin actions.
-- Fixed M-Pesa transaction data consistency:
-  - `plate_number`, `phone_number`, `checkout_id`, `receipt_number` are now consistently populated.
 
 ---
 

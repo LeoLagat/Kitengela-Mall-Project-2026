@@ -16,6 +16,10 @@ $pdo = $db->pdo;
 // parse dates
 $from = $_GET['from'] ?? null;
 $to   = $_GET['to']   ?? null;
+$fromId = isset($_GET['from_id']) ? (int)$_GET['from_id'] : 25;
+if ($fromId < 1) {
+    $fromId = 1;
+}
 
 // include audit helper
 require_once(__DIR__ . '/../../backend/app/services/AdminAudit.php');
@@ -30,14 +34,17 @@ if ($from && $to) {
         die('Invalid date format');
     }
 
-    $stmt = $pdo->prepare(
-        "SELECT plate_number, entry_time, exit_time, total_fee
-         FROM vehicle_logs
-         WHERE payment_status = 'paid'
-           AND exit_time BETWEEN ? AND ?
-         ORDER BY exit_time ASC"
-    );
-    $stmt->execute(["$from 00:00:00", "$to 23:59:59"]);
+         $stmt = $pdo->prepare(
+                "SELECT plate_number, entry_time, exit_time, total_fee, payment_status
+                 FROM vehicle_logs
+                WHERE id >= ?
+                  AND (
+                         (entry_time BETWEEN ? AND ?)
+                     OR (exit_time BETWEEN ? AND ?)
+                  )
+                 ORDER BY entry_time ASC"
+        );
+         $stmt->execute([$fromId, "$from 00:00:00", "$to 23:59:59", "$from 00:00:00", "$to 23:59:59"]);
     $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
     // output CSV headers
@@ -45,11 +52,13 @@ if ($from && $to) {
     header('Content-Disposition: attachment;filename=revenue_' . $from . '_to_' . $to . '.csv');
 
     $out = fopen('php://output', 'w');
-    fputcsv($out, ['Plate Number','Entry Time','Exit Time','Amount']);
+    fputcsv($out, ['Plate Number','Entry Time','Exit Time','Status','Amount']);
     $total = 0;
     foreach ($rows as $r) {
-        fputcsv($out, [$r['plate_number'], $r['entry_time'], $r['exit_time'], $r['total_fee']]);
-        $total += $r['total_fee'];
+        fputcsv($out, [$r['plate_number'], $r['entry_time'], $r['exit_time'], $r['payment_status'], $r['total_fee']]);
+        if (in_array($r['payment_status'], ['paid', 'invoiced'], true)) {
+            $total += (float)$r['total_fee'];
+        }
     }
     fputcsv($out, []);
     fputcsv($out, ['Total','','',$total]);
@@ -74,6 +83,7 @@ if ($from && $to) {
 <body>
 <h2>Generate Revenue Report</h2>
 <form method="get" action="revenue_report.php">
+    <input type="hidden" name="from_id" value="25">
     <label>From <input type="date" name="from" required></label>
     <label>To <input type="date" name="to" required></label>
     <button type="submit">Download CSV</button>

@@ -295,32 +295,20 @@ class MpesaService
 
             $stmt = $pdo->prepare("
                 UPDATE vehicle_logs 
-                SET mpesa_checkout_id = :checkout_id 
-                WHERE plate_number = :plate 
+                SET mpesa_checkout_id = :checkout_id,
+                    phone_number = :phone,
+                    payment_status = 'pending'
+                WHERE plate_number = :plate
                 AND exit_time IS NULL
             ");
             $stmt->execute([
                 ':checkout_id' => $result['CheckoutRequestID'],
-                ':plate' => $plateNumber
+                ':phone'       => $formattedPhone,
+                ':plate'       => $plateNumber
             ]);
 
-            // Insert pending mpesa_transactions record, now including receipt field if available
-            $receipt = isset($result['MpesaReceiptNumber']) ? $result['MpesaReceiptNumber'] : null;
-                $checkoutId = $result['CheckoutRequestID'] ?? ('WS-' . time());
-            $stmtMpesa = $pdo->prepare("
-                INSERT INTO mpesa_transactions 
-                    (log_id, plate_number, phone_number, amount, checkout_id, receipt_number, status) 
-                VALUES (?, ?, ?, ?, ?, ?, 'Pending')
-            ");
-            // Find log_id for this plate
-            $stmtLog = $pdo->prepare("SELECT id FROM vehicle_logs WHERE plate_number = ? AND exit_time IS NULL ORDER BY id DESC LIMIT 1");
-            $stmtLog->execute([$plateNumber]);
-            $logId = $stmtLog->fetchColumn();
-            try {
-                 $stmtMpesa->execute([$logId, $plateNumber, $formattedPhone, $amount, $checkoutId, $receipt]);
-            } catch (Exception $e) {
-                file_put_contents(__DIR__ . '/mpesa_errors.txt', "Mpesa DB insert error: " . $e->getMessage() . PHP_EOL, FILE_APPEND);
-            }
+            // Pending row intentionally not inserted here.
+            // mpesa_transactions is written only by CallBack.php once payment is confirmed Completed.
         }
         // --- NEW DATABASE LOGIC END ---
 

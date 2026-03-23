@@ -123,7 +123,7 @@ if ($plate) {
                     overlay.innerHTML = '<div style="text-align:center;font-size:32px;"><p>Goodbye!</p><p>Gate is opening...</p></div>';
                     document.body.appendChild(overlay);
                     setTimeout(function() {
-                        window.location.href = '../index.php';
+                        window.location.href = '../index.php?welcome=exit';
                     }, 3000);
                 });
             </script>

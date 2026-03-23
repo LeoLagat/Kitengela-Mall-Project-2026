@@ -15,6 +15,10 @@ require_once(__DIR__ . '/../../backend/app/services/AdminAudit.php');
 $db = new DatabaseConnection();
 $pdo = $db->pdo;
 
+if (empty($_SESSION['db_clear_token'])) {
+    $_SESSION['db_clear_token'] = bin2hex(random_bytes(16));
+}
+
 if (!empty($_SESSION['admin_username'])) {
     AdminAudit::log($pdo, $_SESSION['admin_username'], 'visited database search');
 }
@@ -22,8 +26,13 @@ if (!empty($_SESSION['admin_username'])) {
 $tables = [
     'vehicle_logs' => [
         'label' => 'Vehicle Logs',
-        'columns' => ['id', 'plate_number', 'bay_id', 'entry_time', 'exit_time', 'total_fee', 'payment_status', 'nominal_fee', 'paid_at', 'is_manual_bypass', 'bypassed_by', 'bypassed_at'],
-        'searchable' => ['plate_number', 'payment_status', 'bypassed_by']
+        'columns' => ['id', 'plate_number', 'bay_id', 'entry_time', 'exit_time', 'total_fee', 'payment_status', 'mpesa_checkout_id', 'phone_number', 'nominal_fee', 'paid_at', 'is_manual_bypass', 'bypassed_by', 'bypassed_at'],
+        'searchable' => ['plate_number', 'payment_status', 'mpesa_checkout_id', 'phone_number', 'bypassed_by']
+    ],
+    'mpesa_transactions' => [
+        'label' => 'MPESA Transactions',
+        'columns' => ['id', 'log_id', 'plate_number', 'phone_number', 'amount', 'status', 'checkout_id', 'receipt_number', 'created_at'],
+        'searchable' => ['plate_number', 'phone_number', 'status', 'checkout_id', 'receipt_number']
     ],
     'owner_accounts' => [
         'label' => 'Owner Accounts',
@@ -61,6 +70,118 @@ $tables = [
         'searchable' => ['admin_who_cleared', 'notes']
     ]
 ];
+
+$clearableTables = [
+    'vehicle_logs',
+    'mpesa_transactions',
+    'owner_accounts',
+    'owner_vehicle_fees',
+    'staff_vehicles',
+    'restricted_vehicles',
+    'admin_activity',
+    'revenue_archive'
+];
+
+$bulkClearableTables = array_values(array_filter(
+    $clearableTables,
+    static fn ($tableName) => $tableName !== 'revenue_archive'
+));
+
+$clearMessage = '';
+$clearError = '';
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && ($_POST['action'] ?? '') === 'clear_table_data') {
+    $token = $_POST['token'] ?? '';
+    $clearTarget = $_POST['clear_target'] ?? '';
+
+    if (!hash_equals($_SESSION['db_clear_token'], $token)) {
+        $clearError = 'Invalid clear request. Please refresh and try again.';
+    } else {
+        $tablesToClear = [];
+
+        if ($clearTarget === '__all__') {
+            $tablesToClear = $bulkClearableTables;
+        } elseif (in_array($clearTarget, $clearableTables, true)) {
+            $tablesToClear = [$clearTarget];
+        } else {
+            $clearError = 'Selected table is not allowed to be cleared here.';
+        }
+
+        if ($clearError === '') {
+            $archiveVehicleRevenue = in_array('vehicle_logs', $tablesToClear, true)
+                && !in_array('revenue_archive', $tablesToClear, true);
+
+            $deleteOrder = [
+                'mpesa_transactions',
+                'owner_vehicle_fees',
+                'owner_accounts',
+                'staff_vehicles',
+                'restricted_vehicles',
+                'admin_activity',
+                'vehicle_logs',
+                'revenue_archive'
+            ];
+
+            try {
+                $pdo->beginTransaction();
+
+                $archiveSummary = null;
+                if ($archiveVehicleRevenue) {
+                    $stmtRevenue = $pdo->prepare(
+                        "SELECT COALESCE(SUM(total_fee), 0) AS total_revenue, COUNT(*) AS log_count
+                         FROM vehicle_logs
+                         WHERE payment_status IN ('paid', 'invoiced')"
+                    );
+                    $stmtRevenue->execute();
+                    $archiveSummary = $stmtRevenue->fetch(PDO::FETCH_ASSOC) ?: ['total_revenue' => 0, 'log_count' => 0];
+
+                    if ((float) $archiveSummary['total_revenue'] > 0 || (int) $archiveSummary['log_count'] > 0) {
+                        $stmtArchive = $pdo->prepare(
+                            "INSERT INTO revenue_archive (archived_revenue, admin_who_cleared, log_count_cleared, notes)
+                             VALUES (?, ?, ?, ?)"
+                        );
+                        $stmtArchive->execute([
+                            (float) $archiveSummary['total_revenue'],
+                            $_SESSION['admin_username'] ?? 'unknown',
+                            (int) $archiveSummary['log_count'],
+                            'Archived automatically from Database Search clear action'
+                        ]);
+                    }
+                }
+
+                $clearedLabels = [];
+                foreach ($deleteOrder as $tableName) {
+                    if (!in_array($tableName, $tablesToClear, true)) {
+                        continue;
+                    }
+
+                    $pdo->exec("DELETE FROM {$tableName}");
+                    $clearedLabels[] = $tables[$tableName]['label'];
+                }
+
+                if (!empty($_SESSION['admin_username'])) {
+                    $auditMessage = 'cleared table data from: ' . implode(', ', $clearedLabels);
+                    if ($archiveVehicleRevenue && $archiveSummary !== null) {
+                        $auditMessage .= ' (archived Ksh ' . number_format((float) $archiveSummary['total_revenue'], 2) . ')';
+                    }
+                    AdminAudit::log($pdo, $_SESSION['admin_username'], $auditMessage);
+                }
+
+                $pdo->commit();
+
+                $clearMessage = 'Cleared: ' . implode(', ', $clearedLabels) . '.';
+                if ($archiveVehicleRevenue && $archiveSummary !== null) {
+                    $clearMessage .= ' Vehicle log revenue was archived before clearing.';
+                }
+            } catch (Exception $e) {
+                if ($pdo->inTransaction()) {
+                    $pdo->rollBack();
+                }
+                $clearError = 'Clear failed: ' . $e->getMessage();
+            }
+        }
+    }
+}
 
 $selectedTable = $_GET['table'] ?? 'vehicle_logs';
 if (!isset($tables[$selectedTable])) {
@@ -177,6 +298,83 @@ try {
             background: seagreen;
         }
 
+        .danger-toggle {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: none;
+            border: 1px solid lightcoral;
+            border-radius: 6px;
+            color: firebrick;
+            font-size: 12px;
+            font-weight: 600;
+            padding: 4px 10px;
+            cursor: pointer;
+            opacity: 0.7;
+            margin-bottom: 6px;
+        }
+
+        .danger-toggle:hover {
+            opacity: 1;
+            background: mistyrose;
+        }
+
+        .danger-card {
+            background: white;
+            border: 1px solid lightcoral;
+            border-left: 8px solid firebrick;
+            border-radius: 12px;
+            padding: 16px;
+            box-shadow: 0 8px 20px gainsboro;
+        }
+
+        .danger-card h3 {
+            margin: 0 0 8px 0;
+            color: firebrick;
+        }
+
+        .danger-card p {
+            margin: 0 0 12px 0;
+            color: dimgray;
+        }
+
+        .danger-form {
+            display: grid;
+            grid-template-columns: 2fr auto;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .danger-form select {
+            border: 1px solid lightgray;
+            border-radius: 8px;
+            padding: 10px;
+            font-size: 14px;
+            width: 100%;
+        }
+
+        .danger-button {
+            border: none;
+            border-radius: 8px;
+            background: firebrick;
+            color: white;
+            font-weight: 700;
+            padding: 10px 14px;
+            cursor: pointer;
+        }
+
+        .danger-button:hover {
+            background: brown;
+        }
+
+        .ok {
+            background: honeydew;
+            border: 1px solid palegreen;
+            color: darkgreen;
+            border-radius: 8px;
+            padding: 10px 12px;
+        }
+
         .meta {
             margin-top: 10px;
             color: dimgray;
@@ -267,11 +465,61 @@ try {
                     </option>
                 <?php endforeach; ?>
             </select>
-            <input type="text" name="q" value="<?= htmlspecialchars($searchTerm) ?>" placeholder="Search term (plate, username, owner, reason, etc)">
+            <input type="text" name="q" value="<?= htmlspecialchars($searchTerm) ?>" placeholder="Search term (plate, phone number, receipt, username, owner, reason)">
             <button type="submit">Search</button>
         </form>
         <p class="meta">Table: <?= htmlspecialchars($selectedConfig['label']) ?> | Rows shown: <?= count($rows) ?></p>
     </section>
+
+    <button class="danger-toggle" onclick="toggleDangerCard()" id="dangerToggleBtn">&#9656; Clear Table Data</button>
+
+    <section class="danger-card" id="dangerCard" style="display:none;">
+        <h3>Clear Table Data</h3>
+        <p>Delete records from one selected table or all clearable tables. The Administrators table is protected, and the bulk clear option preserves Revenue Archive history.</p>
+        <form method="POST" class="danger-form" onsubmit="return confirm('This will permanently delete data from the selected table set. Continue?');">
+            <input type="hidden" name="action" value="clear_table_data">
+            <input type="hidden" name="token" value="<?= htmlspecialchars($_SESSION['db_clear_token']) ?>">
+            <select name="clear_target" required>
+                <option value="<?= htmlspecialchars($selectedTable) ?>">Selected table: <?= htmlspecialchars($selectedConfig['label']) ?></option>
+                <option value="__all__">All clearable tables except Revenue Archive</option>
+                <?php foreach ($clearableTables as $tableName): ?>
+                    <?php if ($tableName === $selectedTable): ?>
+                        <?php continue; ?>
+                    <?php endif; ?>
+                    <option value="<?= htmlspecialchars($tableName) ?>"><?= htmlspecialchars($tables[$tableName]['label']) ?></option>
+                <?php endforeach; ?>
+            </select>
+            <button type="submit" class="danger-button">Clear Data</button>
+        </form>
+    </section>
+
+    <?php if ($clearMessage !== ''): ?>
+        <div class="ok"><?= htmlspecialchars($clearMessage) ?></div>
+    <?php endif; ?>
+
+    <?php if ($clearError !== ''): ?>
+        <div class="warn"><?= htmlspecialchars($clearError) ?></div>
+    <?php endif; ?>
+
+    <script>
+        <?php if ($clearMessage !== '' || $clearError !== ''): ?>
+        // Keep panel open after a clear action so admin sees the result
+        document.getElementById('dangerCard').style.display = 'block';
+        document.getElementById('dangerToggleBtn').innerHTML = '&#9662; Clear Table Data';
+        <?php endif; ?>
+
+        function toggleDangerCard() {
+            const card = document.getElementById('dangerCard');
+            const btn  = document.getElementById('dangerToggleBtn');
+            if (card.style.display === 'none') {
+                card.style.display = 'block';
+                btn.innerHTML = '&#9662; Clear Table Data';
+            } else {
+                card.style.display = 'none';
+                btn.innerHTML = '&#9656; Clear Table Data';
+            }
+        }
+    </script>
 
     <?php if ($errorMessage !== ''): ?>
         <div class="warn"><?= htmlspecialchars($errorMessage) ?></div>

@@ -144,6 +144,42 @@ nav {
     text-align: center;
 }
 
+.welcome-title {
+    margin: 0;
+    font-size: 26px;
+    color: forestgreen;
+    letter-spacing: 0.5px;
+}
+
+.welcome-subtitle {
+    margin-top: 6px;
+    margin-bottom: 10px;
+    color: darkslategray;
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.plate-chip {
+    display: inline-block;
+    margin-top: 6px;
+    margin-bottom: 8px;
+    background: mintcream;
+    color: darkgreen;
+    border: 1px solid palegreen;
+    border-radius: 999px;
+    padding: 6px 14px;
+    font-size: 17px;
+    font-weight: 800;
+    letter-spacing: 1px;
+}
+
+.welcome-note {
+    margin-top: 4px;
+    color: dimgray;
+    font-size: 13px;
+    font-weight: 600;
+}
+
 .bay-pill {
     display: inline-block;
     margin-top: 8px;
@@ -292,11 +328,14 @@ Warning: <?= htmlspecialchars($message); ?>
 <?php if ($success): ?>
 
 <div class="status-success">
-    Entry recorded successfully.
+    <h3 class="welcome-title">Welcome to Kitengela Mall</h3>
+    <p class="welcome-subtitle">Your vehicle has been checked in successfully.</p>
+    <div class="plate-chip"><?= htmlspecialchars($plateInput) ?></div>
     <?php if ($assignedBay !== ''): ?>
         <div class="bay-pill"><?= htmlspecialchars($assignedBay) ?></div>
     <?php endif; ?>
     <div><?= htmlspecialchars($message) ?></div>
+    <div class="welcome-note">Enjoy your visit. Your parking slot is reserved.</div>
     <div class="progress" aria-hidden="true"><span></span></div>
     <div style="margin-top:8px;color:dimgray;font-size:13px;">Returning to home screen...</div>
 </div>

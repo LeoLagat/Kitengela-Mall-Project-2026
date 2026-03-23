@@ -121,6 +121,13 @@ footer{
 <?php
 require_once(__DIR__ . '/../backend/app/config/database.php');
 
+$welcomeMessage = '';
+if (isset($_GET['welcome'])) {
+    if ($_GET['welcome'] === 'exit') {
+        $welcomeMessage = 'Welcome! Exit completed successfully. Ready for the next vehicle.';
+    }
+}
+
 $db = new DatabaseConnection();
 $pdo = $db->pdo;
 
@@ -152,6 +159,26 @@ $vacantByFloor = $stmt->fetchAll(PDO::FETCH_ASSOC);
 <div class="container">
 
 <div class="card">
+
+<?php if ($welcomeMessage !== ''): ?>
+<div id="welcomeBanner" style="background:honeydew;color:darkgreen;border:1px solid palegreen;border-radius:8px;padding:10px 12px;margin-bottom:14px;font-weight:700;transition:opacity 0.6s ease,margin 0.4s ease,padding 0.4s ease,border 0.4s ease;">
+<?= htmlspecialchars($welcomeMessage); ?>
+</div>
+<script>
+(function(){
+    var b = document.getElementById('welcomeBanner');
+    if(!b) return;
+    setTimeout(function(){
+        b.style.opacity = '0';
+        b.style.marginBottom = '0';
+        b.style.paddingTop = '0';
+        b.style.paddingBottom = '0';
+        b.style.border = 'none';
+        setTimeout(function(){ b.remove(); }, 600);
+    }, 3000);
+})();
+</script>
+<?php endif; ?>
 
 <h2>Welcome to Kitengela Mall Parking System</h2>
 

@@ -27,7 +27,7 @@ try {
     $stmtRevenue = $pdo->prepare("
         SELECT COALESCE(SUM(total_fee), 0) as total_revenue, COUNT(*) as log_count
         FROM vehicle_logs
-        WHERE payment_status = 'paid'
+        WHERE payment_status IN ('paid', 'invoiced')
     ");
     $stmtRevenue->execute();
     $revenueData = $stmtRevenue->fetch(PDO::FETCH_ASSOC);
@@ -47,7 +47,7 @@ try {
 
     // 4. Record the action
     if (!empty($_SESSION['admin_username'])) {
-        $auditMsg = "cleared vehicle logs database (archived revenue: Ksh " . number_format($currentRevenue, 2) . " from $logCount records)";
+        $auditMsg = "cleared vehicle logs database (archived revenue: Ksh " . number_format($currentRevenue, 2) . " from $logCount paid/invoiced records)";
         AdminAudit::log($pdo, $_SESSION['admin_username'], $auditMsg);
     }
 

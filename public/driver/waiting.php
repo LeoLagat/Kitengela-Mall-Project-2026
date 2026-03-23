@@ -48,6 +48,55 @@ $plate = $_GET['plate'] ?? '';
             animation: fadeIn 0.8s ease-out forwards;
         }
 
+        /* Failed UI Styles */
+        #failed-ui {
+            animation: fadeIn 0.6s ease-out forwards;
+        }
+
+        .failed-icon {
+            width: 80px;
+            height: 80px;
+            margin: 0 auto 20px;
+            background: mistyrose;
+            color: firebrick;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 45px;
+            box-shadow: 0 4px 15px silver;
+            animation: scaleUp 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .failed-title {
+            color: firebrick;
+            font-size: 24px;
+            font-weight: 800;
+            margin-bottom: 6px;
+        }
+
+        .failed-desc {
+            color: dimgray;
+            font-size: 14px;
+            margin-bottom: 20px;
+        }
+
+        .retry-btn {
+            display: inline-block;
+            background: darkgreen;
+            color: white;
+            font-weight: 700;
+            font-size: 15px;
+            padding: 12px 30px;
+            border-radius: 10px;
+            text-decoration: none;
+            margin-top: 4px;
+        }
+
+        .retry-btn:hover {
+            background: seagreen;
+        }
+
         .success-checkmark {
             width: 80px;
             height: 80px;
@@ -65,16 +114,38 @@ $plate = $_GET['plate'] ?? '';
 
         .status-title {
             color: darkslategray;
-            font-size: 26px;
+            font-size: 28px;
             font-weight: 800;
-            margin-bottom: 5px;
+            margin-bottom: 4px;
+            letter-spacing: 0.3px;
+        }
+
+        .status-subtitle {
+            color: dimgray;
+            margin: 0;
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .plate-chip {
+            display: inline-block;
+            margin-top: 12px;
+            margin-bottom: 8px;
+            background: mintcream;
+            border: 1px solid palegreen;
+            border-radius: 999px;
+            color: darkgreen;
+            padding: 6px 14px;
+            font-weight: 800;
+            letter-spacing: 1px;
+            font-size: 16px;
         }
 
         .bye-text {
             color: goldenrod;
-            font-size: 22px;
-            font-weight: 600;
-            margin: 20px 0;
+            font-size: 21px;
+            font-weight: 700;
+            margin: 14px 0 8px;
             opacity: 0;
             animation: fadeInUp 0.6s ease-out 0.4s forwards;
         }
@@ -143,15 +214,22 @@ $plate = $_GET['plate'] ?? '';
         <div id="success-ui" style="display:none;">
             <div class="success-checkmark">✓</div>
             
-            <h2 class="status-title">Payment Confirmed</h2>
-            <p style="color: dimgray; margin: 0;">The exit barrier is now opening.</p>
-            
-            <div class="bye-text">Goodbye! Safe Travels 👋</div>
+            <h2 class="status-title">Thank You for Visiting</h2>
+            <p class="status-subtitle">Payment received successfully. Exit barrier unlocked.</p>
+            <div class="plate-chip"><?php echo htmlspecialchars($plate); ?></div>
+            <div class="bye-text">Goodbye. Have a safe journey home.</div>
 
             <div class="redirect-loader">
                 <div id="pBar" class="progress-fill"></div>
             </div>
-            <p class="redirect-hint">Preparing for the next user...</p>
+            <p class="redirect-hint">Returning to home screen...</p>
+        </div>
+
+        <div id="failed-ui" style="display:none;">
+            <div class="failed-icon">&#10007;</div>
+            <h2 class="failed-title">Payment Not Completed</h2>
+            <p class="failed-desc" id="failed-desc">Your M-Pesa payment was cancelled or the PIN was incorrect. You can try again below.</p>
+            <a class="retry-btn" href="pay.php?plate=<?php echo urlencode($plate); ?>">Try Again</a>
         </div>
 
     </div>
@@ -167,12 +245,12 @@ $plate = $_GET['plate'] ?? '';
                 document.getElementById('loading-ui').style.display = 'none';
                 document.getElementById('success-ui').style.display = 'block';
                 document.getElementById('pBar').classList.add('animate-bar');
-                setTimeout(() => { window.location.href = "../gate/exit.php"; }, 3000);
+                setTimeout(() => { window.location.href = "../index.php?welcome=exit"; }, 3000);
                 source.close();
             } else if (data.status === 'failed') {
-                alert("Payment failed. Please try again or visit the management office.");
                 source.close();
-                window.location.href = "pay.php?plate=" + plate;
+                document.getElementById('loading-ui').style.display = 'none';
+                document.getElementById('failed-ui').style.display  = 'block';
             }
         };
 

@@ -400,6 +400,7 @@ if (isset($_GET['from']) && isset($_GET['to'])) {
 <div class="dashboard-box">
     <h3>Revenue Report</h3>
     <form method="get" action="revenue_report.php">
+        <input type="hidden" name="from_id" value="25">
         <div class="quick-form">
             <label>From <input type="date" name="from" required></label>
             <label>To <input type="date" name="to" required></label>
