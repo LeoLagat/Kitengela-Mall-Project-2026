@@ -57,11 +57,25 @@ if ($resultCode === 0) {
     }
 
     try {
-        // 1. Find vehicle log id and bay_id
-        // fetch the related vehicle log so we can capture plate_number as well
-        $stmtFind = $pdo->prepare("SELECT id AS log_id, bay_id, plate_number, phone_number FROM vehicle_logs WHERE mpesa_checkout_id = :checkout_id LIMIT 1");
+        // 1. Find vehicle log id and bay_id.
+        // Prefer checkout mapping in mpesa_transactions (supports retry flows),
+        // then fallback to vehicle_logs.mpesa_checkout_id for legacy rows.
+        $stmtFind = $pdo->prepare("
+            SELECT mt.log_id, vl.bay_id, vl.plate_number, vl.phone_number
+            FROM mpesa_transactions mt
+            LEFT JOIN vehicle_logs vl ON vl.id = mt.log_id
+            WHERE mt.checkout_id = :checkout_id
+            ORDER BY mt.id DESC
+            LIMIT 1
+        ");
         $stmtFind->execute([':checkout_id' => $checkoutRequestID]);
         $vehicle = $stmtFind->fetch(PDO::FETCH_ASSOC);
+
+        if (empty($vehicle['log_id'])) {
+            $stmtLegacy = $pdo->prepare("SELECT id AS log_id, bay_id, plate_number, phone_number FROM vehicle_logs WHERE mpesa_checkout_id = :checkout_id LIMIT 1");
+            $stmtLegacy->execute([':checkout_id' => $checkoutRequestID]);
+            $vehicle = $stmtLegacy->fetch(PDO::FETCH_ASSOC);
+        }
 
         $logId = $vehicle['log_id'] ?? null;
         $bayId = $vehicle['bay_id'] ?? null;
@@ -78,7 +92,7 @@ if ($resultCode === 0) {
 
         // Idempotency check: if this checkout was already marked completed with a receipt,
         // do not process it again.
-        $stmtCheck = $pdo->prepare("\
+                $stmtCheck = $pdo->prepare("
             SELECT id
             FROM mpesa_transactions
             WHERE checkout_id = ?
@@ -129,11 +143,11 @@ if ($resultCode === 0) {
     SET payment_status = 'paid',
         exit_time = NOW(),
         total_fee = :amount  
-    WHERE mpesa_checkout_id = :checkout_id
+    WHERE id = :log_id
      ");
      $stmtVehicle->execute([
     ':amount' => $amount, 
-    ':checkout_id' => $checkoutRequestID
+    ':log_id' => $logId
     ]);
 
 
@@ -166,13 +180,28 @@ if ($resultCode === 0) {
         file_put_contents(__DIR__ . '/mpesa_errors.txt', "Payment Failed: $resultDesc" . PHP_EOL, FILE_APPEND);
 
         try {
-            $stmt = $pdo->prepare("\
-                    UPDATE vehicle_logs
-                    SET payment_status = 'failed',
-                        total_fee = COALESCE(total_fee, 0)
-                    WHERE mpesa_checkout_id = :checkout_id
-            ");
-            $stmt->execute([':checkout_id' => $checkoutRequestID]);
+            $stmtFindFail = $pdo->prepare("SELECT log_id FROM mpesa_transactions WHERE checkout_id = :checkout_id ORDER BY id DESC LIMIT 1");
+            $stmtFindFail->execute([':checkout_id' => $checkoutRequestID]);
+            $logIdFail = $stmtFindFail->fetchColumn();
+
+            if ($logIdFail) {
+                $stmt = $pdo->prepare("
+                        UPDATE vehicle_logs
+                        SET payment_status = 'failed',
+                            total_fee = COALESCE(total_fee, 0)
+                        WHERE id = :log_id
+                ");
+                $stmt->execute([':log_id' => $logIdFail]);
+            } else {
+                // legacy fallback for rows without pending mapping
+                $stmt = $pdo->prepare("
+                        UPDATE vehicle_logs
+                        SET payment_status = 'failed',
+                            total_fee = COALESCE(total_fee, 0)
+                        WHERE mpesa_checkout_id = :checkout_id
+                ");
+                $stmt->execute([':checkout_id' => $checkoutRequestID]);
+            }
 
             // NOTE: parking bay is intentionally NOT freed here.
             // The car is still physically in the lot; the bay stays occupied

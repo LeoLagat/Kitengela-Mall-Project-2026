@@ -6,6 +6,7 @@ require_once(__DIR__ . '/../../backend/app/config/database.php');
 // SSE headers
 header('Content-Type: text/event-stream');
 header('Cache-Control: no-cache');
+header('X-Accel-Buffering: no');
 
 $plate = $_GET['plate'] ?? '';
 
@@ -45,8 +46,8 @@ while (true) {
         }
     }
 
-    // sleep briefly before checking again
-    sleep(1);
+    // check faster so status changes propagate quickly to UI
+    usleep(300000);
 }
 
 // close connection

@@ -247,12 +247,6 @@ $plate = $_GET['plate'] ?? '';
             </div>
             <p style="font-size: 14px; color: grey;">Waiting for Safaricom confirmation...</p>
 
-            <div class="retry-panel" id="retry-panel" style="display:none;">
-                <button type="button" class="retry-stk-btn" id="retry-stk-btn">Retry STK Prompt</button>
-                <div class="retry-note" id="retry-note">If the prompt did not arrive, tap retry to send a fresh STK request.</div>
-                <div class="retry-countdown" id="retry-countdown"></div>
-            </div>
-
         </div>
 
         <div id="success-ui" style="display:none;">
@@ -273,6 +267,8 @@ $plate = $_GET['plate'] ?? '';
             <div class="failed-icon">&#10007;</div>
             <h2 class="failed-title">Payment Not Completed</h2>
             <p class="failed-desc" id="failed-desc">Your M-Pesa payment was cancelled or the PIN was incorrect. You can try again below.</p>
+            <button type="button" class="retry-stk-btn" id="retry-stk-failed-btn">Retry STK Prompt</button>
+            <p class="retry-note" id="retry-stk-failed-note"></p>
             <a class="retry-btn" href="pay.php?plate=<?php echo urlencode($plate); ?>">Try Again</a>
         </div>
 
@@ -282,40 +278,45 @@ $plate = $_GET['plate'] ?? '';
     document.addEventListener('DOMContentLoaded', () => {
         const plate = "<?php echo addslashes($plate); ?>";
         const source = new EventSource(`payment_status_sse.php?plate=${plate}`);
-        const retryPanel = document.getElementById('retry-panel');
-        const retryBtn = document.getElementById('retry-stk-btn');
-        const retryNote = document.getElementById('retry-note');
-        const retryCountdown = document.getElementById('retry-countdown');
+        const retryFailedBtn = document.getElementById('retry-stk-failed-btn');
+        const retryFailedNote = document.getElementById('retry-stk-failed-note');
+        let settled = false;
+        let pollId = null;
 
-        let retryCooldownUntil = 0;
+        function finishWithStatus(status) {
+            if (settled) return;
 
-        function setRetryButtonState() {
-            const now = Date.now();
-            const remaining = Math.ceil((retryCooldownUntil - now) / 1000);
-            if (remaining > 0) {
-                retryBtn.disabled = true;
-                retryBtn.textContent = `Retry available in ${remaining}s`;
-                retryCountdown.textContent = `Next retry in ${remaining}s`;
-            } else {
-                retryBtn.disabled = false;
-                retryBtn.textContent = 'Retry STK Prompt';
-                retryCountdown.textContent = 'You can retry now.';
+            if (status === 'paid') {
+                settled = true;
+                document.getElementById('loading-ui').style.display = 'none';
+                document.getElementById('success-ui').style.display = 'block';
+                document.getElementById('pBar').classList.add('animate-bar');
+                if (pollId) clearInterval(pollId);
+                source.close();
+                setTimeout(() => { window.location.href = "../index.php?welcome=exit"; }, 1500);
+            } else if (status === 'failed') {
+                settled = true;
+                document.getElementById('loading-ui').style.display = 'none';
+                document.getElementById('failed-ui').style.display  = 'block';
+                if (pollId) clearInterval(pollId);
+                source.close();
+            }
+        }
+
+        async function checkStatusNow() {
+            try {
+                const res = await fetch(`check_status.php?plate=${encodeURIComponent(plate)}&_=${Date.now()}`);
+                if (!res.ok) return;
+                const data = await res.json();
+                finishWithStatus(data.status);
+            } catch (err) {
+                // Ignore transient errors; SSE/poller will retry.
             }
         }
 
         source.onmessage = function(e) {
             const data = JSON.parse(e.data);
-            if (data.status === 'paid') {
-                document.getElementById('loading-ui').style.display = 'none';
-                document.getElementById('success-ui').style.display = 'block';
-                document.getElementById('pBar').classList.add('animate-bar');
-                setTimeout(() => { window.location.href = "../index.php?welcome=exit"; }, 3000);
-                source.close();
-            } else if (data.status === 'failed') {
-                source.close();
-                document.getElementById('loading-ui').style.display = 'none';
-                document.getElementById('failed-ui').style.display  = 'block';
-            }
+            finishWithStatus(data.status);
         };
 
         source.onerror = function(err) {
@@ -323,13 +324,15 @@ $plate = $_GET['plate'] ?? '';
             // EventSource will automatically reconnect; nothing else required
         };
 
-        retryBtn?.addEventListener('click', async () => {
-            if (Date.now() < retryCooldownUntil) return;
+        // Fast fallback path in case SSE delivery is delayed by buffering/network.
+        checkStatusNow();
+        pollId = setInterval(checkStatusNow, 2000);
 
-            retryBtn.disabled = true;
-            retryBtn.textContent = 'Sending...';
-            retryNote.textContent = 'Requesting a new STK prompt. Please check your phone.';
-            retryNote.style.color = 'dimgray';
+        retryFailedBtn?.addEventListener('click', async () => {
+            retryFailedBtn.disabled = true;
+            retryFailedBtn.textContent = 'Sending...';
+            retryFailedNote.textContent = 'Requesting a new STK prompt. Please check your phone.';
+            retryFailedNote.style.color = 'dimgray';
 
             try {
                 const res = await fetch('retry_stk.php', {
@@ -340,40 +343,34 @@ $plate = $_GET['plate'] ?? '';
                 const data = await res.json();
 
                 if (res.ok && data.ok) {
-                    retryCooldownUntil = Date.now() + ((data.cooldown_seconds || 30) * 1000);
-                    retryNote.textContent = data.message || 'STK prompt sent again. Complete payment on your phone.';
-                    retryNote.style.color = 'darkgreen';
+                    retryFailedNote.textContent = data.message || 'STK prompt sent. Returning to verification...';
+                    retryFailedNote.style.color = 'darkgreen';
+                    setTimeout(() => {
+                        window.location.href = `waiting.php?plate=${encodeURIComponent(plate)}`;
+                    }, 1200);
                 } else {
-                    retryNote.textContent = data.error || 'Could not resend STK prompt. Please return to exit and try again.';
-                    retryNote.style.color = 'firebrick';
-                    retryCooldownUntil = Date.now() + 5000;
+                    retryFailedNote.textContent = data.error || 'Could not resend STK prompt. Please use Try Again.';
+                    retryFailedNote.style.color = 'firebrick';
+                    retryFailedBtn.disabled = false;
+                    retryFailedBtn.textContent = 'Retry STK Prompt';
                 }
             } catch (error) {
-                retryNote.textContent = 'Network issue while retrying. Please check connection and try again.';
-                retryNote.style.color = 'firebrick';
-                retryCooldownUntil = Date.now() + 5000;
+                retryFailedNote.textContent = 'Network issue while retrying STK. Please try again.';
+                retryFailedNote.style.color = 'firebrick';
+                retryFailedBtn.disabled = false;
+                retryFailedBtn.textContent = 'Retry STK Prompt';
             }
-
-            setRetryButtonState();
         });
-
-        setInterval(setRetryButtonState, 1000);
 
         // if nothing happens for a while, show a hint to user
         setTimeout(() => {
+            if (settled) return;
             const notice = document.createElement('p');
             notice.style.color = 'darkred';
             notice.style.marginTop = '20px';
-            notice.textContent = 'Still waiting? Confirm your M-Pesa prompt, then retry from the exit page if needed.';
+            notice.textContent = 'Still waiting? Confirm your M-Pesa prompt and keep this page open.';
             document.querySelector('#loading-ui').appendChild(notice);
         }, 60000);
-
-        // show retry controls after a short wait to prevent rapid duplicate STK requests
-        setTimeout(() => {
-            retryPanel.style.display = 'block';
-            retryCooldownUntil = Date.now() + 2000;
-            setRetryButtonState();
-        }, 45000);
     });
     </script>
 </body>

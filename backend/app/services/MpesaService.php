@@ -258,8 +258,42 @@ class MpesaService
                 ':plate'       => $plateNumber
             ]);
 
-            // Pending row intentionally not inserted here.
-            // mpesa_transactions is written only by CallBack.php once payment is confirmed Completed.
+            // Persist each checkout request as Pending so callbacks from retries
+            // can still map to the same parking log even after checkout_id changes.
+            try {
+                                $stmtLog = $pdo->prepare("
+                    SELECT id
+                    FROM vehicle_logs
+                    WHERE plate_number = :plate
+                      AND exit_time IS NULL
+                    ORDER BY id DESC
+                    LIMIT 1
+                ");
+                $stmtLog->execute([':plate' => $plateNumber]);
+                $logId = $stmtLog->fetchColumn();
+
+                if ($logId) {
+                    $stmtExists = $pdo->prepare("SELECT id FROM mpesa_transactions WHERE checkout_id = :checkout_id LIMIT 1");
+                    $stmtExists->execute([':checkout_id' => $result['CheckoutRequestID']]);
+
+                    if (!$stmtExists->fetchColumn()) {
+                        $stmtPending = $pdo->prepare("
+                            INSERT INTO mpesa_transactions
+                            (log_id, plate_number, phone_number, amount, checkout_id, status, created_at)
+                            VALUES (:log_id, :plate, :phone, :amount, :checkout_id, 'Pending', NOW())
+                        ");
+                        $stmtPending->execute([
+                            ':log_id' => $logId,
+                            ':plate' => $plateNumber,
+                            ':phone' => $formattedPhone,
+                            ':amount' => $amount,
+                            ':checkout_id' => $result['CheckoutRequestID']
+                        ]);
+                    }
+                }
+            } catch (Exception $e) {
+                file_put_contents(__DIR__ . '/mpesa_errors.txt', "Pending mapping insert failed for checkout " . ($result['CheckoutRequestID'] ?? 'N/A') . ": " . $e->getMessage() . PHP_EOL, FILE_APPEND);
+            }
         }
         // --- NEW DATABASE LOGIC END ---
 

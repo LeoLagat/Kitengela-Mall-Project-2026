@@ -44,7 +44,7 @@ try {
     $db = new DatabaseConnection();
     $pdo = $db->pdo;
 
-    $stmt = $pdo->prepare("\
+        $stmt = $pdo->prepare("
         SELECT id, total_fee, phone_number, payment_status
         FROM vehicle_logs
         WHERE plate_number = :plate
@@ -84,7 +84,7 @@ try {
     $mpesa = new MpesaService();
     $response = $mpesa->stkPush($phone, $amount, $plate, 'Parking Fee Retry');
 
-    if (!is_array($response) || ($response['ResponseCode'] ?? null) !== '0') {
+    if (!is_array($response) || isset($response['error']) || ($response['ResponseCode'] ?? null) !== '0') {
         $message = is_array($response)
             ? ($response['error'] ?? ($response['CustomerMessage'] ?? 'STK retry failed'))
             : 'STK retry failed';
