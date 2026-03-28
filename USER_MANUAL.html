@@ -1,0 +1,1242 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Kitengela Mall Parking Management System – User Manual</title>
+<style>
+  body {
+    font-family: Calibri, Arial, sans-serif;
+    font-size: 10.5pt;
+    line-height: 1.5;
+    color: #1a1a1a;
+    max-width: 760px;
+    margin: 30px auto;
+    padding: 0 28px;
+    box-sizing: border-box;
+  }
+  h1 {
+    font-size: 17pt;
+    font-weight: bold;
+    text-align: center;
+    color: #1a3557;
+    margin-top: 30px;
+    margin-bottom: 6px;
+    page-break-before: always;
+  }
+  h2 {
+    font-size: 13pt;
+    font-weight: bold;
+    color: #1a3557;
+    border-bottom: 2px solid #1a3557;
+    padding-bottom: 3px;
+    margin-top: 24px;
+  }
+  h3 {
+    font-size: 11pt;
+    font-weight: bold;
+    color: #2c5282;
+    margin-top: 16px;
+  }
+  h4 {
+    font-size: 10.5pt;
+    font-weight: bold;
+    color: #2d3748;
+    margin-top: 12px;
+  }
+  p { margin: 6px 0 10px 0; }
+  ul, ol { margin: 6px 0 10px 0; padding-left: 22px; }
+  li { margin-bottom: 3px; }
+
+  table {
+    border-collapse: collapse;
+    width: 100%;
+    margin: 10px 0;
+    font-size: 9pt;
+    table-layout: fixed;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+  }
+  th {
+    background-color: #1a3557;
+    color: white;
+    padding: 5px 7px;
+    text-align: left;
+    font-weight: bold;
+    font-size: 9pt;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+  }
+  td {
+    padding: 5px 7px;
+    border: 1px solid #c8d4e0;
+    font-size: 9pt;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    vertical-align: top;
+  }
+  tr:nth-child(even) td { background-color: #f0f5fb; }
+  tr:nth-child(odd) td { background-color: #ffffff; }
+
+  .cover-block {
+    text-align: center;
+    margin: 40px 0 30px 0;
+    padding: 22px;
+    border: 2px solid #1a3557;
+    border-radius: 6px;
+  }
+  .cover-block h1 { page-break-before: avoid; font-size: 20pt; }
+  .cover-block p { font-size: 10.5pt; margin: 5px 0; }
+
+  .toc-title {
+    font-size: 13pt;
+    font-weight: bold;
+    color: #1a3557;
+    margin-bottom: 12px;
+  }
+  .toc-entry {
+    display: flex;
+    justify-content: space-between;
+    border-bottom: 1px dotted #888;
+    padding: 2px 0;
+    font-size: 9.5pt;
+  }
+  .toc-sub {
+    padding-left: 18px;
+    font-size: 9pt;
+    color: #333;
+  }
+  .toc-chapter { font-weight: bold; }
+
+  .note {
+    background: #eaf4fb;
+    border-left: 4px solid #2980b9;
+    padding: 7px 10px;
+    margin: 9px 0;
+    font-size: 9pt;
+  }
+  .warning {
+    background: #fff8e1;
+    border-left: 4px solid #f0a500;
+    padding: 7px 10px;
+    margin: 9px 0;
+    font-size: 9pt;
+  }
+  .danger {
+    background: #fdecea;
+    border-left: 4px solid #c0392b;
+    padding: 7px 10px;
+    margin: 9px 0;
+    font-size: 9pt;
+  }
+  code {
+    font-family: "Courier New", monospace;
+    font-size: 8.5pt;
+    background: #f4f4f4;
+    padding: 1px 4px;
+    border-radius: 3px;
+    border: 1px solid #ddd;
+    word-break: break-all;
+  }
+  .flow-table {
+    width: 80%;
+    margin: 20px auto;
+    text-align: center;
+  }
+  .flow-box {
+    background: #e8f0fe;
+    border: 2px solid #4a6fa5;
+    border-radius: 6px;
+    padding: 6px 10px;
+    font-size: 8.5pt;
+    font-weight: bold;
+    color: #1a3557;
+    display: inline-block;
+    width: 82%;
+    word-wrap: break-word;
+  }
+  .flow-diamond {
+    background: #fff3cd;
+    border: 2px solid #c49a00;
+    border-radius: 4px;
+    padding: 6px 10px;
+    font-size: 8.5pt;
+    font-weight: bold;
+    color: #7a5c00;
+    display: inline-block;
+    width: 82%;
+    word-wrap: break-word;
+  }
+  .flow-end {
+    background: #d4edda;
+    border: 2px solid #28a745;
+    border-radius: 20px;
+    padding: 6px 10px;
+    font-size: 8.5pt;
+    font-weight: bold;
+    color: #155724;
+    display: inline-block;
+    width: 82%;
+    word-wrap: break-word;
+  }
+  .flow-fail {
+    background: #fdecea;
+    border: 2px solid #c0392b;
+    border-radius: 20px;
+    padding: 6px 10px;
+    font-size: 8.5pt;
+    font-weight: bold;
+    color: #78281f;
+    display: inline-block;
+    width: 82%;
+    word-wrap: break-word;
+  }
+  .flow-arrow {
+    font-size: 18pt;
+    color: #555;
+    margin: 2px 0;
+    line-height: 1.2;
+  }
+  .flow-label-row {
+    display: flex;
+    justify-content: space-around;
+    margin: 4px 0;
+    font-size: 9.5pt;
+    color: #555;
+  }
+  .quick-ref {
+    background: #f0f5fb;
+    border: 1px solid #c8d4e0;
+    border-radius: 4px;
+    padding: 9px 12px;
+    margin: 11px 0;
+  }
+  .quick-ref h4 { margin-top: 0; color: #1a3557; font-size: 9.5pt; }
+  hr { border: none; border-top: 1px solid #ccc; margin: 22px 0; }
+  .page-break { page-break-before: always; }
+
+  @media print {
+    body {
+      max-width: 100%;
+      margin: 0;
+      padding: 0 10mm;
+      font-size: 9pt;
+    }
+    table { font-size: 8pt; }
+    th, td { font-size: 8pt; padding: 4px 5px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ═══════════════════ COVER PAGE ═══════════════════ -->
+<div class="cover-block">
+  <h1>Kitengela Mall Parking<br>Management System</h1>
+  <p style="font-size:16pt; font-weight:bold; margin-top:18px;">USER MANUAL</p>
+  <br>
+  <p><strong>Version:</strong> 1.0</p>
+  <p><strong>Date:</strong> March 2026</p>
+  <p><strong>Prepared by:</strong> Development Team</p>
+  <p><strong>Classification:</strong> Internal Use</p>
+</div>
+
+<hr>
+
+<!-- ═══════════════════ TABLE OF CONTENTS ═══════════════════ -->
+<div class="page-break"></div>
+<p class="toc-title">Table of Contents</p>
+
+<div class="toc-entry toc-chapter"><span>1. Introduction</span><span>4</span></div>
+<div class="toc-entry toc-sub"><span>1.1 Purpose of this Document</span><span>4</span></div>
+<div class="toc-entry toc-sub"><span>1.2 Intended Audience</span><span>4</span></div>
+
+<div class="toc-entry toc-chapter"><span>2. System Overview</span><span>5</span></div>
+<div class="toc-entry toc-sub"><span>2.1 What the System Does</span><span>5</span></div>
+<div class="toc-entry toc-sub"><span>2.2 Facility Layout</span><span>5</span></div>
+<div class="toc-entry toc-sub"><span>2.3 Technology Stack</span><span>6</span></div>
+
+<div class="toc-entry toc-chapter"><span>3. System Requirements and Installation</span><span>6</span></div>
+<div class="toc-entry toc-sub"><span>3.1 Server Requirements</span><span>6</span></div>
+<div class="toc-entry toc-sub"><span>3.2 Accessing the System</span><span>6</span></div>
+<div class="toc-entry toc-sub"><span>3.3 Recommended Browsers</span><span>7</span></div>
+<div class="toc-entry toc-sub"><span>3.4 Network Setup</span><span>7</span></div>
+
+<div class="toc-entry toc-chapter"><span>4. User Roles and Access Levels</span><span>7</span></div>
+<div class="toc-entry toc-sub"><span>4.1 Role Overview</span><span>7</span></div>
+<div class="toc-entry toc-sub"><span>4.2 Super Admin Capabilities</span><span>8</span></div>
+<div class="toc-entry toc-sub"><span>4.3 Sub-Admin Capabilities</span><span>8</span></div>
+<div class="toc-entry toc-sub"><span>4.4 Gate Staff Capabilities</span><span>8</span></div>
+<div class="toc-entry toc-sub"><span>4.5 Driver / Visitor Capabilities</span><span>9</span></div>
+
+<div class="toc-entry toc-chapter"><span>5. Accessing the System</span><span>9</span></div>
+
+<div class="toc-entry toc-chapter"><span>6. Gate Operations — Vehicle Entry</span><span>10</span></div>
+<div class="toc-entry toc-sub"><span>6.1 Overview</span><span>10</span></div>
+<div class="toc-entry toc-sub"><span>6.2 Step-by-Step: Logging a Vehicle Entry</span><span>10</span></div>
+<div class="toc-entry toc-sub"><span>6.3 Important Notes for Gate Entry Staff</span><span>11</span></div>
+
+<div class="toc-entry toc-chapter"><span>7. Gate Operations — Vehicle Exit</span><span>11</span></div>
+<div class="toc-entry toc-sub"><span>7.1 Overview</span><span>11</span></div>
+<div class="toc-entry toc-sub"><span>7.2 Step-by-Step: Processing a Vehicle Exit</span><span>12</span></div>
+<div class="toc-entry toc-sub"><span>7.3 Parking Fee Structure</span><span>12</span></div>
+<div class="toc-entry toc-sub"><span>7.4 Fee Exceptions</span><span>13</span></div>
+
+<div class="toc-entry toc-chapter"><span>8. Driver and Visitor Guide — Making a Payment</span><span>13</span></div>
+<div class="toc-entry toc-sub"><span>8.1 Overview</span><span>13</span></div>
+<div class="toc-entry toc-sub"><span>8.2 Step-by-Step: Paying for Parking</span><span>13</span></div>
+<div class="toc-entry toc-sub"><span>8.3 What to Do if Payment Fails</span><span>14</span></div>
+<div class="toc-entry toc-sub"><span>8.4 Frequently Asked Questions</span><span>14</span></div>
+
+<div class="toc-entry toc-chapter"><span>9. Admin Panel — Logging In</span><span>15</span></div>
+
+<div class="toc-entry toc-chapter"><span>10. Admin Panel — Dashboard</span><span>15</span></div>
+<div class="toc-entry toc-sub"><span>10.1 Dashboard Sections</span><span>15</span></div>
+<div class="toc-entry toc-sub"><span>10.2 Using the Dashboard — Common Tasks</span><span>16</span></div>
+
+<div class="toc-entry toc-chapter"><span>11. Admin Panel — Revenue Reports</span><span>16</span></div>
+
+<div class="toc-entry toc-chapter"><span>12. Admin Panel — Staff Vehicle Management</span><span>17</span></div>
+
+<div class="toc-entry toc-chapter"><span>13. Admin Panel — Owner Vehicle Management and Monthly Billing</span><span>18</span></div>
+
+<div class="toc-entry toc-chapter"><span>14. Admin Panel — Restricted Vehicles</span><span>20</span></div>
+
+<div class="toc-entry toc-chapter"><span>15. Admin Panel — User Account Management</span><span>21</span></div>
+
+<div class="toc-entry toc-chapter"><span>16. Admin Panel — Activity Logs and Audit Trail</span><span>22</span></div>
+
+<div class="toc-entry toc-chapter"><span>17. Admin Panel — Database Tools</span><span>23</span></div>
+
+<div class="toc-entry toc-chapter"><span>18. Admin Panel — Profile and Password Management</span><span>24</span></div>
+
+<div class="toc-entry toc-chapter"><span>19. Public Display Pages</span><span>25</span></div>
+
+<div class="toc-entry toc-chapter"><span>20. Manual Gate Bypass (Emergency Override)</span><span>25</span></div>
+
+<div class="toc-entry toc-chapter"><span>21. M-Pesa Payment Integration — Technical Overview</span><span>27</span></div>
+<div class="toc-entry toc-sub"><span>21.1 What Is M-Pesa STK Push?</span><span>27</span></div>
+<div class="toc-entry toc-sub"><span>21.2 Payment Flow Diagram</span><span>27</span></div>
+<div class="toc-entry toc-sub"><span>21.3 Callback Security</span><span>28</span></div>
+<div class="toc-entry toc-sub"><span>21.4 Common M-Pesa Error Codes</span><span>28</span></div>
+<div class="toc-entry toc-sub"><span>21.5 Retry Logic</span><span>29</span></div>
+
+<div class="toc-entry toc-chapter"><span>22. Business Rules and Pricing Policy</span><span>29</span></div>
+
+<div class="toc-entry toc-chapter"><span>23. Troubleshooting Guide</span><span>30</span></div>
+
+<div class="toc-entry toc-chapter"><span>24. Glossary of Terms</span><span>32</span></div>
+
+<div class="toc-entry toc-chapter"><span>25. Appendix A — Database Table Reference</span><span>33</span></div>
+
+<div class="toc-entry toc-chapter"><span>26. Appendix B — Quick Reference Card</span><span>34</span></div>
+
+<hr>
+
+<!-- ═══════════════════ CHAPTER 1 ═══════════════════ -->
+<h1>1. Introduction</h1>
+
+<p>Welcome to the <strong>Kitengela Mall Parking Management System</strong>. This manual is intended to guide all users — gate staff, drivers, business owners, and administrators — through the operation of the system from day-to-day tasks to advanced administrative functions.</p>
+
+<p>The system was built to address the real challenges that come with running a busy multi-level parking facility inside a large commercial mall. Before this system was put in place, the process of tracking which bays were occupied, calculating the right fee per vehicle, collecting payment, and keeping a reliable audit trail all depended on manual effort. That approach was slow, prone to human error, and opened the door to revenue leakage. This system closes those gaps by automating every step of the parking process — from the moment a vehicle approaches the entry barrier to the moment it drives out.</p>
+
+<p>The manual is organized by role and workflow so that each type of user can go straight to the section that is relevant to them. Gate operators will find Chapters 6 and 7 most useful for their daily work. Customers paying for parking should refer to Chapter 8. Administrators and supervisors should read Chapters 9 through 18 in detail.</p>
+
+<h3>1.1 Purpose of this Document</h3>
+<p>This document provides:</p>
+<ul>
+  <li>Clear step-by-step instructions for all system functions</li>
+  <li>Explanations of core business rules including pricing, grace periods, and monthly invoicing</li>
+  <li>Guidance on how to handle exceptions, emergency overrides, and system problems</li>
+  <li>Reference material that can be used for training new staff and administrators</li>
+</ul>
+
+<h3>1.2 Intended Audience</h3>
+<table>
+  <tr><th>Audience</th><th>Most Relevant Chapters</th></tr>
+  <tr><td>Gate staff (entry and exit operators)</td><td>3, 5, 6, 7, 23</td></tr>
+  <tr><td>Drivers and visitors (paying customers)</td><td>5, 8, 23</td></tr>
+  <tr><td>Business owners (monthly invoice accounts)</td><td>7, 8, 13</td></tr>
+  <tr><td>Sub-administrators</td><td>9 – 12, 14, 16, 18</td></tr>
+  <tr><td>Super-administrators</td><td>All chapters</td></tr>
+</table>
+
+<!-- ═══════════════════ CHAPTER 2 ═══════════════════ -->
+<h1>2. System Overview</h1>
+
+<h3>2.1 What the System Does</h3>
+<p>The Kitengela Mall Parking Management System is a web-based application that handles the complete lifecycle of a vehicle's stay in the mall's two-basement parking facility. At a high level, its core capabilities are:</p>
+
+<ol>
+  <li><strong>Vehicle Entry Management</strong> — Every vehicle entering the facility is recorded, assigned a numbered bay, and checked against the restricted list before being allowed in.</li>
+  <li><strong>Vehicle Exit and Fee Calculation</strong> — On exit, the system calculates the exact fee owed based on the duration of the visit and routes the driver through payment or a free-exit path depending on their vehicle category.</li>
+  <li><strong>M-Pesa Payment Processing</strong> — Fees are collected directly through the driver's mobile phone using Safaricom's Lipa Na M-Pesa (STK Push) service. No cash changes hands at the gate.</li>
+  <li><strong>Staff Free Parking</strong> — Registered employee vehicles are recognized automatically and released at exit without any charge.</li>
+  <li><strong>Monthly Owner Invoicing</strong> — Vehicles belonging to registered business owners or mall tenants are granted a discount and their fees are accumulated then settled on a monthly basis rather than at each exit.</li>
+  <li><strong>Bay Management</strong> — The system tracks the live occupancy of all 262 bays across both basement floors and prevents over-allocation by blocking entry when the facility is full.</li>
+  <li><strong>Restricted Vehicle Control</strong> — Plates added to the restricted list are automatically denied entry, with no opportunity for bypass at the gate level.</li>
+  <li><strong>Administrative Oversight</strong> — A dedicated admin panel gives supervisors access to live dashboards, revenue reports, user management, full audit logs, and emergency override controls.</li>
+</ol>
+
+<h3>2.2 Facility Layout</h3>
+<p>The parking facility is made up of two underground levels. Each level contains 131 individually numbered bays:</p>
+<table>
+  <tr><th>Floor</th><th>Bay Number Range</th><th>Total Bays</th></tr>
+  <tr><td>Basement 1 (B1)</td><td>B1-001 to B1-131</td><td>131 bays</td></tr>
+  <tr><td>Basement 2 (B2)</td><td>B2-001 to B2-131</td><td>131 bays</td></tr>
+  <tr><td><strong>Total Facility Capacity</strong></td><td></td><td><strong>262 bays</strong></td></tr>
+</table>
+<p>Bays are assigned sequentially — the system always picks the lowest available bay number across either floor. Currently the system does not separate floor preferences.</p>
+
+<h3>2.3 Technology Stack</h3>
+<table>
+  <tr><th>Component</th><th>Technology Used</th></tr>
+  <tr><td>Web Server</td><td>Apache (via XAMPP)</td></tr>
+  <tr><td>Server-side Language</td><td>PHP 8.2</td></tr>
+  <tr><td>Database</td><td>MySQL / MariaDB 10.4</td></tr>
+  <tr><td>Payment Gateway</td><td>Safaricom Daraja — M-Pesa STK Push</td></tr>
+  <tr><td>Front-end</td><td>HTML5, CSS3, Vanilla JavaScript</td></tr>
+  <tr><td>Application Architecture</td><td>MVC-inspired (Controllers, Models, Services)</td></tr>
+</table>
+
+<!-- ═══════════════════ CHAPTER 3 ═══════════════════ -->
+<h1>3. System Requirements and Installation</h1>
+
+<h3>3.1 Server Requirements</h3>
+<table>
+  <tr><th>Requirement</th><th>Minimum Specification</th></tr>
+  <tr><td>Operating System</td><td>Windows 10/11 or Ubuntu 20.04 and above</td></tr>
+  <tr><td>Web Server</td><td>Apache 2.4 or higher</td></tr>
+  <tr><td>PHP</td><td>PHP 8.0 or higher</td></tr>
+  <tr><td>Database</td><td>MySQL 5.7+ or MariaDB 10.4+</td></tr>
+  <tr><td>Internet Connection</td><td>Required (for M-Pesa API calls)</td></tr>
+  <tr><td>RAM</td><td>4 GB minimum, 8 GB recommended</td></tr>
+  <tr><td>Disk Space</td><td>2 GB minimum</td></tr>
+</table>
+
+<h3>3.2 Accessing the System</h3>
+<p>The system runs as a local networked application. Any device connected to the mall's internal network can access it through a web browser. A typical local URL will look like this:</p>
+<p><code>http://192.168.1.10/Kitengela_Parking/public/</code></p>
+<p>Replace <code>192.168.1.10</code> with the actual IP address of the server. No software installation is needed on client devices — only a modern web browser is required.</p>
+
+<h3>3.3 Recommended Browsers</h3>
+<table>
+  <tr><th>Browser</th><th>Minimum Version</th></tr>
+  <tr><td>Google Chrome</td><td>Version 90 or above</td></tr>
+  <tr><td>Mozilla Firefox</td><td>Version 88 or above</td></tr>
+  <tr><td>Microsoft Edge</td><td>Version 90 or above</td></tr>
+  <tr><td>Safari (macOS / iOS)</td><td>Version 14 or above</td></tr>
+</table>
+<div class="warning"><strong>Note:</strong> Internet Explorer is not supported and will not display the system correctly.</div>
+
+<h3>3.4 Network Setup</h3>
+<p>All gate terminals, admin workstations, and display screens must be connected to the same local area network as the XAMPP server. It is strongly recommended that the server be assigned a <strong>static (fixed) IP address</strong> so that bookmarked URLs on gate devices remain valid even after restarts. Wi-Fi coverage in the parking area should be tested before go-live to confirm that gate tablets maintain a stable connection.</p>
+
+<!-- ═══════════════════ CHAPTER 4 ═══════════════════ -->
+<h1>4. User Roles and Access Levels</h1>
+<p>The system recognises four distinct user roles. Each role limits what a user can see and do.</p>
+
+<h3>4.1 Role Overview</h3>
+<table>
+  <tr><th>Role</th><th>Who Uses It</th><th>Login Required?</th></tr>
+  <tr><td><strong>Super Admin</strong></td><td>Senior system administrator / facility manager</td><td>Yes</td></tr>
+  <tr><td><strong>Sub-Admin (Admin)</strong></td><td>Duty supervisor / junior administrator</td><td>Yes</td></tr>
+  <tr><td><strong>Gate Staff</strong></td><td>Physical gate operators at entry and exit</td><td>No</td></tr>
+  <tr><td><strong>Driver / Visitor</strong></td><td>Customers paying for parking</td><td>No</td></tr>
+</table>
+
+<h3>4.2 Super Admin Capabilities</h3>
+<p>The Super Admin has unrestricted access to every part of the system. Capabilities exclusive to this role include:</p>
+<ul>
+  <li>Creating and deleting other administrator accounts (both sub-admins and super admins)</li>
+  <li>Viewing the complete activity log for every admin user in the system</li>
+  <li>Accessing the dedicated sub-admin activity auditing page</li>
+  <li>Using the Database Tools page to search and manage data across all tables</li>
+  <li>Permanently (hard) deleting soft-deleted staff, owner, and restricted vehicle records</li>
+  <li>Clearing vehicle logs with automatic archiving of revenue data</li>
+</ul>
+<div class="note"><strong>Note:</strong> The username <code>leolagat</code> is permanently assigned the super_admin role at the system level and cannot be downgraded through the standard interface.</div>
+
+<h3>4.3 Sub-Admin (Admin) Capabilities</h3>
+<p>Sub-admins can handle all routine day-to-day administrative tasks:</p>
+<ul>
+  <li>View the live dashboard with occupancy statistics and today's revenue</li>
+  <li>Perform manual gate bypass for any vehicle in an emergency</li>
+  <li>Add, view, and soft-delete staff vehicles</li>
+  <li>View, compute billing for, and record payments against owner accounts</li>
+  <li>Add, view, and soft-remove restricted vehicles</li>
+  <li>Download revenue CSV reports for a chosen date range</li>
+  <li>View and export their own activity log</li>
+  <li>Change their own password</li>
+</ul>
+<p>Sub-admins <strong>cannot</strong> add or delete user accounts, view other admins' activity, access database tools, or clear vehicle logs.</p>
+
+<h3>4.4 Gate Staff Capabilities</h3>
+<p>Gate staff operate two dedicated, bookmarked pages on gate terminals and do not require a login. Their work is limited to:</p>
+<ul>
+  <li><strong>Entry gate:</strong> Type a plate number, submit, confirm that a bay has been assigned</li>
+  <li><strong>Exit gate:</strong> Type a plate number, submit, guide the driver to payment or free exit</li>
+</ul>
+
+<h3>4.5 Driver / Visitor Capabilities</h3>
+<p>Drivers interact with the system only at the payment stage. They can:</p>
+<ul>
+  <li>Enter their M-Pesa phone number on the payment page</li>
+  <li>Approve the STK Push prompt on their mobile phone</li>
+  <li>Click the "Retry Payment" button if their first attempt fails</li>
+  <li>View the real-time payment waiting / status screen</li>
+</ul>
+
+<!-- ═══════════════════ CHAPTER 5 ═══════════════════ -->
+<h1>5. Accessing the System</h1>
+<table>
+  <tr><th>Page</th><th>Who Uses It</th><th>URL</th></tr>
+  <tr><td>Home — Bay Overview Grid</td><td>Public / lobby display</td><td><code>.../public/</code></td></tr>
+  <tr><td>Gate Entry</td><td>Gate entry staff</td><td><code>.../public/gate/entry.php</code></td></tr>
+  <tr><td>Gate Exit</td><td>Gate exit staff</td><td><code>.../public/gate/exit.php</code></td></tr>
+  <tr><td>Admin Login</td><td>All administrators</td><td><code>.../public/admin/login.php</code></td></tr>
+  <tr><td>LED Display Board</td><td>External screens / monitors</td><td><code>.../public/led_display.php</code></td></tr>
+  <tr><td>Staff Parking Display</td><td>Security desk / staff room</td><td><code>.../public/staff.php</code></td></tr>
+</table>
+<p>Replace <code>...</code> with <code>http://[server-ip]/Kitengela_Parking</code>.</p>
+
+<!-- ═══════════════════ CHAPTER 6 ═══════════════════ -->
+<h1>6. Gate Operations — Vehicle Entry</h1>
+
+<h3>6.1 Overview</h3>
+<p>Every vehicle entering the parking facility must be recorded through the entry page. This process checks whether the vehicle is permitted, finds an available bay, records the entry time, and gives gate staff the bay number to communicate to the driver. The whole check takes about one to two seconds.</p>
+
+<h3>6.2 Step-by-Step: Logging a Vehicle Entry</h3>
+
+<p><strong>Step 1 —</strong> Open the entry page on the gate terminal. Bookmark this URL so you can access it with one tap:</p>
+<p><code>http://[server-ip]/Kitengela_Parking/public/gate/entry.php</code></p>
+
+<p><strong>Step 2 —</strong> When a vehicle pulls up at the boom barrier, read the <strong>license plate number</strong> carefully.</p>
+
+<p><strong>Step 3 —</strong> Type the plate number into the <em>Enter Plate Number</em> field. The system accepts plates in any mix of upper and lowercase letters (e.g. <code>kca 123a</code> will be saved as <code>KCA 123A</code>) and handles spacing automatically.</p>
+
+<p><strong>Step 4 —</strong> Click <strong>Log Entry</strong> or press <kbd>Enter</kbd>.</p>
+
+<p><strong>Step 5 —</strong> Read the system response and act accordingly:</p>
+<table>
+  <tr><th>Screen Response</th><th>Meaning</th><th>What to Do</th></tr>
+  <tr><td style="color:green;font-weight:bold;">Green — Bay Assigned (e.g. B1-023)</td><td>Entry recorded, bay available</td><td>Raise boom gate. Tell driver their bay number.</td></tr>
+  <tr><td style="color:red;font-weight:bold;">Red — Restricted Vehicle</td><td>Plate is on the blocked list</td><td>Keep gate down. Do not allow entry. Alert supervisor.</td></tr>
+  <tr><td style="color:red;font-weight:bold;">Red — Already Inside</td><td>Vehicle is already logged as parked</td><td>Keep gate down. Verify plate, contact admin if needed.</td></tr>
+  <tr><td style="color:red;font-weight:bold;">Red — Parking Full</td><td>All 262 bays occupied</td><td>Keep gate down. Politely redirect driver.</td></tr>
+</table>
+
+<p><strong>Step 6 —</strong> The page resets automatically after 3 seconds, ready for the next vehicle.</p>
+
+<h3>6.3 Important Notes for Gate Entry Staff</h3>
+<div class="danger"><strong>Important:</strong> Never allow a vehicle in without recording it in the system, even if there is a queue. The exit fee relies entirely on having a correct entry record with an accurate entry time. If the system is temporarily unavailable, write the plate number and time on paper and log it as soon as the system is back.</div>
+<ul>
+  <li>If a driver says they were already logged in but nothing shows, verify the plate spelling carefully — a single character difference creates an entirely separate record in the database.</li>
+  <li>Bay numbers are assigned by the system automatically. You cannot choose or swap bays manually.</li>
+</ul>
+
+<!-- ═══════════════════ CHAPTER 7 ═══════════════════ -->
+<h1>7. Gate Operations — Vehicle Exit</h1>
+
+<h3>7.1 Overview</h3>
+<p>When a vehicle is ready to leave, the exit gate staff processes the plate number on the exit page. The system calculates the parking fee and either allows a free exit immediately or directs the driver to pay via M-Pesa before the gate opens.</p>
+
+<h3>7.2 Step-by-Step: Processing a Vehicle Exit</h3>
+
+<p><strong>Step 1 —</strong> Open the exit page on the gate terminal:</p>
+<p><code>http://[server-ip]/Kitengela_Parking/public/gate/exit.php</code></p>
+
+<p><strong>Step 2 —</strong> Ask the driver for their plate number and type it into the field, then click <strong>Process Exit</strong>.</p>
+
+<p><strong>Step 3 —</strong> The system will display one of the following outcomes:</p>
+<table>
+  <tr><th>Outcome Displayed</th><th>What It Means</th><th>Action</th></tr>
+  <tr><td>Free Exit — Staff Vehicle</td><td>Plate belongs to a registered employee</td><td>Raise boom gate immediately.</td></tr>
+  <tr><td>Free Exit — Grace Period</td><td>Vehicle has been parked ≤ 30 minutes</td><td>Raise boom gate immediately.</td></tr>
+  <tr><td>Free Exit — Owner Invoiced</td><td>Registered business owner vehicle</td><td>Raise boom gate. Fee is added to monthly invoice.</td></tr>
+  <tr><td>Payment Required — KES [amount]</td><td>Standard visitor, fee is owed</td><td>Direct driver to payment page or kiosk.</td></tr>
+  <tr><td>Plate Not Found</td><td>No matching entry record</td><td>Do not open gate. Check plate spelling, contact admin.</td></tr>
+</table>
+
+<p><strong>Step 4 —</strong> If payment is required, the system loads the payment page for the driver automatically. Once the driver completes M-Pesa payment on their phone, the gate opens by itself — you do not need to do anything further.</p>
+
+<h3>7.3 Parking Fee Structure</h3>
+<table>
+  <tr><th>Duration of Stay</th><th>Fee Charged</th></tr>
+  <tr><td>0 to 30 minutes</td><td><strong>Free</strong> (Grace Period)</td></tr>
+  <tr><td>31 to 60 minutes</td><td><strong>KES 50</strong> (flat)</td></tr>
+  <tr><td>61 to 120 minutes</td><td><strong>KES 70</strong> (KES 50 + KES 20 for 1 extra hour)</td></tr>
+  <tr><td>121 to 180 minutes</td><td><strong>KES 90</strong> (KES 50 + KES 40 for 2 extra hours)</td></tr>
+  <tr><td>Each additional hour after the first</td><td>+ KES 20 per started hour</td></tr>
+  <tr><td>12 hours or more (all-day parking)</td><td><strong>KES 1,000</strong> (daily cap — no higher)</td></tr>
+</table>
+<div class="note"><strong>Example:</strong> A vehicle parked for 2 hours and 45 minutes = KES 50 (first hour) + KES 20 × 2 extra hours = <strong>KES 90</strong>.</div>
+
+<h3>7.4 Fee Exceptions</h3>
+<table>
+  <tr><th>Vehicle Category</th><th>Fee Treatment</th></tr>
+  <tr><td>Registered staff / employee vehicles</td><td>Always KES 0 — free regardless of duration</td></tr>
+  <tr><td>Registered owner / business vehicles</td><td>30% discount on calculated fee; balance invoiced monthly</td></tr>
+  <tr><td>Any vehicle parked ≤ 30 minutes</td><td>Free grace period — no payment required</td></tr>
+</table>
+
+<!-- ═══════════════════ CHAPTER 8 ═══════════════════ -->
+<h1>8. Driver and Visitor Guide — Making a Payment</h1>
+
+<h3>8.1 Overview</h3>
+<p>Kitengela Mall uses the <strong>Lipa Na M-Pesa</strong> system for cashless parking payment. Payment is made directly from your mobile phone. You do not need to hand over cash, and the gate will open automatically once your payment is confirmed.</p>
+
+<h3>8.2 Step-by-Step: Paying for Parking</h3>
+
+<p><strong>Step 1 —</strong> When you are ready to leave, the gate staff will process your plate at the exit terminal. If a fee is owed, a payment screen will appear on the kiosk or tablet near the exit gate showing:</p>
+<ul>
+  <li>Your vehicle plate number</li>
+  <li>The amount due (in Kenyan Shillings)</li>
+  <li>A field for your M-Pesa phone number</li>
+</ul>
+
+<p><strong>Step 2 —</strong> Type in your Safaricom phone number. Any of these formats are accepted:</p>
+<ul>
+  <li><code>0712 345 678</code></li>
+  <li><code>+254712345678</code></li>
+  <li><code>254712345678</code></li>
+</ul>
+
+<p><strong>Step 3 —</strong> Click <strong>Pay Now</strong>. The system sends a payment request to Safaricom, and within a few seconds you should feel your phone vibrate or see a notification pop up.</p>
+
+<p><strong>Step 4 —</strong> On your mobile phone, a screen will appear asking you to confirm payment, similar to:</p>
+<blockquote style="background:#f9f9f9;border-left:3px solid #ccc;padding:8px 14px;font-style:italic;font-size:10pt;">
+  "Kitengela Parking — Pay KES [amount]. Enter M-Pesa PIN to proceed."
+</blockquote>
+<p>Enter your <strong>M-Pesa PIN</strong> and confirm.</p>
+
+<p><strong>Step 5 —</strong> The waiting screen on the kiosk/tablet will show a loading animation and the message "Waiting for payment..." Once your PIN is verified by Safaricom, the screen will automatically switch to a green success message and the boom gate will open.</p>
+
+<p><strong>Step 6 —</strong> Proceed to the exit gate. Safaricom will also send an SMS receipt to your phone with a transaction reference number (e.g. <code>RKA1234XYZ</code>) — keep this for your records.</p>
+
+<h3>8.3 What to Do if Payment Fails</h3>
+<p>If the M-Pesa prompt does not appear on your phone, or you dismissed it accidentally, or your phone was off:</p>
+<ol>
+  <li>Wait for the kiosk screen to show the payment result (usually within 60 seconds).</li>
+  <li>If it shows "Payment Failed" or "Timed Out", click the <strong>Retry Payment</strong> button to send a new prompt to your phone.</li>
+  <li>There is a <strong>30-second cooldown</strong> between retries to prevent double deductions.</li>
+  <li>If the problem persists after two attempts, call a gate attendant. The administrator can manually release your vehicle while payment is sorted separately.</li>
+</ol>
+
+<h3>8.4 Frequently Asked Questions</h3>
+<table>
+  <tr><th>Question</th><th>Answer</th></tr>
+  <tr><td>Can I pay with cash?</td><td>No. The system is fully cashless and uses M-Pesa only.</td></tr>
+  <tr><td>Will I get a receipt?</td><td>Yes. Safaricom sends an SMS receipt to your phone with the transaction reference number after successful payment.</td></tr>
+  <tr><td>What if I entered my PIN wrongly?</td><td>A wrong PIN cancels the transaction — no money is deducted. You can retry from the waiting page.</td></tr>
+  <tr><td>I was parked under 30 minutes but was asked to pay?</td><td>This can happen if you had an older unclosed session. Speak to gate staff to investigate.</td></tr>
+  <tr><td>Can I leave and pay later?</td><td>No. The gate will not open until payment is confirmed or an administrator manually overrides it.</td></tr>
+</table>
+
+<!-- ═══════════════════ CHAPTER 9 ═══════════════════ -->
+<h1>9. Admin Panel — Logging In</h1>
+
+<p>To access the admin panel, navigate to:</p>
+<p><code>http://[server-ip]/Kitengela_Parking/public/admin/login.php</code></p>
+
+<p>Enter your <strong>username</strong> and <strong>password</strong> and click <strong>Login</strong>. On successful login you will be taken directly to the Admin Dashboard.</p>
+
+<p>If your credentials are wrong, you will see "Invalid username or password." There is no automatic lockout after failed attempts, but all login attempts — both successful and failed — are recorded in the audit log with your IP address.</p>
+
+<div class="warning">
+  <strong>Security reminder:</strong> Never share your admin login details with anyone. Each administrator must use their own account. Log out whenever you leave your workstation unattended, even briefly. See Chapter 18 for password change instructions.
+</div>
+
+<!-- ═══════════════════ CHAPTER 10 ═══════════════════ -->
+<h1>10. Admin Panel — Dashboard</h1>
+
+<h3>10.1 Dashboard Sections</h3>
+
+<h4>Summary Statistics (Top Cards)</h4>
+<p>Immediately after logging in, four summary cards at the top of the dashboard give you a real-time snapshot of the facility:</p>
+<table>
+  <tr><th>Card</th><th>What It Shows</th></tr>
+  <tr><td>Vehicles Currently Inside</td><td>How many vehicles are actively parked (have entered but not yet exited)</td></tr>
+  <tr><td>Vacant Bays</td><td>Number of bays that are currently unoccupied and available</td></tr>
+  <tr><td>Occupied Bays</td><td>Number of bays that currently have a vehicle in them</td></tr>
+  <tr><td>Today's Revenue</td><td>Total M-Pesa confirmed payments collected today, in KES</td></tr>
+</table>
+
+<h4>Active Vehicles Table</h4>
+<p>Below the summary cards is a table listing every vehicle that is currently parked. For each vehicle you can see the plate number, the bay it occupies, when it entered, how long it has been parked, its payment status, and a Manual Bypass button. Rows highlighted in orange or red indicate <strong>overstays</strong> — vehicles that have been parked for more than 8 hours.</p>
+
+<h4>Total Revenue (All-Time)</h4>
+<p>A separate section shows cumulative revenue since the system was deployed. This figure always combines current live records with previously archived revenue snapshots, so clearing old logs never reduces the total shown here.</p>
+
+<h3>10.2 Using the Dashboard — Common Tasks</h3>
+<ul>
+  <li><strong>To check which bays are occupied:</strong> Read the Active Vehicles table.</li>
+  <li><strong>To identify long-stay vehicles:</strong> Look for orange or red highlighted rows (over 8 hours).</li>
+  <li><strong>To perform an emergency bypass:</strong> See Chapter 20.</li>
+  <li><strong>To refresh the live data:</strong> Press F5 or click the browser's refresh button.</li>
+</ul>
+
+<!-- ═══════════════════ CHAPTER 11 ═══════════════════ -->
+<h1>11. Admin Panel — Revenue Reports</h1>
+
+<p>The Revenue Report page lets you download a detailed record of all completed parking fee transactions as a CSV file, suitable for importing into Excel or Google Sheets for accounting and audit purposes.</p>
+
+<p>To generate a report:</p>
+<ol>
+  <li>Click <strong>Revenue Report</strong> in the admin navigation menu.</li>
+  <li>Select a <strong>Start Date</strong> and <strong>End Date</strong> using the date pickers.</li>
+  <li>Click <strong>Download CSV</strong>.</li>
+  <li>Open the downloaded file in Microsoft Excel, LibreOffice Calc, or Google Sheets.</li>
+</ol>
+
+<p>Each row in the CSV represents one completed transaction and includes the following columns:</p>
+<table>
+  <tr><th>Column</th><th>Description</th></tr>
+  <tr><td>Transaction ID</td><td>Unique internal record identifier</td></tr>
+  <tr><td>Plate Number</td><td>The vehicle's registration number</td></tr>
+  <tr><td>Bay Number</td><td>Which bay the vehicle used</td></tr>
+  <tr><td>Entry Time</td><td>Date and time the vehicle entered</td></tr>
+  <tr><td>Exit Time</td><td>Date and time the vehicle exited</td></tr>
+  <tr><td>Duration</td><td>Total time parked (hours and minutes)</td></tr>
+  <tr><td>Nominal Fee (KES)</td><td>Full calculated fee before any discounts</td></tr>
+  <tr><td>Amount Paid (KES)</td><td>Actual amount charged / collected</td></tr>
+  <tr><td>Payment Status</td><td>paid, invoiced, or manual_bypass</td></tr>
+  <tr><td>M-Pesa Receipt</td><td>Safaricom transaction reference number</td></tr>
+  <tr><td>Phone Number</td><td>The M-Pesa number that paid</td></tr>
+  <tr><td>Date Paid</td><td>When the payment was confirmed</td></tr>
+</table>
+
+<div class="note"><strong>Revenue Archiving:</strong> When old vehicle logs are cleared by a super admin, the total revenue figure is automatically saved to an archive table before any data is deleted. The dashboard always includes archived totals, so historical revenue is never lost.</div>
+
+<!-- ═══════════════════ CHAPTER 12 ═══════════════════ -->
+<h1>12. Admin Panel — Staff Vehicle Management</h1>
+
+<p>Staff vehicles belong to mall employees or other approved personnel who are entitled to park free of charge at any time. Once a plate is added to the staff list, the system will recognize it at exit and apply a zero fee, regardless of how long the vehicle was parked.</p>
+
+<h3>Adding a Staff Vehicle</h3>
+<ol>
+  <li>In the admin navigation, click <strong>Staff Vehicles</strong>.</li>
+  <li>In the <em>Add Staff Vehicle</em> form, enter the <strong>plate number</strong> and the <strong>employee name</strong>.</li>
+  <li>Click <strong>Add Vehicle</strong>.</li>
+</ol>
+<p>The vehicle will be active immediately. The next time this plate exits the facility, no fee will be charged.</p>
+
+<div class="warning"><strong>Reminder:</strong> Only add vehicles that genuinely belong to current, active employees. Free parking is a staff benefit and should not be applied to personal or family vehicles that are not authorized.</div>
+
+<h3>Removing a Staff Vehicle</h3>
+<p>When an employee leaves the organization:</p>
+<ol>
+  <li>Find the entry in the staff vehicles list.</li>
+  <li>Click <strong>Remove</strong>.</li>
+</ol>
+<p>The record is <strong>soft-deleted</strong> — it is hidden from the active list but stays in the database for audit purposes. A super admin can restore it or permanently delete it if needed. If the employee's vehicle is currently inside the facility, they will be charged normally on their next exit following removal.</p>
+
+<h3>Public Staff Parking Display</h3>
+<p>Staff vehicles currently inside the facility are shown on the public display page at <code>.../public/staff.php</code>. This is useful for security desks or managers checking who is on-site.</p>
+
+<!-- ═══════════════════ CHAPTER 13 ═══════════════════ -->
+<h1>13. Admin Panel — Owner Vehicle Management and Monthly Billing</h1>
+
+<h3>How Owner Accounts Work</h3>
+<p>Mall tenants and registered corporate clients are set up as <strong>owner accounts</strong>. Rather than paying at each exit via M-Pesa, their fees are accumulated throughout the month and settled periodically. A 30% discount applies to the full calculated fee, and only the discounted amount (70% of the fee) is invoiced.</p>
+
+<p>When an owner vehicle exits:</p>
+<ul>
+  <li>The system calculates the normal parking fee.</li>
+  <li>It records it as <em>invoiced</em> (not collected by M-Pesa).</li>
+  <li>The discounted total accumulates under that owner's billing ledger.</li>
+  <li>The gate opens without any payment being requested.</li>
+</ul>
+
+<h3>Adding a Business Owner Vehicle</h3>
+<ol>
+  <li>Click <strong>Owners</strong> in the admin navigation.</li>
+  <li>Fill in the <em>Add Business Owner Vehicle</em> form with the <strong>plate number</strong> and <strong>owner name</strong>.</li>
+  <li>Make sure the <strong>Invoice Monthly</strong> checkbox is checked.</li>
+  <li>Click <strong>Add Owner</strong>.</li>
+</ol>
+
+<h3>Viewing the Billing Summary</h3>
+<p>The owners page shows a table with a billing summary for every registered owner:</p>
+<table>
+  <tr><th>Column</th><th>What It Shows</th></tr>
+  <tr><td>Plate Number</td><td>The owner's vehicle registration</td></tr>
+  <tr><td>Owner Name</td><td>The business or individual name</td></tr>
+  <tr><td>Nominal Fee (KES)</td><td>Total of all parking fees accumulated since last payment (before discount)</td></tr>
+  <tr><td>Total Due (KES)</td><td>70% of nominal fee — the actual amount the owner owes after the 30% discount</td></tr>
+  <tr><td>Due Period</td><td>The current billing month</td></tr>
+</table>
+
+<h3>Computing Monthly Totals</h3>
+<p>Before issuing an invoice or recording a payment, always click <strong>Compute Totals</strong> first. This recalculates the accumulated fees and discounts for all owner accounts to make sure the figures are current and accurate.</p>
+
+<h3>Recording a Payment</h3>
+<p>When an owner settles their account:</p>
+<ol>
+  <li>Click <strong>Compute Totals</strong> to refresh the billing figures.</li>
+  <li>Find the owner in the table and click <strong>Record Payment</strong> next to their entry.</li>
+  <li>Confirm the action when prompted.</li>
+</ol>
+<p>The system will mark all outstanding invoiced records for that plate as paid, set the outstanding balance to zero, and advance the billing period to the following month.</p>
+
+<h3>Removing an Owner Account</h3>
+<p>If a tenant's account should no longer receive the monthly invoicing benefit, click <strong>Remove</strong> next to their entry. Their vehicle will be charged normal visitor rates from the next exit. Super admins can restore or permanently delete the record.</p>
+
+<!-- ═══════════════════ CHAPTER 14 ═══════════════════ -->
+<h1>14. Admin Panel — Restricted Vehicles</h1>
+
+<p>The restricted vehicles list is a blocklist that prevents specific vehicles from entering the parking facility. Any plate on this list will be refused at the entry gate — the system will display a denial message and the gate will not open.</p>
+
+<h3>When to Restrict a Vehicle</h3>
+<p>Common reasons for adding a vehicle to the restricted list include:</p>
+<ul>
+  <li>Repeated parking without payment or deliberate attempts to evade fees</li>
+  <li>Vehicle involved in a theft, fraud, or security incident at the mall</li>
+  <li>Direct instruction from mall management or security</li>
+</ul>
+
+<h3>Adding a Restricted Vehicle</h3>
+<ol>
+  <li>Click <strong>Restricted Vehicles</strong> in the admin navigation.</li>
+  <li>Enter the <strong>plate number</strong> and a brief <strong>reason</strong> for the restriction.</li>
+  <li>Click <strong>Add to Restricted List</strong>.</li>
+</ol>
+<p>The restriction takes effect immediately. The next time this plate attempts entry, it will be blocked.</p>
+
+<h3>Removing a Restriction</h3>
+<p>If a restriction should be lifted, click <strong>Remove</strong> next to the entry. The plate goes to a soft-delete recycle bin. A super admin can restore it if it was removed in error or permanently delete the record.</p>
+
+<!-- ═══════════════════ CHAPTER 15 ═══════════════════ -->
+<h1>15. Admin Panel — User Account Management</h1>
+<div class="note"><strong>Super Admin access only.</strong> Sub-admins cannot access this page.</div>
+
+<h3>Creating a New Admin Account</h3>
+<ol>
+  <li>In the admin navigation, click <strong>Add User</strong>.</li>
+  <li>Fill in the form: set a unique <strong>username</strong>, a <strong>temporary password</strong>, and select the <strong>role</strong> (admin or super_admin).</li>
+  <li>Click <strong>Create Account</strong>.</li>
+</ol>
+<p>The account is created immediately. Instruct the new admin to log in and change their password right away using the Profile page (Chapter 18).</p>
+
+<div class="warning"><strong>Note:</strong> Passwords are always stored using secure one-way encryption (bcrypt hashing). The system never stores raw passwords. Never share temporary passwords electronically in plain text.</div>
+
+<h3>Deleting an Admin Account</h3>
+<ol>
+  <li>Find the account in the admin accounts table.</li>
+  <li>Click <strong>Delete</strong> and confirm.</li>
+</ol>
+<p>Two safeguards are in place:</p>
+<ul>
+  <li>A super admin <strong>cannot delete their own account</strong>.</li>
+  <li>The system <strong>will not allow the last remaining super admin account to be deleted</strong>, which prevents the facility from being locked out entirely.</li>
+</ul>
+
+<!-- ═══════════════════ CHAPTER 16 ═══════════════════ -->
+<h1>16. Admin Panel — Activity Logs and Audit Trail</h1>
+
+<p>The system keeps a permanent audit log of every significant action any admin performs. This provides full accountability and makes it easy to investigate anomalies or disputes after the fact.</p>
+
+<h3>What Is Logged?</h3>
+<p>Every one of the following events is recorded with the admin's username, IP address, and timestamp:</p>
+<ul>
+  <li>All login and logout events (successful and failed)</li>
+  <li>Manual gate bypasses with the vehicle plate and before/after status</li>
+  <li>Staff vehicle additions and removals</li>
+  <li>Owner vehicle additions, payment recordings, and billing updates</li>
+  <li>Restricted vehicle additions and removals</li>
+  <li>Admin account creation and deletion</li>
+  <li>Password changes</li>
+  <li>Revenue report downloads</li>
+  <li>Database searches and any table clear operations</li>
+</ul>
+
+<h3>Viewing Your Own Activity Log</h3>
+<ol>
+  <li>Click <strong>Activity Log</strong> in the admin navigation.</li>
+  <li>By default, your own actions are shown.</li>
+  <li>Use the <strong>date range</strong> filter to narrow the results.</li>
+  <li>Click <strong>Download CSV</strong> to export the log as a spreadsheet.</li>
+</ol>
+
+<h3>Super Admin — Viewing All Admins' Activity</h3>
+<p>Super admins can switch the view to see the full log for every admin account using the "All Users" toggle at the top of the activity log page.</p>
+
+<h3>Sub-Admin Audit Page (Super Admin Only)</h3>
+<p>A dedicated page at <code>.../public/admin/subadmin_activity.php</code> shows specifically the actions performed by sub-admin accounts, making it easier to supervise staff activity separately from super admin actions.</p>
+
+<!-- ═══════════════════ CHAPTER 17 ═══════════════════ -->
+<h1>17. Admin Panel — Database Tools</h1>
+<div class="danger"><strong>Super Admin access only. Use with extreme care. Some operations cannot be undone.</strong></div>
+
+<h3>Database Search</h3>
+<p>The database search tool lets you look up records across any table in the system. This is useful for resolving payment disputes, verifying a plate's full parking history, or tracing a specific M-Pesa transaction reference.</p>
+<ol>
+  <li>Click <strong>Database Tools</strong> in the admin navigation.</li>
+  <li>Select the <strong>table</strong> you want to search from the dropdown.</li>
+  <li>Enter a <strong>search term</strong> (e.g. a plate number, receipt number, or username).</li>
+  <li>Click <strong>Search</strong>. Matching rows are shown in a results table below.</li>
+</ol>
+
+<h3>Clearing Vehicle Logs</h3>
+<p>Over time, the vehicle logs table grows large. Periodic clearing keeps the system running smoothly. Before any data is deleted, the system automatically:</p>
+<ol>
+  <li>Calculates the total revenue contained in the current logs.</li>
+  <li>Saves that figure to the <em>revenue_archive</em> table along with the date, your username, and how many records were cleared.</li>
+  <li>Only then removes the old records.</li>
+</ol>
+<p>This means the cumulative revenue figure on the dashboard is never reduced by clearing — historical earnings are always preserved in the archive.</p>
+
+<p>To clear vehicle logs:</p>
+<ol>
+  <li>Click <strong>Clear Vehicle Logs</strong> on the Database Tools page.</li>
+  <li>Read the warning carefully.</li>
+  <li>Confirm <strong>twice</strong> when prompted.</li>
+</ol>
+<div class="danger"><strong>Warning:</strong> Clearing logs is irreversible. Individual vehicle records will be permanently removed. Only the aggregate revenue total is archived. Do not clear logs unless you are certain you no longer need the individual records.</div>
+
+<!-- ═══════════════════ CHAPTER 18 ═══════════════════ -->
+<h1>18. Admin Panel — Profile and Password Management</h1>
+
+<h3>Changing Your Password</h3>
+<ol>
+  <li>Click <strong>Profile</strong> in the admin navigation.</li>
+  <li>Scroll to the <em>Change Password</em> section.</li>
+  <li>Enter your <strong>current password</strong> in the first field.</li>
+  <li>Enter your <strong>new password</strong> and then re-enter it to confirm.</li>
+  <li>Click <strong>Update Password</strong>.</li>
+</ol>
+<p>If your current password is correct and the two new entries match, your password is updated immediately.</p>
+
+<p><strong>Password guidelines:</strong></p>
+<ul>
+  <li>Use at least 8 characters</li>
+  <li>Mix uppercase letters, lowercase letters, numbers, and symbols</li>
+  <li>Do not reuse a password you have used recently</li>
+  <li>Never share your password with a colleague — each admin must use their own account</li>
+</ul>
+
+<h3>Logging Out</h3>
+<p>Click <strong>Logout</strong> in the navigation at any time. Your session will be destroyed immediately and you will be returned to the login page. The logout event is recorded in the audit log with your username, IP address, and timestamp. Always log out before walking away from your workstation.</p>
+
+<!-- ═══════════════════ CHAPTER 19 ═══════════════════ -->
+<h1>19. Public Display Pages</h1>
+
+<h3>Home Page — Bay Occupancy Grid</h3>
+<p>URL: <code>.../public/</code></p>
+<p>Shows a visual grid of all 262 bays colour-coded green (vacant) and red (occupied). Total and per-floor bay counts and an overall occupancy percentage are shown at the top. Suitable for a lobby or entrance screen. No login required.</p>
+
+<h3>LED Display Board</h3>
+<p>URL: <code>.../public/led_display.php</code></p>
+<p>A full-screen dark-background display designed for large LED boards or television screens mounted at the parking entrance. It shows vacant bay counts per floor in large, easy-to-read text and <strong>auto-refreshes every 10 seconds</strong>. To set up a permanent display:</p>
+<ol>
+  <li>Connect a dedicated device (PC or Raspberry Pi) to the screen.</li>
+  <li>Open a browser in full-screen mode (press <kbd>F11</kbd>).</li>
+  <li>Navigate to the LED display URL — it will stay current indefinitely without interaction.</li>
+</ol>
+
+<h3>Staff Parking Display</h3>
+<p>URL: <code>.../public/staff.php</code></p>
+<p>Lists all staff vehicles currently inside the facility with their parking entry times. Useful for supervisors or the security desk to confirm which staff members are on-site.</p>
+
+<!-- ═══════════════════ CHAPTER 20 ═══════════════════ -->
+<h1>20. Manual Gate Bypass (Emergency Override)</h1>
+
+<h3>What Is a Bypass?</h3>
+<p>A manual gate bypass is an emergency function available on the Admin Dashboard. It allows an administrator to forcibly release a vehicle from the system without collecting M-Pesa payment. The gate staff is then able to raise the boom gate manually. This function exists for genuine emergencies only and every use is permanently recorded in the audit trail.</p>
+
+<h3>When to Use a Bypass</h3>
+<p>Appropriate situations include:</p>
+<ul>
+  <li>The driver cannot pay via M-Pesa (no balance, phone broken, Safaricom network outage)</li>
+  <li>A medical or security emergency requires the vehicle to leave immediately</li>
+  <li>A vehicle was logged with the wrong plate number and the record needs to be cleared</li>
+  <li>The M-Pesa service is completely down and no alternative payment is available</li>
+</ul>
+
+<div class="danger"><strong>Important:</strong> Every bypass is permanently written into the audit log with your name, IP address, and timestamp. Bypasses are irrevocable. Misuse of this feature is detectable and should be treated as a serious disciplinary matter.</div>
+
+<h3>How to Perform a Manual Bypass — Step by Step</h3>
+<ol>
+  <li>Log in to the Admin Panel and go to the <strong>Dashboard</strong>.</li>
+  <li>Find the vehicle in the Active Vehicles table.</li>
+  <li>Click the <strong>Manual Bypass</strong> button in the Actions column for that row.</li>
+  <li>A first confirmation dialog will appear — read it carefully and click <strong>Yes, proceed</strong>.</li>
+  <li>A second confirmation dialog will appear as a final check.</li>
+  <li>Confirm to proceed.</li>
+</ol>
+<p>The system will immediately record the current time as the vehicle's exit time, mark the record with a bypass flag, free the parking bay, and write the full event to the audit log. Inform gate staff to raise the barrier for the vehicle.</p>
+
+<h3>Bypass Outcomes by Scenario</h3>
+<table>
+  <tr><th>Scenario at the Time of Bypass</th><th>What the System Does</th></tr>
+  <tr><td>Vehicle is currently inside the facility</td><td>Normal exit recorded with bypass flag; bay freed</td></tr>
+  <tr><td>Vehicle has already exited</td><td>Emergency override flag stamped on the most recent log record</td></tr>
+  <tr><td>Vehicle has no record in the system at all</td><td>"Emergency Access" record created and logged</td></tr>
+</table>
+
+<h3>After a Bypass</h3>
+<p>The revenue report will tag this record as a bypass rather than a collected payment. If the amount is owed by the driver, pursue collection through the mall's standard debt recovery process. The audit log entry will tell you exactly which admin authorized the bypass and at what time, which is useful for any follow-up investigation.</p>
+
+<!-- ═══════════════════ CHAPTER 21 ═══════════════════ -->
+<h1>21. M-Pesa Payment Integration — Technical Overview</h1>
+<p><em>This chapter is intended for technical staff and administrators who need to understand the M-Pesa payment flow for troubleshooting purposes.</em></p>
+
+<h3>21.1 What Is M-Pesa STK Push?</h3>
+<p>STK Push — short for SIM Toolkit Push — is a Safaricom service that sends a payment approval prompt directly to a customer's mobile phone at the request of a business. The customer sees a pop-up on their screen asking them to enter their M-Pesa PIN to approve the payment. The entire interaction happens through the customer's SIM card and requires no app download — it works on any M-Pesa-enabled Safaricom line.</p>
+
+<h3>21.2 Payment Flow</h3>
+<p>The diagram below shows how a standard M-Pesa payment moves through the system from the moment the driver clicks "Pay Now" to the moment the gate opens.</p>
+
+<!-- Humanised flow diagram using a table layout -->
+<table class="flow-table" style="width:76%; margin:24px auto; border-collapse:separate; border:none;">
+  <tr>
+    <td style="text-align:center; padding:4px 0;">
+      <div class="flow-box">Driver clicks "Pay Now" and enters phone number</div>
+    </td>
+  </tr>
+  <tr><td style="text-align:center;" class="flow-arrow">&#8595;</td></tr>
+  <tr>
+    <td style="text-align:center; padding:4px 0;">
+      <div class="flow-box">System normalises phone number (07... → 2547...) and sends STK Push request to Safaricom Daraja API</div>
+    </td>
+  </tr>
+  <tr><td style="text-align:center;" class="flow-arrow">&#8595;</td></tr>
+  <tr>
+    <td style="text-align:center; padding:4px 0;">
+      <div class="flow-box">Safaricom delivers a pop-up prompt to the driver's phone asking for M-Pesa PIN</div>
+    </td>
+  </tr>
+  <tr><td style="text-align:center;" class="flow-arrow">&#8595;</td></tr>
+  <tr>
+    <td style="text-align:center; padding:4px 0;">
+      <div class="flow-diamond">Did the driver approve by entering their PIN correctly?</div>
+    </td>
+  </tr>
+  <tr>
+    <td>
+      <table style="width:100%; border:none; border-collapse:collapse;">
+        <tr>
+          <td style="width:50%; text-align:center; vertical-align:top; padding:4px;">
+            <div style="color:green; font-weight:bold;">&#8595; YES</div>
+            <div class="flow-box" style="font-size:9.5pt;">Safaricom deducts the amount and sends a SUCCESS callback to the system (CallBack.php)</div>
+            <div class="flow-arrow">&#8595;</div>
+            <div class="flow-box" style="font-size:9.5pt;">System marks the transaction as Completed, records exit time, and frees the bay</div>
+            <div class="flow-arrow">&#8595;</div>
+            <div class="flow-end">Waiting page shows SUCCESS — boom gate opens</div>
+          </td>
+          <td style="width:50%; text-align:center; vertical-align:top; padding:4px;">
+            <div style="color:red; font-weight:bold;">&#8595; NO (Cancelled or timeout)</div>
+            <div class="flow-box" style="font-size:9.5pt;">Safaricom sends a FAILURE callback to the system</div>
+            <div class="flow-arrow">&#8595;</div>
+            <div class="flow-box" style="font-size:9.5pt;">System marks the payment status as "failed"</div>
+            <div class="flow-arrow">&#8595;</div>
+            <div class="flow-fail">Waiting page shows FAILED — "Retry Payment" button appears</div>
+          </td>
+        </tr>
+      </table>
+    </td>
+  </tr>
+</table>
+
+<h3>21.3 Callback Security</h3>
+<p>The "callback" is the notification Safaricom sends back to the system to report the payment result. For this to work, the system's callback URL must be reachable from the internet — it cannot be on a private, non-routable network address. During development and testing, a tool called <strong>ngrok</strong> is used to create a temporary public tunnel to the local server. In a production deployment, the server should be assigned a public IP or hostname.</p>
+<p>The callback URL can be set using the <code>MPESA_CALLBACK_URL</code> environment variable on the server.</p>
+
+<h3>21.4 Common M-Pesa Error Codes</h3>
+<table>
+  <tr><th>Error Code</th><th>Meaning</th><th>Recommended Action</th></tr>
+  <tr><td>1</td><td>Insufficient M-Pesa balance</td><td>Ask the driver to top up their M-Pesa wallet and retry</td></tr>
+  <tr><td>1032</td><td>Transaction cancelled by the user</td><td>Driver dismissed the prompt — ask them to retry</td></tr>
+  <tr><td>1037</td><td>STK Push request timed out</td><td>Driver did not respond in time — click Retry on the waiting page</td></tr>
+  <tr><td>2001</td><td>Wrong PIN entered three times</td><td>M-Pesa may be temporarily locked — driver should contact Safaricom</td></tr>
+  <tr><td>Network / API error</td><td>Safaricom API unreachable</td><td>Check internet connection. If Safaricom is having an outage, use the admin bypass.</td></tr>
+</table>
+
+<h3>21.5 Retry Logic</h3>
+<p>The system automatically retries failed API network requests on its own — up to two retries on connection timeouts and one retry on Safaricom server errors. From the driver's side, a 30-second cooldown is enforced between manual retry attempts to ensure Safaricom does not process two deductions for the same session.</p>
+
+<!-- ═══════════════════ CHAPTER 22 ═══════════════════ -->
+<h1>22. Business Rules and Pricing Policy</h1>
+
+<h3>22.1 Fee Calculation</h3>
+<table>
+  <tr><th>Rule</th><th>Policy</th></tr>
+  <tr><td>Grace period</td><td>Vehicles parked 30 minutes or less pay nothing</td></tr>
+  <tr><td>Standard first hour fee</td><td>KES 50 flat for 31–60 minutes</td></tr>
+  <tr><td>Additional hours</td><td>KES 20 per additional started hour beyond the first</td></tr>
+  <tr><td>Daily cap</td><td>Any vehicle parked 12 or more hours is charged a flat KES 1,000</td></tr>
+  <tr><td>Staff vehicles</td><td>Always KES 0 — free regardless of duration</td></tr>
+  <tr><td>Owner vehicles</td><td>Standard fee calculated, 30% discount applied, balance invoiced monthly</td></tr>
+</table>
+
+<h3>22.2 Access Control</h3>
+<table>
+  <tr><th>Rule</th><th>Policy</th></tr>
+  <tr><td>Restricted vehicles</td><td>Entry denied at gate — no exceptions without admin bypass</td></tr>
+  <tr><td>Double-entry prevention</td><td>A vehicle already logged as inside cannot enter again without the old session being closed</td></tr>
+  <tr><td>Full facility</td><td>Entry denied when all 262 bays are occupied</td></tr>
+</table>
+
+<h3>22.3 Owner Billing</h3>
+<table>
+  <tr><th>Rule</th><th>Policy</th></tr>
+  <tr><td>Discount rate</td><td>30% discount on all parking fees for registered owners</td></tr>
+  <tr><td>Total due calculation</td><td>Always nominal fee × 0.70</td></tr>
+  <tr><td>Billing reset</td><td>Balance resets to zero after payment is recorded; period advances one month</td></tr>
+</table>
+
+<h3>22.4 Admin Security</h3>
+<table>
+  <tr><th>Rule</th><th>Policy</th></tr>
+  <tr><td>Password storage</td><td>bcrypt hashing — raw passwords are never stored</td></tr>
+  <tr><td>Self-delete prevention</td><td>Super admins cannot delete their own account</td></tr>
+  <tr><td>Last admin protection</td><td>The last remaining super admin account cannot be deleted</td></tr>
+  <tr><td>Audit logging</td><td>All significant actions logged with username, IP address, and timestamp</td></tr>
+  <tr><td>CSRF protection</td><td>Destructive database operations require a session-bound token with double confirmation</td></tr>
+</table>
+
+<!-- ═══════════════════ CHAPTER 23 ═══════════════════ -->
+<h1>23. Troubleshooting Guide</h1>
+
+<h3>Gate Issues</h3>
+<table>
+  <tr><th>Problem</th><th>Most Likely Cause</th><th>What to Do</th></tr>
+  <tr><td>Plate not found on exit</td><td>Vehicle was not logged on entry, or plate was entered differently</td><td>Try alternative plate spellings. Search in Database Tools. Check entry log.</td></tr>
+  <tr><td>"Already inside" on entry</td><td>Duplicate entry or previous session was not closed properly</td><td>Check dashboard. If the old session is a ghost record, admin can bypass to close it.</td></tr>
+  <tr><td>"Parking Full" even though bays look empty</td><td>One or more bay records are stuck as occupied</td><td>Admin checks dashboard for vehicles with very old entry times. Bypass to clear stuck records.</td></tr>
+  <tr><td>Wrong bay assigned (bay appears free)</td><td>Physical vs. system state mismatch</td><td>Note the discrepancy and report to admin for investigation. The bay table may need a manual update.</td></tr>
+</table>
+
+<h3>M-Pesa Payment Issues</h3>
+<table>
+  <tr><th>Problem</th><th>Most Likely Cause</th><th>What to Do</th></tr>
+  <tr><td>STK Push not received on phone</td><td>Wrong phone number, no signal, phone off</td><td>Verify the number format. Turn phone on and check signal. Use the Retry button.</td></tr>
+  <tr><td>Payment stuck on "pending" for more than 2 minutes</td><td>Safaricom callback delayed or the tunnel/callback URL is down</td><td>Check internet connectivity. Check that the ngrok tunnel (or callback URL) is still active.</td></tr>
+  <tr><td>Paid on phone but waiting screen still shows "pending"</td><td>SSE connection dropped before receiving the update</td><td>Refresh the waiting page. Check dashboard — if the bay shows free, payment went through.</td></tr>
+  <tr><td>Driver charged twice on M-Pesa</td><td>Two separate STK pushes were sent and both approved</td><td>Check mpesa_transactions table. Confirm duplicate. Issue one refund as appropriate.</td></tr>
+</table>
+
+<h3>Admin Panel Issues</h3>
+<table>
+  <tr><th>Problem</th><th>Most Likely Cause</th><th>What to Do</th></tr>
+  <tr><td>Cannot log in</td><td>Incorrect credentials, or account was deleted</td><td>Verify the username with super admin. Request a password reset.</td></tr>
+  <tr><td>Dashboard shows stale data</td><td>Page has not been refreshed</td><td>Press F5 to reload the page.</td></tr>
+  <tr><td>Revenue figure appears too low</td><td>Possible misunderstanding of archive vs. live data</td><td>Revenue always shows live + archived. Check if recent records are marked as invoiced or bypass rather than paid.</td></tr>
+  <tr><td>Cannot delete another admin account</td><td>Trying to delete own account, or deleting the last super admin</td><td>Create a new super admin first, or choose a different account to delete.</td></tr>
+</table>
+
+<h3>System-Level Issues</h3>
+<table>
+  <tr><th>Problem</th><th>Most Likely Cause</th><th>What to Do</th></tr>
+  <tr><td>Pages loading very slowly</td><td>Very large database tables</td><td>Super admin should clear and archive old vehicle logs via Database Tools.</td></tr>
+  <tr><td>Database connection error</td><td>MySQL service has stopped</td><td>Open XAMPP Control Panel and restart the MySQL service.</td></tr>
+  <tr><td>M-Pesa API not working at all</td><td>No internet, Safaricom outage, or expired ngrok tunnel</td><td>Check internet. Visit Safaricom's system status page. Renew the ngrok tunnel if applicable.</td></tr>
+  <tr><td>Waiting page not updating (SSE not working)</td><td>Browser or proxy blocking server-sent events</td><td>Try a different browser. Check proxy settings. Refresh the page manually.</td></tr>
+</table>
+
+<!-- ═══════════════════ CHAPTER 24 ═══════════════════ -->
+<h1>24. Glossary of Terms</h1>
+<table>
+  <tr><th>Term</th><th>Definition</th></tr>
+  <tr><td><strong>Bay</strong></td><td>A single numbered parking space in the facility (e.g. B1-023)</td></tr>
+  <tr><td><strong>Boom Gate</strong></td><td>The mechanical arm barrier that controls entry to or exit from the parking area</td></tr>
+  <tr><td><strong>Bypass</strong></td><td>An emergency admin action that releases a vehicle and frees its bay without requiring M-Pesa payment</td></tr>
+  <tr><td><strong>Callback</strong></td><td>A server-to-server message sent by Safaricom to the parking system to report the outcome of a payment request</td></tr>
+  <tr><td><strong>CSV</strong></td><td>Comma-Separated Values — a plain-text file format that can be opened as a spreadsheet in Excel or Google Sheets</td></tr>
+  <tr><td><strong>Daraja</strong></td><td>Safaricom's developer API platform through which M-Pesa services are accessed</td></tr>
+  <tr><td><strong>Grace Period</strong></td><td>The first 30 minutes of parking are free for all visitors</td></tr>
+  <tr><td><strong>Invoiced</strong></td><td>The payment status given to owner vehicle exits — fee is accumulated on their account rather than collected by M-Pesa</td></tr>
+  <tr><td><strong>M-Pesa</strong></td><td>Safaricom's widely-used mobile money service, used by the parking system for cashless payment</td></tr>
+  <tr><td><strong>Nominal Fee</strong></td><td>The full calculated parking fee before any discounts are applied</td></tr>
+  <tr><td><strong>Occupied</strong></td><td>A parking bay that currently has a vehicle parked in it</td></tr>
+  <tr><td><strong>Owner Account</strong></td><td>A registered business or corporate client vehicle that receives a monthly invoice instead of paying at each exit</td></tr>
+  <tr><td><strong>Plate Number</strong></td><td>A vehicle's official registration number as shown on its number plates</td></tr>
+  <tr><td><strong>Restricted Vehicle</strong></td><td>A vehicle whose plate number has been added to the block list, preventing it from entering the facility</td></tr>
+  <tr><td><strong>Soft Delete</strong></td><td>Marking a database record as deleted without permanently removing it — the record can be restored if needed</td></tr>
+  <tr><td><strong>SSE (Server-Sent Events)</strong></td><td>A web technology that allows the server to push real-time updates to the browser without the user needing to refresh the page</td></tr>
+  <tr><td><strong>STK Push</strong></td><td>SIM Toolkit Push — the Safaricom mechanism that sends a payment prompt directly to a customer's phone screen</td></tr>
+  <tr><td><strong>Sub-Admin</strong></td><td>An administrator account with a restricted set of permissions (role = "admin" in the system)</td></tr>
+  <tr><td><strong>Super Admin</strong></td><td>An administrator account with full, unrestricted access to all system functions (role = "super_admin")</td></tr>
+  <tr><td><strong>Vacant</strong></td><td>A parking bay that is currently empty and available for assignment</td></tr>
+  <tr><td><strong>Vehicle Log</strong></td><td>A single database record that captures the complete lifecycle of one parking session, from entry to exit</td></tr>
+</table>
+
+<!-- ═══════════════════ CHAPTER 25 ═══════════════════ -->
+<h1>25. Appendix A — Database Table Reference</h1>
+<table>
+  <tr><th>Table Name</th><th>What It Stores</th></tr>
+  <tr><td><code>administrators</code></td><td>All admin user accounts — username, bcrypt-hashed password, role, and creation date</td></tr>
+  <tr><td><code>admin_activity</code></td><td>Append-only audit log — every admin action with username, IP address, action description, and timestamp</td></tr>
+  <tr><td><code>vehicle_logs</code></td><td>Core parking records — one row per session, containing entry time, exit time, bay number, fees, payment status, and M-Pesa reference</td></tr>
+  <tr><td><code>mpesa_transactions</code></td><td>One row per STK Push attempt — stores the Safaricom checkout ID, receipt number, amount, phone number, and completion status</td></tr>
+  <tr><td><code>parking_bays</code></td><td>All 262 physical bays — bay number, floor level, and current occupancy status (vacant or occupied)</td></tr>
+  <tr><td><code>owner_accounts</code></td><td>Registered business owner vehicles — plate number, owner name, monthly invoice flag, and soft-delete timestamp</td></tr>
+  <tr><td><code>owner_vehicle_fees</code></td><td>Running billing ledger per owner vehicle — accumulated nominal fees, discount applied, total currently owed, and billing period</td></tr>
+  <tr><td><code>staff_vehicles</code></td><td>Registered employee vehicles — plate number, employee name, and soft-delete timestamp</td></tr>
+  <tr><td><code>restricted_vehicles</code></td><td>Block-listed vehicles — plate number, reason for restriction, date added, soft-delete timestamp</td></tr>
+  <tr><td><code>revenue_archive</code></td><td>Historical revenue snapshots — created automatically whenever vehicle_logs is cleared; stores the total archived revenue, admin who cleared it, date, and record count</td></tr>
+</table>
+
+<!-- ═══════════════════ CHAPTER 26 ═══════════════════ -->
+<h1>26. Appendix B — Quick Reference Card</h1>
+
+<div class="quick-ref">
+  <h4>Gate Entry — Quick Steps</h4>
+  <ol>
+    <li>Open <code>gate/entry.php</code> on the terminal.</li>
+    <li>Type the plate number → click <strong>Log Entry</strong>.</li>
+    <li><span style="color:green;font-weight:bold;">Green banner</span> = bay assigned → raise gate, tell driver their bay number.</li>
+    <li><span style="color:red;font-weight:bold;">Red banner</span> = check the message → do NOT raise gate.</li>
+  </ol>
+</div>
+
+<div class="quick-ref">
+  <h4>Gate Exit — Quick Steps</h4>
+  <ol>
+    <li>Open <code>gate/exit.php</code> on the terminal.</li>
+    <li>Type the plate number → click <strong>Process Exit</strong>.</li>
+    <li>Free exit message → raise gate immediately.</li>
+    <li>Payment required → direct driver to payment page and wait for automatic gate open.</li>
+  </ol>
+</div>
+
+<div class="quick-ref">
+  <h4>Parking Fee Quick Reference</h4>
+  <table style="margin-top:8px;">
+    <tr><th>Duration</th><th>Fee</th></tr>
+    <tr><td>0 – 30 minutes</td><td>Free</td></tr>
+    <tr><td>31 – 60 minutes</td><td>KES 50</td></tr>
+    <tr><td>Each additional hour after the first</td><td>+ KES 20</td></tr>
+    <tr><td>12 hours or more</td><td>KES 1,000 (cap)</td></tr>
+    <tr><td>Staff vehicle</td><td>Always free</td></tr>
+    <tr><td>Owner vehicle</td><td>30% discount — invoiced monthly</td></tr>
+  </table>
+</div>
+
+<div class="quick-ref">
+  <h4>Emergency Bypass — Quick Steps</h4>
+  <ol>
+    <li>Log in to Admin Panel → go to <strong>Dashboard</strong>.</li>
+    <li>Click <strong>Manual Bypass</strong> next to the vehicle in the Active Vehicles table.</li>
+    <li>Confirm <strong>twice</strong> when prompted.</li>
+    <li>Tell gate staff to raise the boom gate for that vehicle.</li>
+    <li>Record any outstanding fee obligation for follow-up through normal channels.</li>
+  </ol>
+</div>
+
+<div class="quick-ref">
+  <h4>Admin Login Quick Reference</h4>
+  <p>URL: <code>.../public/admin/login.php</code></p>
+  <table>
+    <tr><th>Role</th><th>Access Level</th></tr>
+    <tr><td>Super Admin</td><td>Full access to all pages and features</td></tr>
+    <tr><td>Sub-Admin</td><td>Dashboard, vehicles, staff, owners, restricted list, revenue reports, own activity log</td></tr>
+  </table>
+</div>
+
+<hr>
+<p style="text-align:center; font-size:9.5pt; color:#666;">
+  <em>End of User Manual — Kitengela Mall Parking Management System, Version 1.0, March 2026</em><br>
+  <em>For technical support, contact the system administrator.</em>
+</p>
+
+</body>
+</html>

@@ -1,0 +1,496 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Kitengela Mall Parking System - Final Presentation</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700;800&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-main: ghostwhite;
+      --bg-slide: white;
+      --text-main: midnightblue;
+      --text-muted: dimgray;
+      --accent: darkslateblue;
+      --accent-soft: steelblue;
+      --border: gainsboro;
+      --shadow: slategrey;
+      --ok: seagreen;
+      --warn: goldenrod;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: "Manrope", "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+      background:
+        radial-gradient(circle at 10% 10%, lightcyan 0%, transparent 30%),
+        radial-gradient(circle at 90% 20%, mistyrose 0%, transparent 32%),
+        linear-gradient(to bottom right, aliceblue, ghostwhite 45%, lavender 100%);
+      color: var(--text-main);
+    }
+
+    .deck {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 28px;
+    }
+
+    .topbar {
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      background: rgba(255, 255, 255, 0.95);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 14px 18px;
+      margin-bottom: 18px;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.09);
+      backdrop-filter: blur(4px);
+    }
+
+    .topbar h1 {
+      margin: 0;
+      font-size: 19px;
+      color: var(--accent);
+      font-family: "Space Grotesk", "Manrope", sans-serif;
+      letter-spacing: 0.02em;
+    }
+
+    .topbar p {
+      margin: 6px 0 0;
+      font-size: 13px;
+      color: var(--text-muted);
+    }
+
+    .slide {
+      background: var(--bg-slide);
+      border: 1px solid var(--border);
+      border-left: 9px solid var(--accent);
+      border-radius: 16px;
+      padding: 26px;
+      margin-bottom: 20px;
+      box-shadow: 0 12px 24px rgba(0, 0, 0, 0.08);
+      page-break-after: always;
+      position: relative;
+      overflow: hidden;
+      animation: rise 0.45s ease;
+    }
+
+    .slide::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to bottom right, transparent 78%, aliceblue 100%);
+      pointer-events: none;
+    }
+
+    .slide h2 {
+      margin-top: 0;
+      color: var(--accent);
+      font-size: 30px;
+      font-family: "Space Grotesk", "Manrope", sans-serif;
+      letter-spacing: 0.01em;
+      position: relative;
+      z-index: 1;
+    }
+
+    .slide h3 {
+      margin-top: 18px;
+      margin-bottom: 8px;
+      color: var(--accent-soft);
+      font-size: 18px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .slide p,
+    .slide li {
+      font-size: 18px;
+      line-height: 1.6;
+      position: relative;
+      z-index: 1;
+    }
+
+    .slide ul,
+    .slide ol {
+      margin-top: 8px;
+      padding-left: 24px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .meta {
+      color: var(--text-muted);
+      font-size: 16px;
+    }
+
+    .split {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 18px;
+      align-items: start;
+      position: relative;
+      z-index: 1;
+    }
+
+    .kpi-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+      margin-top: 10px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .kpi {
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 12px;
+      background: floralwhite;
+      text-align: center;
+    }
+
+    .kpi strong {
+      display: block;
+      font-size: 24px;
+      color: var(--accent);
+      font-family: "Space Grotesk", "Manrope", sans-serif;
+    }
+
+    .pill {
+      display: inline-block;
+      padding: 4px 10px;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 700;
+      background: aliceblue;
+      color: var(--accent);
+      border: 1px solid lightsteelblue;
+      margin-bottom: 8px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .mermaid-wrap {
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 12px;
+      background: ghostwhite;
+      position: relative;
+      z-index: 1;
+    }
+
+    .highlight {
+      color: var(--ok);
+      font-weight: 700;
+    }
+
+    .warn {
+      color: var(--warn);
+      font-weight: 700;
+    }
+
+    .notes {
+      margin-top: 16px;
+      border-top: 1px dashed var(--border);
+      padding-top: 12px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .notes strong {
+      color: darkslategray;
+    }
+
+    @keyframes rise {
+      from {
+        transform: translateY(6px);
+        opacity: 0.88;
+      }
+      to {
+        transform: translateY(0);
+        opacity: 1;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .deck {
+        padding: 12px;
+      }
+
+      .slide {
+        padding: 18px;
+      }
+
+      .slide h2 {
+        font-size: 22px;
+      }
+
+      .split,
+      .kpi-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .slide p,
+      .slide li {
+        font-size: 16px;
+      }
+    }
+
+    @media print {
+      body {
+        background: white;
+      }
+
+      .topbar {
+        display: none;
+      }
+
+      .slide {
+        box-shadow: none;
+        border-radius: 0;
+        margin: 0;
+        min-height: 95vh;
+      }
+    }
+  </style>
+  <script type="module">
+    import mermaid from "https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs";
+    mermaid.initialize({ startOnLoad: true, theme: "default", securityLevel: "loose" });
+  </script>
+</head>
+<body>
+  <div class="deck">
+    <div class="topbar">
+      <h1>Kitengela Mall Parking Management System - Final Presentation Slides</h1>
+      <p>Professional Presentation Edition with Process Flow Charts</p>
+    </div>
+
+    <section class="slide" id="slide-1">
+      <h2>Slide 1: Title Slide</h2>
+      <span class="pill">Final Defense</span>
+      <p><strong>Kitengela Mall Parking Management System</strong></p>
+      <p class="meta">Final Project Presentation and Live Demonstration</p>
+      <p class="meta">Presented by: [Student Name(s)]</p>
+      <p class="meta">Course / Unit: [Course Name]</p>
+      <p class="meta">Date: [Presentation Date]</p>
+      <div class="notes">
+        <strong>Speaker notes:</strong>
+        <ul>
+          <li>Introduce yourselves and the project.</li>
+          <li>State that you will cover the problem, solution, system features, architecture, and live demo.</li>
+        </ul>
+      </div>
+    </section>
+
+    <section class="slide" id="slide-2">
+      <h2>Slide 2: Problem Statement</h2>
+      <div class="kpi-grid">
+        <div class="kpi"><strong>262</strong>Bays to monitor</div>
+        <div class="kpi"><strong>3</strong>Main user groups</div>
+        <div class="kpi"><strong>1</strong>Integrated payment flow</div>
+      </div>
+      <ul>
+        <li>Manual parking operations created avoidable delays at both entry and exit gates because staff had to verify records and fees by hand.</li>
+        <li>The mall could not maintain reliable real-time occupancy awareness across 262 bays, which made bay allocation less efficient during peak hours.</li>
+        <li>Revenue leakage became a serious risk because weak audit trails and manual cash handling made it difficult to reconcile transactions with confidence.</li>
+        <li>The operation needed a secure and traceable digital payment model so that vehicle release decisions could be based on verified payment status.</li>
+      </ul>
+      <div class="notes">
+        <strong>Speaker notes:</strong>
+        <ul>
+          <li>Explain the business pain points briefly.</li>
+          <li>Mention impact: long queues, poor visibility, and operational inefficiency.</li>
+        </ul>
+      </div>
+    </section>
+
+    <section class="slide" id="slide-3">
+      <h2>Slide 3: Project Objectives</h2>
+      <ul>
+        <li>We automated vehicle entry, bay assignment, and exit processing so that gate operations remain consistent even during high traffic periods.</li>
+        <li>We integrated cashless parking payments through M-Pesa STK Push because the mall required a trusted method that most drivers already use.</li>
+        <li>We implemented role-based access for Admin, Staff, and Drivers to ensure each user only performs actions that match their responsibility.</li>
+        <li>We added activity logs and reporting features to strengthen accountability and to support management decisions with auditable evidence.</li>
+        <li>We focused on delivery of a reliable working system because the final objective was not only a prototype, but a usable operational solution.</li>
+      </ul>
+    </section>
+
+    <section class="slide" id="slide-4">
+      <h2>Slide 4: Proposed Solution Overview</h2>
+      <ul>
+        <li>The solution is a web-based parking platform for Kitengela Mall so that all user groups can access the same live data from networked devices.</li>
+        <li>The system tracks occupancy across Basement 1 and Basement 2 in real time, which improves allocation accuracy and reduces unnecessary searching.</li>
+        <li>The workflow supports staff free parking and owner monthly invoicing because these groups follow different billing rules from ordinary visitors.</li>
+        <li>Restricted vehicles are blocked at entry to enforce policy immediately rather than relying on manual checks after admission.</li>
+        <li>An administrative dashboard with reporting and database tools is included so supervisors can monitor operations and validate records quickly.</li>
+      </ul>
+    </section>
+
+    <section class="slide" id="slide-5">
+      <h2>Slide 5: Technology Stack</h2>
+      <ul>
+        <li>We used PHP 8+ with an MVC-inspired structure because it keeps controllers, models, and services organized for easier maintenance.</li>
+        <li>The interface is built with HTML, CSS, and JavaScript so the system runs in standard browsers without requiring special client software.</li>
+        <li>MySQL or MariaDB stores operational data because both engines are stable, widely supported, and suitable for transactional records.</li>
+        <li>Apache on XAMPP and Docker support were included to allow both local academic deployment and reproducible environment setup.</li>
+        <li>Safaricom Daraja STK Push was selected as the payment API because it aligns with local payment behavior and reduces cash dependence.</li>
+      </ul>
+    </section>
+
+    <section class="slide" id="slide-6">
+      <h2>Slide 6: Core Modules</h2>
+      <div class="split">
+        <ul>
+          <li>The Gate Entry module captures number plates and validates restrictions before assigning bays so that unauthorized vehicles are stopped early.</li>
+          <li>The Gate Exit module computes fees and verifies payment status so that a vehicle can only leave when business rules are satisfied.</li>
+          <li>The Driver Payment module collects phone details and triggers STK Push with live status updates, which reduces uncertainty at the exit point.</li>
+          <li>The Admin Panel centralizes dashboard metrics, user management, reports, and logs to support day-to-day governance and escalation handling.</li>
+          <li>The Public Display module publishes live bay availability to improve driver guidance and reduce internal circulation congestion.</li>
+        </ul>
+        <div class="mermaid-wrap">
+          <div class="mermaid">
+flowchart TD
+    A[Gate Entry] --> B[Parking Session]
+    B --> C[Gate Exit]
+    C --> D{Payable?}
+    D -- No --> E[Release Vehicle]
+    D -- Yes --> F[M-Pesa STK Push]
+    F --> G{Payment Confirmed?}
+    G -- Yes --> E
+    G -- No --> H[Retry / Pending]
+          </div>
+        </div>
+      </div>
+      <p>This modular design was chosen because it separates concerns clearly and allows targeted improvements without destabilizing the full platform.</p>
+    </section>
+
+    <section class="slide" id="slide-7">
+      <h2>Slide 7: System Workflow</h2>
+      <div class="mermaid-wrap">
+        <div class="mermaid">
+flowchart LR
+    V1[Vehicle Arrives] --> V2[Entry Validation]
+    V2 --> V3[Assign Bay]
+    V3 --> V4[Track Parking Duration]
+    V4 --> V5[Exit Fee Computation]
+    V5 --> V6[M-Pesa Payment]
+    V6 --> V7[Gate Exit Authorization]
+    V7 --> V8[Archive Logs and Revenue]
+        </div>
+      </div>
+      <p><span class="highlight">Result:</span> End-to-end digital flow reduces delays and preserves data traceability.</p>
+    </section>
+
+    <section class="slide" id="slide-8">
+      <h2>Slide 8: Security and Control Features</h2>
+      <ul>
+        <li>Role-based access control separates Super Admin, Sub-Admin, Staff, and Driver permissions so that high-risk actions remain tightly governed.</li>
+        <li>Administrative actions are protected with account controls to reduce accidental misuse and unauthorized configuration changes.</li>
+        <li>Login activity, page access, and report downloads are logged because accountability depends on traceable administrator behavior.</li>
+        <li>Restricted vehicles are denied at gate entry so policy enforcement happens immediately and consistently in real time.</li>
+        <li>Data management operations retain a visible audit trail so supervisors can verify what changed, when it changed, and who initiated it.</li>
+      </ul>
+    </section>
+
+    <section class="slide" id="slide-9">
+      <h2>Slide 9: Key Improvements and Reliability</h2>
+      <ul>
+        <li>We redesigned M-Pesa failure handling to include a retry path because drivers need guided recovery instead of abrupt error interruptions <span class="highlight">(improved user experience)</span>.</li>
+        <li>We reset the payment state on each new STK attempt so that retries read fresh status and do not immediately fail from stale values <span class="highlight">(reliable retries)</span>.</li>
+        <li>We prevented bay release on failed payment to ensure that occupancy and revenue controls remain synchronized at all times <span class="warn">(operational safety)</span>.</li>
+        <li>We removed duplicate transaction creation so financial records map cleanly to confirmed callbacks and reconciliation remains accurate <span class="highlight">(data integrity)</span>.</li>
+        <li>We expanded admin database search and controlled table clearing because operations teams need visibility while still preserving safe boundaries.</li>
+      </ul>
+    </section>
+
+    <section class="slide" id="slide-10a">
+      <h2>Slide 10A: Payment Lifecycle Flow Chart</h2>
+      <div class="mermaid-wrap">
+        <div class="mermaid">
+flowchart TD
+    P1[Driver enters phone] --> P2[STK Push Request]
+    P2 --> P3{Customer Action}
+    P3 -- Approve and PIN --> P4[Callback Success]
+    P3 -- Cancel or Wrong PIN --> P5[Callback Failed]
+    P4 --> P6[Mark Transaction Completed]
+    P6 --> P7[Allow Exit and Stamp exit_time]
+    P5 --> P8[Show Payment Not Completed]
+    P8 --> P9[Try Again]
+    P9 --> P2
+        </div>
+      </div>
+    </section>
+
+    <section class="slide" id="slide-10">
+      <h2>Slide 10: Live Demonstration Plan</h2>
+      <ul>
+        <li>Demo 1 shows normal gate entry to prove that plate capture and bay assignment execute correctly under standard conditions.</li>
+        <li>Demo 2 shows exit and fee computation to verify that duration-based charging follows the configured business rules.</li>
+        <li>Demo 3 shows driver payment through STK Push simulation or sandbox so the audience can observe the full payment lifecycle.</li>
+        <li>Demo 4 shows dashboard and activity log updates to confirm that operational events are reflected and audited in near real time.</li>
+        <li>Demo 5 shows restricted vehicle denial to demonstrate policy enforcement at the earliest decision point.</li>
+      </ul>
+    </section>
+
+    <section class="slide" id="slide-10b">
+      <h2>Slide 10B: Admin Oversight Flow Chart</h2>
+      <div class="mermaid-wrap">
+        <div class="mermaid">
+flowchart LR
+    A1[Admin Login] --> A2[Dashboard Metrics]
+    A2 --> A3[Manage Users / Vehicles]
+    A2 --> A4[Generate Reports]
+    A2 --> A5[Activity Audit Log]
+    A3 --> A6[Policy Enforcement]
+    A4 --> A6
+    A5 --> A6
+    A6 --> A7[Operational Decisions]
+        </div>
+      </div>
+    </section>
+
+    <section class="slide" id="slide-11">
+      <h2>Slide 11: Results and Impact</h2>
+      <ul>
+        <li>Gate operations became faster because entry and exit decisions now rely on instant digital checks instead of manual verification.</li>
+        <li>Visibility of available bays improved because occupancy is tracked continuously and presented in a format that staff can interpret quickly.</li>
+        <li>Revenue tracking and accountability improved because transaction evidence and administrator actions are now systematically auditable.</li>
+        <li>Administrative workflows are cleaner since reports, logs, and management actions are available from a single operational interface.</li>
+        <li>The architecture provides a scalable base for future smart parking features because integration points are already structured and tested.</li>
+      </ul>
+    </section>
+
+    <section class="slide" id="slide-12">
+      <h2>Slide 12: Challenges and Lessons Learned</h2>
+      <ul>
+        <li>API integration required careful callback and error handling because network delays and user-side interruptions are unavoidable in real deployments.</li>
+        <li>Real-time flows demanded strict state management so that user interfaces always reflected valid and current transaction outcomes.</li>
+        <li>Role separation proved essential because administrative convenience must never override system security and accountability controls.</li>
+        <li>Failure-case testing was as important as success-case testing since production reliability depends on graceful recovery behavior.</li>
+      </ul>
+    </section>
+
+    <section class="slide" id="slide-13">
+      <h2>Slide 13: Conclusion and Future Work</h2>
+      <ul>
+        <li>We successfully built and tested a complete parking management system that addresses entry control, payment, monitoring, and administration in one platform.</li>
+        <li>The project demonstrates a practical digital solution for mall parking operations because it combines operational efficiency with auditable governance.</li>
+        <li>Future work will include ANPR recognition, SMS receipts, analytics, and mobile integration so the system can deliver deeper automation and user convenience.</li>
+      </ul>
+    </section>
+
+    <section class="slide" id="slide-14">
+      <h2>Slide 14: Questions and Answers</h2>
+      <p>Thank you for listening.</p>
+      <p>We welcome your questions and feedback.</p>
+    </section>
+  </div>
+</body>
+</html>
