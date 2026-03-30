@@ -1,6 +1,19 @@
 <?php
 require_once(__DIR__ . '/../../backend/app/config/database.php');
 $plate = $_GET['plate'] ?? '';
+
+// Get bay info from the most recent vehicle log for this plate
+$bay_info = '';
+if ($plate) {
+    $db = new DatabaseConnection();
+    $pdo = $db->pdo;
+    $stmt = $pdo->prepare("SELECT bay_id FROM vehicle_logs WHERE plate_number = ? AND exit_time IS NOT NULL ORDER BY id DESC LIMIT 1");
+    $stmt->execute([$plate]);
+    $result = $stmt->fetch(PDO::FETCH_ASSOC);
+    if ($result && $result['bay_id']) {
+        $bay_info = 'B' . str_pad($result['bay_id'], 3, '0', STR_PAD_LEFT);
+    }
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -28,7 +41,7 @@ $plate = $_GET['plate'] ?? '';
             box-shadow: 0 15px 35px silver; 
             text-align: center; 
             width: 420px; 
-            border-top: 10px solid darkgreen;
+            border: 3px solid lightgreen;
         }
 
         /* Loading Spinner */
@@ -151,41 +164,59 @@ $plate = $_GET['plate'] ?? '';
         }
 
         .status-title {
-            color: darkslategray;
-            font-size: 28px;
-            font-weight: 800;
-            margin-bottom: 4px;
-            letter-spacing: 0.3px;
+            color: darkgreen;
+            font-size: 36px;
+            font-weight: 900;
+            margin: 0 0 12px 0;
+            letter-spacing: 0.5px;
         }
 
         .status-subtitle {
-            color: dimgray;
-            margin: 0;
-            font-size: 14px;
+            color: darkslategray;
+            margin: 0 0 20px 0;
+            font-size: 15px;
             font-weight: 600;
         }
 
         .plate-chip {
             display: inline-block;
-            margin-top: 12px;
-            margin-bottom: 8px;
-            background: mintcream;
-            border: 1px solid palegreen;
+            margin: 0 8px 16px 8px;
+            background: honeydew;
+            border: 2px solid palegreen;
             border-radius: 999px;
             color: darkgreen;
-            padding: 6px 14px;
-            font-weight: 800;
-            letter-spacing: 1px;
-            font-size: 16px;
+            padding: 8px 18px;
+            font-weight: 900;
+            letter-spacing: 2px;
+            font-size: 18px;
+        }
+
+        .chips-container {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin: 12px 0 20px 0;
+        }
+
+        .confirmation-title {
+            color: darkgreen;
+            font-size: 20px;
+            font-weight: 900;
+            margin: 14px 0 8px 0;
+        }
+
+        .confirmation-subtitle {
+            color: dimgray;
+            font-size: 14px;
+            font-weight: 600;
+            margin: 0 0 16px 0;
         }
 
         .bye-text {
-            color: goldenrod;
-            font-size: 21px;
-            font-weight: 700;
-            margin: 14px 0 8px;
-            opacity: 0;
-            animation: fadeInUp 0.6s ease-out 0.4s forwards;
+            color: dimgray;
+            font-size: 13px;
+            font-weight: 600;
+            margin: 0;
         }
 
         /* Progress Bar for Redirect */
@@ -203,10 +234,6 @@ $plate = $_GET['plate'] ?? '';
             height: 100%;
             background: darkgreen;
             width: 0%;
-        }
-
-        .animate-bar {
-            animation: loadingBar 3s linear forwards;
         }
 
         .redirect-hint {
@@ -233,6 +260,10 @@ $plate = $_GET['plate'] ?? '';
             from { width: 0%; }
             to { width: 100%; }
         }
+
+        .animate-bar {
+            animation: loadingBar 6s linear forwards;
+        }
     </style>
 </head>
 <body>
@@ -250,12 +281,20 @@ $plate = $_GET['plate'] ?? '';
         </div>
 
         <div id="success-ui" style="display:none;">
-            <div class="success-checkmark">✓</div>
+            <h2 class="status-title">Welcome to Kitengela Mall</h2>
+            <p class="status-subtitle">Your vehicle has checked out successfully.</p>
             
-            <h2 class="status-title">Thank You for Visiting</h2>
-            <p class="status-subtitle">Payment received successfully. Exit barrier unlocked.</p>
-            <div class="plate-chip"><?php echo htmlspecialchars($plate); ?></div>
-            <div class="bye-text">Goodbye. Have a safe journey home.</div>
+            <div class="chips-container">
+                <div class="plate-chip" id="plate-display">
+                    <?php echo htmlspecialchars($plate); ?>
+                </div>
+                <div class="plate-chip" id="bay-display">
+                    <span id="bay-text"><?php echo !empty($bay_info) ? htmlspecialchars($bay_info) : 'N/A'; ?></span>
+                </div>
+            </div>
+
+            <p class="confirmation-title">Exit Approved. Payment Confirmed.</p>
+            <p class="confirmation-subtitle">Your parking fee has been successfully processed and your exit is authorized.</p>
 
             <div class="redirect-loader">
                 <div id="pBar" class="progress-fill"></div>
@@ -293,7 +332,7 @@ $plate = $_GET['plate'] ?? '';
                 document.getElementById('pBar').classList.add('animate-bar');
                 if (pollId) clearInterval(pollId);
                 source.close();
-                setTimeout(() => { window.location.href = "../index.php?welcome=exit"; }, 1500);
+                setTimeout(() => { window.location.href = "../index.php?welcome=exit"; }, 6000);
             } else if (status === 'failed') {
                 settled = true;
                 document.getElementById('loading-ui').style.display = 'none';

@@ -20,10 +20,12 @@ $message = '';
 $messageType = 'success';
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && !empty($_POST['plate'])) {
     $plate = strtoupper(trim($_POST['plate']));
-    $name = trim($_POST['name'] ?? '');
+    $name  = strtoupper(trim($_POST['name']  ?? ''));
+    $make  = trim($_POST['make']  ?? '');
+    $color = trim($_POST['color'] ?? '');
     try {
-        $stmt = $pdo->prepare("INSERT INTO staff_vehicles (plate_number, employee_name) VALUES (?, ?)");
-        $stmt->execute([$plate, $name === '' ? null : $name]);
+        $stmt = $pdo->prepare("INSERT INTO staff_vehicles (plate_number, employee_name, vehicle_make, vehicle_color) VALUES (?, ?, ?, ?)");
+        $stmt->execute([$plate, $name === '' ? null : $name, $make === '' ? null : $make, $color === '' ? null : $color]);
         $message = "Added $plate to staff list.";
     } catch (Exception $e) {
         $messageType = 'error';
@@ -32,7 +34,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && !empty($_POST['plate'])) {
 }
 
 // fetch current staff list
-$stmt = $pdo->prepare("SELECT plate_number, employee_name, created_at FROM staff_vehicles WHERE deleted_at IS NULL ORDER BY plate_number");
+$stmt = $pdo->prepare("SELECT plate_number, employee_name, vehicle_make, vehicle_color, created_at FROM staff_vehicles WHERE deleted_at IS NULL ORDER BY plate_number");
 $stmt->execute();
 $staff = $stmt->fetchAll(PDO::FETCH_ASSOC);
 $totalStaff = count($staff);
@@ -40,7 +42,7 @@ $totalStaff = count($staff);
 // Fetch deleted staff vehicles (recycle bin) - only for super_admin
 $deletedStaff = [];
 if (!empty($_SESSION['admin_role']) && $_SESSION['admin_role'] === 'super_admin') {
-    $stmt = $pdo->prepare("SELECT plate_number, employee_name, created_at, deleted_at FROM staff_vehicles WHERE deleted_at IS NOT NULL ORDER BY deleted_at DESC");
+    $stmt = $pdo->prepare("SELECT plate_number, employee_name, vehicle_make, vehicle_color, created_at, deleted_at FROM staff_vehicles WHERE deleted_at IS NOT NULL ORDER BY deleted_at DESC");
     $stmt->execute();
     $deletedStaff = $stmt->fetchAll(PDO::FETCH_ASSOC);
 }
@@ -263,7 +265,15 @@ if (!empty($_SESSION['admin_role']) && $_SESSION['admin_role'] === 'super_admin'
                     Employee Name (optional)
                     <input name="name" class="auto-uppercase" autocomplete="off" placeholder="JANE DOE">
                 </label>
-                <p class="form-hint">Plate and name are auto-converted to uppercase for consistency.</p>
+                <label>
+                    Vehicle Make / Model (optional)
+                    <input name="make" autocomplete="off" placeholder="Toyota Corolla">
+                </label>
+                <label>
+                    Vehicle Colour (optional)
+                    <input name="color" autocomplete="off" placeholder="Silver">
+                </label>
+                <p class="form-hint">These details are shown to gate operators at exit for physical verification against the actual vehicle.</p>
                 <button type="submit">Add to Staff List</button>
             </form>
         </article>
@@ -284,6 +294,8 @@ if (!empty($_SESSION['admin_role']) && $_SESSION['admin_role'] === 'super_admin'
                             <tr>
                                 <th>Plate</th>
                                 <th>Name</th>
+                                <th>Make / Model</th>
+                                <th>Colour</th>
                                 <th>Added</th>
                                 <?php if (!empty($_SESSION['admin_role']) && $_SESSION['admin_role'] === 'super_admin'): ?>
                                     <th>Action</th>
@@ -295,6 +307,8 @@ if (!empty($_SESSION['admin_role']) && $_SESSION['admin_role'] === 'super_admin'
                                 <tr>
                                     <td><?= htmlspecialchars($row['plate_number']) ?></td>
                                     <td><?= htmlspecialchars($row['employee_name'] ?? 'N/A') ?></td>
+                                    <td><?= htmlspecialchars($row['vehicle_make'] ?? '—') ?></td>
+                                    <td><?= htmlspecialchars($row['vehicle_color'] ?? '—') ?></td>
                                     <td><?= htmlspecialchars($row['created_at']) ?></td>
                                     <?php if (!empty($_SESSION['admin_role']) && $_SESSION['admin_role'] === 'super_admin'): ?>
                                         <td>
@@ -323,6 +337,8 @@ if (!empty($_SESSION['admin_role']) && $_SESSION['admin_role'] === 'super_admin'
                             <tr>
                                 <th>Plate</th>
                                 <th>Name</th>
+                                <th>Make / Model</th>
+                                <th>Colour</th>
                                 <th>Deleted On</th>
                                 <th>Action</th>
                             </tr>
@@ -332,6 +348,8 @@ if (!empty($_SESSION['admin_role']) && $_SESSION['admin_role'] === 'super_admin'
                                 <tr style="opacity: 0.7;">
                                     <td><?= htmlspecialchars($row['plate_number']) ?></td>
                                     <td><?= htmlspecialchars($row['employee_name'] ?? 'N/A') ?></td>
+                                    <td><?= htmlspecialchars($row['vehicle_make'] ?? '—') ?></td>
+                                    <td><?= htmlspecialchars($row['vehicle_color'] ?? '—') ?></td>
                                     <td><?= htmlspecialchars($row['deleted_at']) ?></td>
                                     <td>
                                         <button class="action-btn restore-btn" onclick="restoreStaffVehicle('<?= htmlspecialchars($row['plate_number']) ?>')">Restore</button>

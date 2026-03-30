@@ -228,6 +228,7 @@
 </head>
 <body>
 
+
 <!-- ═══════════════════ COVER PAGE ═══════════════════ -->
 <div class="cover-block">
   <h1>Kitengela Mall Parking<br>Management System</h1>
@@ -237,6 +238,23 @@
   <p><strong>Date:</strong> March 2026</p>
   <p><strong>Prepared by:</strong> Development Team</p>
   <p><strong>Classification:</strong> Internal Use</p>
+</div>
+
+<!-- ═══════════════════ RECENT CHANGES HIGHLIGHT ═══════════════════ -->
+<div style="background: #e6ffe6; border-left: 6px solid green; border-radius: 8px; padding: 18px 22px; margin: 30px 0 18px 0;">
+  <h2 style="color: green; margin-top: 0;">Recent System Updates <span style="font-size:13px; color:seagreen;">(Highlighted in Green)</span></h2>
+  <ul style="font-size: 12.5pt; color: #155724;">
+    <li><b>Layered Security for Staff Vehicle Exits:</b> Staff free exits now require physical verification and are logged for audit. Suspicious multiple exits are flagged for admin review.</li>
+    <li><b>Admin-Only Verification Alerts:</b> Security alerts for suspicious staff exits are visible only to admins on the dashboard.</li>
+    <li><b>Audit Logging:</b> All staff free exits and manual bypasses are now permanently recorded in the audit trail.</li>
+    <li><b>Revenue Report Preview & CSV:</b> Revenue report now previews results before download, includes only outstanding owner invoices, and matches dashboard totals (including archived revenue).</li>
+    <li><b>Owner Invoice Logic:</b> Only owners with outstanding balances are counted and displayed in reports. Invoice trip breakdown and last exit shown.</li>
+    <li><b>UI/UX Improvements:</b> Entry and exit pages now fit better on all screens, show clear parking rates, and display exit reasons for all free exits.</li>
+    <li><b>New Vehicle Log Report:</b> Admins can now download a full vehicle log report (CSV) for any date range, including bypass and audit details.</li>
+    <li><b>Staff Vehicle Details:</b> Staff vehicle records now include make/model and color for physical verification at the gate.</li>
+    <li><b>Dashboard Enhancements:</b> All-time and current revenue are shown separately, with archived revenue breakdown. Suspicious staff exits are highlighted in a dedicated alert box.</li>
+  </ul>
+  <div style="color: #155724; font-size: 12px; margin-top: 8px;">All new/updated features are <span style="background: #b6ffb6; padding: 2px 6px; border-radius: 4px;">highlighted in green</span> throughout this manual.</div>
 </div>
 
 <hr>
@@ -547,11 +565,12 @@
 <p><strong>Step 2 —</strong> Ask the driver for their plate number and type it into the field, then click <strong>Process Exit</strong>.</p>
 
 <p><strong>Step 3 —</strong> The system will display one of the following outcomes:</p>
+
 <table>
   <tr><th>Outcome Displayed</th><th>What It Means</th><th>Action</th></tr>
-  <tr><td>Free Exit — Staff Vehicle</td><td>Plate belongs to a registered employee</td><td>Raise boom gate immediately.</td></tr>
-  <tr><td>Free Exit — Grace Period</td><td>Vehicle has been parked ≤ 30 minutes</td><td>Raise boom gate immediately.</td></tr>
-  <tr><td>Free Exit — Owner Invoiced</td><td>Registered business owner vehicle</td><td>Raise boom gate. Fee is added to monthly invoice.</td></tr>
+  <tr style="background: #b6ffb6;"><td>Free Exit — Staff Vehicle</td><td>Plate belongs to a registered employee<br><span style="color:green;">Staff details (name, make, color) shown for verification. All exits are logged for audit. Multiple exits in one day are flagged for admin review.</span></td><td>Raise boom gate immediately.<br><span style="color:green;">Physically verify vehicle details before release.</span></td></tr>
+  <tr style="background: #b6ffb6;"><td>Free Exit — Grace Period</td><td>Vehicle has been parked ≤ 30 minutes</td><td>Raise boom gate immediately.<br><span style="color:green;">Exit reason is displayed to driver.</span></td></tr>
+  <tr style="background: #b6ffb6;"><td>Free Exit — Owner Invoiced</td><td>Registered business owner vehicle<br><span style="color:green;">Fee is added to monthly invoice. Only owners with outstanding balances are shown in reports.</span></td><td>Raise boom gate.<br><span style="color:green;">No payment required at exit.</span></td></tr>
   <tr><td>Payment Required — KES [amount]</td><td>Standard visitor, fee is owed</td><td>Direct driver to payment page or kiosk.</td></tr>
   <tr><td>Plate Not Found</td><td>No matching entry record</td><td>Do not open gate. Check plate spelling, contact admin.</td></tr>
 </table>
@@ -591,6 +610,7 @@
   <li>Your vehicle plate number</li>
   <li>The amount due (in Kenyan Shillings)</li>
   <li>A field for your M-Pesa phone number</li>
+  <li style="background: #b6ffb6; color: #155724; border-radius: 4px; padding: 2px 6px;">If you qualify for a free exit (staff, owner, or grace period), the reason will be shown clearly on screen.</li>
 </ul>
 
 <p><strong>Step 2 —</strong> Type in your Safaricom phone number. Any of these formats are accepted:</p>
@@ -650,15 +670,19 @@
 
 <h3>10.1 Dashboard Sections</h3>
 
+
 <h4>Summary Statistics (Top Cards)</h4>
-<p>Immediately after logging in, four summary cards at the top of the dashboard give you a real-time snapshot of the facility:</p>
+<p>Immediately after logging in, summary cards at the top of the dashboard give you a real-time snapshot of the facility:</p>
 <table>
   <tr><th>Card</th><th>What It Shows</th></tr>
   <tr><td>Vehicles Currently Inside</td><td>How many vehicles are actively parked (have entered but not yet exited)</td></tr>
   <tr><td>Vacant Bays</td><td>Number of bays that are currently unoccupied and available</td></tr>
   <tr><td>Occupied Bays</td><td>Number of bays that currently have a vehicle in them</td></tr>
-  <tr><td>Today's Revenue</td><td>Total M-Pesa confirmed payments collected today, in KES</td></tr>
+  <tr><td style="background: #b6ffb6;">Current Logs Revenue</td><td style="background: #b6ffb6;">Total revenue from current vehicle logs (paid and invoiced)</td></tr>
+  <tr><td style="background: #b6ffb6;">All-Time Revenue</td><td style="background: #b6ffb6;">Combined total including archived revenue from cleared logs</td></tr>
 </table>
+<div style="background: #b6ffb6; color: #155724; border-radius: 4px; padding: 6px 10px; margin: 8px 0 14px 0;">
+  <b>New:</b> <b>Suspicious Staff Exits</b> are now flagged in a red alert box if a staff vehicle exits more than once in a day. <b>Vehicle Log Report</b> is available for download.</div>
 
 <h4>Active Vehicles Table</h4>
 <p>Below the summary cards is a table listing every vehicle that is currently parked. For each vehicle you can see the plate number, the bay it occupies, when it entered, how long it has been parked, its payment status, and a Manual Bypass button. Rows highlighted in orange or red indicate <strong>overstays</strong> — vehicles that have been parked for more than 8 hours.</p>
@@ -677,13 +701,19 @@
 <!-- ═══════════════════ CHAPTER 11 ═══════════════════ -->
 <h1>11. Admin Panel — Revenue Reports</h1>
 
-<p>The Revenue Report page lets you download a detailed record of all completed parking fee transactions as a CSV file, suitable for importing into Excel or Google Sheets for accounting and audit purposes.</p>
+
+<div style="background: #b6ffb6; color: #155724; border-radius: 4px; padding: 8px 12px; margin-bottom: 12px;">
+  <b>New:</b> Revenue report now previews results before download, includes only outstanding owner invoices, and matches dashboard totals (including archived revenue).<br>
+  <b>Owner Invoice section</b> only lists owners with unpaid balances. <b>CSV</b> includes all relevant columns and a summary.</div>
+
+<p>The Revenue Report page lets you preview and download a detailed record of all completed parking fee transactions as a CSV file, suitable for importing into Excel or Google Sheets for accounting and audit purposes.</p>
 
 <p>To generate a report:</p>
 <ol>
   <li>Click <strong>Revenue Report</strong> in the admin navigation menu.</li>
   <li>Select a <strong>Start Date</strong> and <strong>End Date</strong> using the date pickers.</li>
-  <li>Click <strong>Download CSV</strong>.</li>
+  <li>Click <strong>Preview Report</strong> to see a summary and outstanding owner invoices.</li>
+  <li>Click <strong>Download CSV</strong> to export the data.</li>
   <li>Open the downloaded file in Microsoft Excel, LibreOffice Calc, or Google Sheets.</li>
 </ol>
 
@@ -709,7 +739,10 @@
 <!-- ═══════════════════ CHAPTER 12 ═══════════════════ -->
 <h1>12. Admin Panel — Staff Vehicle Management</h1>
 
+
 <p>Staff vehicles belong to mall employees or other approved personnel who are entitled to park free of charge at any time. Once a plate is added to the staff list, the system will recognize it at exit and apply a zero fee, regardless of how long the vehicle was parked.</p>
+<div style="background: #b6ffb6; color: #155724; border-radius: 4px; padding: 8px 12px; margin-bottom: 12px;">
+  <b>New:</b> Staff vehicle records now include <b>make/model</b> and <b>color</b> for physical verification at the gate. All staff exits are logged for audit, and suspicious multiple exits in a day are flagged for admin review.</div>
 
 <h3>Adding a Staff Vehicle</h3>
 <ol>
@@ -754,16 +787,21 @@
   <li>Click <strong>Add Owner</strong>.</li>
 </ol>
 
+
 <h3>Viewing the Billing Summary</h3>
 <p>The owners page shows a table with a billing summary for every registered owner:</p>
 <table>
   <tr><th>Column</th><th>What It Shows</th></tr>
   <tr><td>Plate Number</td><td>The owner's vehicle registration</td></tr>
   <tr><td>Owner Name</td><td>The business or individual name</td></tr>
+  <tr><td style="background: #b6ffb6;">Trips In Invoice</td><td style="background: #b6ffb6;">Number of vehicle exits included in the current outstanding invoice</td></tr>
+  <tr><td style="background: #b6ffb6;">Last Invoiced Exit</td><td style="background: #b6ffb6;">Date/time of the most recent trip in the invoice</td></tr>
   <tr><td>Nominal Fee (KES)</td><td>Total of all parking fees accumulated since last payment (before discount)</td></tr>
   <tr><td>Total Due (KES)</td><td>70% of nominal fee — the actual amount the owner owes after the 30% discount</td></tr>
   <tr><td>Due Period</td><td>The current billing month</td></tr>
 </table>
+<div style="background: #b6ffb6; color: #155724; border-radius: 4px; padding: 6px 10px; margin: 8px 0 14px 0;">
+  <b>New:</b> Only owners with outstanding balances are shown in the invoice section and reports. Invoice trip breakdown and last exit are now visible.</div>
 
 <h3>Computing Monthly Totals</h3>
 <p>Before issuing an invoice or recording a payment, always click <strong>Compute Totals</strong> first. This recalculates the accumulated fees and discounts for all owner accounts to make sure the figures are current and accurate.</p>
@@ -838,8 +876,9 @@
 <p>Every one of the following events is recorded with the admin's username, IP address, and timestamp:</p>
 <ul>
   <li>All login and logout events (successful and failed)</li>
-  <li>Manual gate bypasses with the vehicle plate and before/after status</li>
-  <li>Staff vehicle additions and removals</li>
+  <li style="background: #b6ffb6;">Manual gate bypasses with the vehicle plate and before/after status (now includes reason and admin name)</li>
+  <li style="background: #b6ffb6;">Staff vehicle additions and removals (now includes make/model and color)</li>
+  <li style="background: #b6ffb6;">Staff free exits (all are logged, with suspicious multiple exits flagged)</li>
   <li>Owner vehicle additions, payment recordings, and billing updates</li>
   <li>Restricted vehicle additions and removals</li>
   <li>Admin account creation and deletion</li>
@@ -864,6 +903,8 @@
 
 <!-- ═══════════════════ CHAPTER 17 ═══════════════════ -->
 <h1>17. Admin Panel — Database Tools</h1>
+<div style="background: #b6ffb6; color: #155724; border-radius: 4px; padding: 8px 12px; margin-bottom: 12px;">
+  <b>New:</b> <b>Vehicle Log Report</b> is now available for download as a CSV for any date range, including bypass and audit details.</div>
 <div class="danger"><strong>Super Admin access only. Use with extreme care. Some operations cannot be undone.</strong></div>
 
 <h3>Database Search</h3>

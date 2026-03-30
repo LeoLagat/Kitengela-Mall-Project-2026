@@ -7,6 +7,10 @@ if (isset($_GET['error']) && $_GET['error'] == 'notfound') {
 
 // free exit notification
 $isFreeExit = (isset($_GET['free']) && $_GET['free'] == '1');
+$exitReason = isset($_GET['reason']) ? trim((string)$_GET['reason']) : '';
+if ($exitReason === '') {
+    $exitReason = 'No payment required under the grace period.';
+}
 ?>
 
 <!DOCTYPE html>
@@ -139,7 +143,7 @@ nav {
     width: 100%;
     height: 100%;
     background: linear-gradient(90deg, seagreen, darkgreen);
-    animation: shrink 3s linear forwards;
+    animation: shrink 8s linear forwards;
 }
 
 @keyframes shrink {
@@ -251,7 +255,7 @@ Enter the plate number to compute fees and open the barrier.
 <?php if ($isFreeExit): ?>
 <div class="status-success">
 <div style="font-size:23px;font-weight:800;color:forestgreen;letter-spacing:0.3px;">Exit Approved</div>
-<div style="margin-top:6px;color:darkslategray;font-size:14px;font-weight:600;">No payment required under the grace period.</div>
+<div style="margin-top:6px;color:darkslategray;font-size:14px;font-weight:600;">Reason: <?= htmlspecialchars($exitReason) ?></div>
 <div style="display:inline-block;margin-top:10px;background:mintcream;border:1px solid palegreen;border-radius:999px;color:darkgreen;padding:6px 14px;font-size:13px;font-weight:800;">Thank you for visiting Kitengela Mall</div>
 <div class="progress" aria-hidden="true"><span></span></div>
 <div style="margin-top:8px;color:dimgray;font-size:13px;">Returning to home screen...</div>
@@ -291,7 +295,7 @@ PROCESS EXIT
 <script>
 window.setTimeout(function () {
     window.location = '../index.php?welcome=exit';
-}, 3000);
+}, 8000);
 </script>
 <?php endif; ?>
 

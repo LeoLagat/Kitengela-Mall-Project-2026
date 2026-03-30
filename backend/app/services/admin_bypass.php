@@ -62,7 +62,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['plate'])) {
             $pdo->commit();
             echo json_encode([
                 'status' => 'success', 
-                'message' => "✓ Gate forced open for $plate. Bay $bayId is now vacant. (Previous payment status: $oldStatus)"
+                'message' => "✓ Gate forced open for $plate. Bay $bayId is now vacant. Reason: manual admin override for controlled exit. (Previous payment status: $oldStatus)"
             ]);
         } else {
             // Vehicle not found in active logs - try to find ANY record to verify it exists
@@ -93,7 +93,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['plate'])) {
                 }
                 echo json_encode([
                     'status' => 'success', 
-                    'message' => "✓ EMERGENCY OVERRIDE: Gate forced open for $plate (vehicle already exited, but manual override applied)"
+                    'message' => "✓ EMERGENCY OVERRIDE: Gate forced open for $plate. Reason: vehicle record was already closed, so authorized emergency override was applied."
                 ]);
             } else {
                 // Vehicle doesn't exist in system at all - still allow bypass
@@ -106,7 +106,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['plate'])) {
                 }
                 echo json_encode([
                     'status' => 'success', 
-                    'message' => "✓ EMERGENCY ACCESS: Gate forced open for $plate (vehicle not found in system, but access granted)"
+                    'message' => "✓ EMERGENCY ACCESS: Gate forced open for $plate. Reason: no active system record was found, so authorized emergency access was granted."
                 ]);
             }
         }

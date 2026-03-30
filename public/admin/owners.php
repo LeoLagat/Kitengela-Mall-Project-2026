@@ -111,17 +111,29 @@ if (isset($_GET['silent_sync']) && $_GET['silent_sync'] === '1') {
         $summary = $summaryStmt->fetch(PDO::FETCH_ASSOC) ?: [];
 
         $dueStmt = $pdo->prepare(
-            "SELECT a.plate_number, COALESCE(f.total_due, 0) AS total_due
+                        "SELECT a.plate_number,
+                                        COALESCE(f.total_due, 0) AS total_due,
+                                        COALESCE(v.invoice_trip_count, 0) AS invoice_trip_count
              FROM owner_accounts a
              LEFT JOIN owner_vehicle_fees f ON a.plate_number = f.plate_number
+                         LEFT JOIN (
+                                 SELECT plate_number, COUNT(*) AS invoice_trip_count
+                                 FROM vehicle_logs
+                                 WHERE exit_time IS NOT NULL
+                                     AND COALESCE(nominal_fee, 0) > 0
+                                     AND (payment_status = 'invoiced' OR payment_status IS NULL OR payment_status = '')
+                                 GROUP BY plate_number
+                         ) v ON v.plate_number = a.plate_number
              WHERE a.deleted_at IS NULL"
         );
         $dueStmt->execute();
         $dueRows = $dueStmt->fetchAll(PDO::FETCH_ASSOC);
 
         $dueByPlate = [];
+        $invoiceTripsByPlate = [];
         foreach ($dueRows as $row) {
             $dueByPlate[$row['plate_number']] = (float) $row['total_due'];
+            $invoiceTripsByPlate[$row['plate_number']] = (int) ($row['invoice_trip_count'] ?? 0);
         }
 
         echo json_encode([
@@ -129,7 +141,8 @@ if (isset($_GET['silent_sync']) && $_GET['silent_sync'] === '1') {
             'activeCount' => (int) ($summary['active_count'] ?? 0),
             'expiredCount' => (int) ($summary['expired_count'] ?? 0),
             'totalDue' => (float) ($summary['total_due'] ?? 0),
-            'dueByPlate' => $dueByPlate
+            'dueByPlate' => $dueByPlate,
+            'invoiceTripsByPlate' => $invoiceTripsByPlate
         ]);
     } catch (Exception $e) {
         http_response_code(500);
@@ -220,6 +233,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $ownerAction !== '') {
                      WHERE id = ?"
                 );
                 $settleLatestStmt->execute([$dueAmount, $latestLogId]);
+
+                $resetLedgerStmt = $pdo->prepare(
+                    "UPDATE owner_vehicle_fees
+                     SET nominal_fee = 0,
+                         discount_given = 0,
+                         total_due = 0,
+                         due_period = DATE_ADD(CURDATE(), INTERVAL 1 MONTH)
+                     WHERE plate_number = ?"
+                );
+                $resetLedgerStmt->execute([$payPlate]);
 
                 syncOwnerBilling($pdo);
 
@@ -312,6 +335,8 @@ $stmt = $pdo->prepare("
 SELECT a.plate_number, a.owner_name, a.invoice_monthly, a.created_at,
     COALESCE(f.due_period, DATE_ADD(a.created_at, INTERVAL 1 MONTH)) AS active_until,
     f.total_due,
+    COALESCE(v.invoice_trip_count, 0) AS invoice_trip_count,
+    v.last_invoiced_exit,
     CASE
         WHEN COALESCE(f.due_period, DATE_ADD(a.created_at, INTERVAL 1 MONTH)) >= ? THEN 'Active'
         WHEN COALESCE(f.due_period, DATE_ADD(a.created_at, INTERVAL 1 MONTH)) < ? AND (f.total_due IS NULL OR f.total_due <= 0) THEN 'Active'
@@ -319,6 +344,16 @@ SELECT a.plate_number, a.owner_name, a.invoice_monthly, a.created_at,
     END AS status
 FROM owner_accounts a
 LEFT JOIN owner_vehicle_fees f ON a.plate_number = f.plate_number
+LEFT JOIN (
+    SELECT plate_number,
+           COUNT(*) AS invoice_trip_count,
+           MAX(exit_time) AS last_invoiced_exit
+    FROM vehicle_logs
+    WHERE exit_time IS NOT NULL
+      AND COALESCE(nominal_fee, 0) > 0
+      AND (payment_status = 'invoiced' OR payment_status IS NULL OR payment_status = '')
+    GROUP BY plate_number
+) v ON v.plate_number = a.plate_number
 WHERE a.deleted_at IS NULL
 ORDER BY a.plate_number");
 $stmt->execute([$currentDate, $currentDate]);
@@ -761,6 +796,8 @@ if (!empty($_SESSION['admin_role']) && $_SESSION['admin_role'] === 'super_admin'
                                 <th>Plate</th>
                                 <th>Name</th>
                                 <th>Invoiced?</th>
+                                <th>Trips In Invoice</th>
+                                <th>Last Invoiced Exit</th>
                                 <th>Added</th>
                                 <th>Status</th>
                                 <th>Total Due</th>
@@ -776,6 +813,8 @@ if (!empty($_SESSION['admin_role']) && $_SESSION['admin_role'] === 'super_admin'
                                     <td><?= htmlspecialchars($row['plate_number']) ?></td>
                                     <td><?= htmlspecialchars($row['owner_name'] ?? 'N/A') ?></td>
                                     <td><?= $row['invoice_monthly'] ? 'Yes' : 'No' ?></td>
+                                    <td class="owner-trip-count" data-plate="<?= htmlspecialchars($row['plate_number']) ?>"><?= (int) ($row['invoice_trip_count'] ?? 0) ?></td>
+                                    <td><?= !empty($row['last_invoiced_exit']) ? htmlspecialchars($row['last_invoiced_exit']) : '<span style="color:dimgray;">No open invoice</span>' ?></td>
                                     <td><?= htmlspecialchars($row['created_at']) ?></td>
                                     <td>
                                         <span class="status-chip <?= ($row['status'] === 'Active') ? 'active' : 'expired' ?>">
@@ -783,7 +822,7 @@ if (!empty($_SESSION['admin_role']) && $_SESSION['admin_role'] === 'super_admin'
                                         </span>
                                     </td>
                                     <td class="owner-due-cell" data-plate="<?= htmlspecialchars($row['plate_number']) ?>">KES <?= isset($row['total_due']) ? number_format($row['total_due'], 2) : '0.00' ?></td>
-                                    <td>
+                                    <td class="owner-payment-cell" data-plate="<?= htmlspecialchars($row['plate_number']) ?>">
                                         <?php $rowDue = isset($row['total_due']) ? (float) $row['total_due'] : 0; ?>
                                         <?php if ($rowDue > 0): ?>
                                             <form method="POST" onsubmit="return confirm('Receive payment of KES <?= number_format($rowDue, 2) ?> for <?= htmlspecialchars($row['plate_number']) ?>?');" style="margin:0;">
@@ -897,6 +936,25 @@ document.addEventListener('DOMContentLoaded', function() {
                     const plate = cell.getAttribute('data-plate') || '';
                     if (Object.prototype.hasOwnProperty.call(data.dueByPlate, plate)) {
                         cell.textContent = formatKes(data.dueByPlate[plate]);
+                    }
+                });
+            }
+
+            if (data.invoiceTripsByPlate) {
+                document.querySelectorAll('.owner-trip-count[data-plate]').forEach(function(cell) {
+                    const plate = cell.getAttribute('data-plate') || '';
+                    if (Object.prototype.hasOwnProperty.call(data.invoiceTripsByPlate, plate)) {
+                        cell.textContent = String(data.invoiceTripsByPlate[plate] || 0);
+                    }
+                });
+
+                document.querySelectorAll('.owner-payment-cell[data-plate]').forEach(function(cell) {
+                    const plate = cell.getAttribute('data-plate') || '';
+                    const due = data.dueByPlate && Object.prototype.hasOwnProperty.call(data.dueByPlate, plate)
+                        ? Number(data.dueByPlate[plate] || 0)
+                        : null;
+                    if (due !== null && due <= 0) {
+                        cell.innerHTML = '<span style="color: dimgray; font-size: 12px;">No Due</span>';
                     }
                 });
             }

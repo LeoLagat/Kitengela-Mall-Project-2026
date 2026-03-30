@@ -15,6 +15,7 @@ $plate = htmlspecialchars(strtoupper(trim($_POST['plate'])));
 $fee = 0;
 $duration_text = "";
 $free_exit = false; // indicates zero-fee grace period
+$exit_reason = "";
 
 if ($plate) {
     // Always use uppercase for plate numbers
@@ -44,9 +45,28 @@ if ($plate) {
         // special handling for free exit or owners
         if ($fee === 0 || $vehicleModel->isOwner($plate)) {
             // owners get invoiced; staff free get paid
-            $status = ($vehicleModel->isOwner($plate) ? 'invoiced' : 'paid');
-            $nominal = ($vehicleModel->isOwner($plate) ? $fee : 0);
-            $currentDue = ($vehicleModel->isOwner($plate) ? round($fee * 0.7, 2) : 0);
+            $isOwnerVehicle = $vehicleModel->isOwner($plate);
+            $staffInfo      = $vehicleModel->getStaffInfo($plate);
+            $isStaffVehicle = ($staffInfo !== false);
+            $suspiciousStaff = false;
+            if ($isStaffVehicle) {
+                // flag if this staff plate already exited once today (possible impersonation)
+                $suspiciousStaff = ($vehicleModel->staffExitCountToday($plate) >= 1);
+            }
+            $status = ($isOwnerVehicle ? 'invoiced' : 'paid');
+            $nominal = ($isOwnerVehicle ? $fee : 0);
+            $currentDue = ($isOwnerVehicle ? round($fee * 0.7, 2) : 0);
+
+            $totalMinutes = ($hours * 60) + $minutes;
+            if ($isOwnerVehicle) {
+                $exit_reason = "Owner vehicle: parking charges were moved to owner account (invoiced), so direct gate payment is not required.";
+            } elseif ($isStaffVehicle) {
+                $exit_reason = "Staff vehicle: this vehicle is registered as a staff member vehicle and receives complimentary parking.";
+            } elseif ($totalMinutes <= 30) {
+                $exit_reason = "Grace period applied: parking duration was within 30 minutes, so no payment was required.";
+            } else {
+                $exit_reason = "Fee exemption applied for this vehicle category, so no gate payment was required.";
+            }
 
             $stmt = $pdo->prepare(
                 "UPDATE vehicle_logs 
@@ -67,6 +87,17 @@ if ($plate) {
             if (!empty($row['bay_id'])) {
                 $upd = $pdo->prepare("UPDATE parking_bays SET current_status='vacant' WHERE id = ?");
                 $upd->execute([$row['bay_id']]);
+            }
+
+            // audit: log every staff free exit so admins can review unusual patterns
+            if ($isStaffVehicle) {
+                require_once(__DIR__ . '/../../backend/app/services/AdminAudit.php');
+                $employeeName = htmlspecialchars($staffInfo['employee_name'] ?? 'Unknown');
+                $auditMsg = "[STAFF EXIT] Plate: $plate | Employee: $employeeName";
+                if ($suspiciousStaff) {
+                    $auditMsg .= " | ⚠ SUSPICIOUS: this plate already exited today";
+                }
+                AdminAudit::log($pdo, 'system', $auditMsg);
             }
 
             // mark for later display
@@ -91,6 +122,106 @@ if ($plate) {
         /* small overrides for pay page */
         .fee-display { font-size: 45px; }
         .bill-details p { display: flex; justify-content: space-between; }
+        
+        /* Optimize payment checkout to fit on screen */
+        html, body {
+            height: 100%;
+            overflow: auto;
+        }
+        
+        body {
+            display: flex;
+            flex-direction: column;
+        }
+        
+        nav {
+            flex-shrink: 0;
+        }
+        
+        .page {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 95%;
+            max-width: 600px;
+            margin: 10px auto;
+            padding: 0;
+        }
+        
+        .card {
+            padding: 20px !important;
+            width: 100%;
+            box-sizing: border-box;
+        }
+        
+        .card h2 {
+            font-size: 24px !important;
+            margin-bottom: 10px !important;
+        }
+        
+        .card h1 {
+            font-size: 20px !important;
+            margin-bottom: 8px !important;
+        }
+        
+        .fee-display {
+            font-size: 32px !important;
+            margin: 10px 0 !important;
+            font-weight: 900;
+        }
+        
+        .bill-details {
+            margin: 8px 0 !important;
+        }
+        
+        .bill-details p {
+            margin: 4px 0 !important;
+            font-size: 12px !important;
+            display: flex;
+            justify-content: space-between;
+        }
+        
+        .bill-details span {
+            font-size: 12px !important;
+        }
+        
+        .bill-details strong {
+            font-size: 12px !important;
+        }
+        
+        .alert-success {
+            padding: 10px 12px !important;
+            margin-bottom: 10px !important;
+            font-size: 12px !important;
+            line-height: 1.3 !important;
+        }
+        
+        input[type="text"],
+        input[type="password"],
+        input[type="tel"],
+        .phone-input {
+            padding: 10px !important;
+            margin-bottom: 10px !important;
+            font-size: 14px !important;
+        }
+        
+        button {
+            padding: 10px 15px !important;
+            margin-bottom: 8px !important;
+            font-size: 14px !important;
+        }
+        
+        .cancel-link {
+            font-size: 12px !important;
+            margin-top: 5px !important;
+        }
+        
+        footer {
+            flex-shrink: 0;
+            padding: 8px !important;
+            font-size: 11px !important;
+        }
     </style>
 </head>
 <body>
@@ -104,28 +235,13 @@ if ($plate) {
     <div class="card">
         <?php if (!empty($free_exit)): ?>
             <h2>Thank You!</h2>
-            <p>Your parking duration was within the grace period. No payment is required.</p>
+            <p><strong>Exit Approved.</strong> Reason: <?php echo htmlspecialchars($exit_reason ?: 'No gate payment was required.'); ?></p>
+
             <script>
-                // show goodbye overlay then redirect home
-                document.addEventListener('DOMContentLoaded', function() {
-                    const overlay = document.createElement('div');
-                    overlay.style.position = 'fixed';
-                    overlay.style.top = '0';
-                    overlay.style.left = '0';
-                    overlay.style.width = '100%';
-                    overlay.style.height = '100%';
-                    overlay.style.background = 'rgba(0,0,0,0.8)';
-                    overlay.style.color = 'white';
-                    overlay.style.display = 'flex';
-                    overlay.style.justifyContent = 'center';
-                    overlay.style.alignItems = 'center';
-                    overlay.style.zIndex = '10000';
-                    overlay.innerHTML = '<div style="text-align:center;font-size:32px;"><p>Goodbye!</p><p>Gate is opening...</p></div>';
-                    document.body.appendChild(overlay);
-                    setTimeout(function() {
-                        window.location.href = '../index.php?welcome=exit';
-                    }, 3000);
-                });
+                // Redirect home after 8 seconds without overlay
+                setTimeout(function() {
+                    window.location.href = '../index.php?welcome=exit';
+                }, 8000);
             </script>
         <?php else: ?>
             <h2>Parking Checkout</h2>

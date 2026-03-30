@@ -186,6 +186,17 @@
       z-index: 1;
     }
 
+    #slide-10a .mermaid-wrap {
+      padding: 18px;
+      min-height: 430px;
+    }
+
+    #slide-10a .mermaid svg {
+      width: 100% !important;
+      max-width: 100% !important;
+      height: 390px !important;
+    }
+
     .highlight {
       color: var(--ok);
       font-weight: 700;
@@ -240,6 +251,14 @@
       .slide p,
       .slide li {
         font-size: 16px;
+      }
+
+      #slide-10a .mermaid-wrap {
+        min-height: 300px;
+      }
+
+      #slide-10a .mermaid svg {
+        height: 260px !important;
       }
     }
 
@@ -356,7 +375,7 @@
         </ul>
         <div class="mermaid-wrap">
           <div class="mermaid">
-flowchart TD
+flowchart LR
     A[Gate Entry] --> B[Parking Session]
     B --> C[Gate Exit]
     C --> D{Payable?}
@@ -414,7 +433,7 @@ flowchart LR
       <h2>Slide 10A: Payment Lifecycle Flow Chart</h2>
       <div class="mermaid-wrap">
         <div class="mermaid">
-flowchart TD
+flowchart LR
     P1[Driver enters phone] --> P2[STK Push Request]
     P2 --> P3{Customer Action}
     P3 -- Approve and PIN --> P4[Callback Success]

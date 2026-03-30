@@ -113,6 +113,40 @@ class Vehicle {
         return (bool) $stmt->fetchColumn();
     }
 
+    // helper: check whether a plate is a registered staff vehicle
+    public function isStaff($plate) {
+        $stmt = $this->conn->prepare(
+            "SELECT 1 FROM staff_vehicles WHERE plate_number = ? AND (deleted_at IS NULL OR deleted_at = '') LIMIT 1"
+        );
+        $stmt->execute([$plate]);
+        return (bool) $stmt->fetchColumn();
+    }
+
+    // helper: return full staff record for a plate (for gate-operator visual verification)
+    // returns associative array with employee_name, vehicle_make, vehicle_color, or false if not staff
+    public function getStaffInfo($plate) {
+        $stmt = $this->conn->prepare(
+            "SELECT employee_name, vehicle_make, vehicle_color FROM staff_vehicles
+             WHERE plate_number = ? AND (deleted_at IS NULL OR deleted_at = '') LIMIT 1"
+        );
+        $stmt->execute([$plate]);
+        $row = $stmt->fetch(PDO::FETCH_ASSOC);
+        return $row ?: false;
+    }
+
+    // helper: count how many times a staff plate has exited today (for suspicious-reuse detection)
+    public function staffExitCountToday($plate) {
+        $stmt = $this->conn->prepare(
+            "SELECT COUNT(*) FROM vehicle_logs
+             WHERE plate_number = ?
+               AND exit_time IS NOT NULL
+               AND DATE(exit_time) = CURDATE()
+               AND payment_status = 'paid'"
+        );
+        $stmt->execute([$plate]);
+        return (int) $stmt->fetchColumn();
+    }
+
     // return array of overstaying vehicles (currently parked > 8 hours)
     public function overstays($hoursThreshold = 8) {
         $stmt = $this->conn->prepare(
@@ -137,27 +171,30 @@ class Vehicle {
         return (int) $stmt->fetchColumn();
     }
 
-        // Calculate total revenue from paid and invoiced vehicles (including archived revenue from cleared logs)
-       public function totalRevenue(): float {
-        // Get current revenue from active logs
+        // Revenue currently available in vehicle_logs.
+       public function currentLoggedRevenue(): float {
     $stmt = $this->conn->prepare(
         "SELECT COALESCE(SUM(total_fee), 0) as current_revenue
          FROM vehicle_logs
-            WHERE payment_status IN ('paid', 'invoiced')"
+         WHERE payment_status IN ('paid', 'invoiced')"
     );
     $stmt->execute();
-    $currentRevenue = (float)$stmt->fetchColumn();
+    return (float)$stmt->fetchColumn();
+}
 
-    // Get archived revenue from previous log clears
+        // Revenue archived when logs were cleared.
+       public function archivedRevenue(): float {
     $stmtArchive = $this->conn->prepare(
         "SELECT COALESCE(SUM(archived_revenue), 0) as archived_revenue
          FROM revenue_archive"
     );
     $stmtArchive->execute();
-    $archivedRevenue = (float)$stmtArchive->fetchColumn();
+    return (float)$stmtArchive->fetchColumn();
+}
 
-    // Return total of both
-    return $currentRevenue + $archivedRevenue;
+        // Calculate all-time revenue from current logs plus archived clears.
+       public function totalRevenue(): float {
+    return $this->currentLoggedRevenue() + $this->archivedRevenue();
 }
 
     // Get active vehicle details by plate number

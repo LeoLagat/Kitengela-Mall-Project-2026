@@ -61,37 +61,66 @@ if ($hasRange && !$validRange) {
     die('Invalid date format');
 }
 
-// export CSV only when explicitly requested
-if ($validRange && isset($_GET['download'])) {
-    if ($isSuperAdmin) {
-        $stmtExport = $pdo->prepare(
-            "SELECT created_at, username, action, ip_address
-             FROM admin_activity
-             WHERE created_at BETWEEN ? AND ?
-             ORDER BY created_at DESC"
-        );
-        $stmtExport->execute(["$from 00:00:00", "$to 23:59:59"]);
+// Preview and CSV download logic
+$error = '';
+$showPreview = false;
+$previewRows = [];
+if ($validRange) {
+    if (isset($_GET['download'])) {
+        // CSV download
+        if ($isSuperAdmin) {
+            $stmtExport = $pdo->prepare(
+                "SELECT created_at, username, action, ip_address
+                 FROM admin_activity
+                 WHERE created_at BETWEEN ? AND ?
+                 ORDER BY created_at DESC"
+            );
+            $stmtExport->execute(["$from 00:00:00", "$to 23:59:59"]);
+        } else {
+            $stmtExport = $pdo->prepare(
+                "SELECT created_at, username, action, ip_address
+                 FROM admin_activity
+                 WHERE username = ?
+                   AND created_at BETWEEN ? AND ?
+                 ORDER BY created_at DESC"
+            );
+            $stmtExport->execute([$_SESSION['admin_username'], "$from 00:00:00", "$to 23:59:59"]);
+        }
+        $rowsExport = $stmtExport->fetchAll(PDO::FETCH_ASSOC);
+        header('Content-Type: text/csv');
+        header('Content-Disposition: attachment;filename=activity_' . $from . '_to_' . $to . '.csv');
+        $out = fopen('php://output', 'w');
+        fputcsv($out, ['Time','Username','Action','IP']);
+        foreach ($rowsExport as $r) {
+            fputcsv($out, [$r['created_at'], $r['username'], $r['action'], $r['ip_address']]);
+        }
+        fclose($out);
+        exit;
     } else {
-        $stmtExport = $pdo->prepare(
-            "SELECT created_at, username, action, ip_address
-             FROM admin_activity
-             WHERE username = ?
-               AND created_at BETWEEN ? AND ?
-             ORDER BY created_at DESC"
-        );
-        $stmtExport->execute([$_SESSION['admin_username'], "$from 00:00:00", "$to 23:59:59"]);
+        // Preview
+        if ($isSuperAdmin) {
+            $stmtPreview = $pdo->prepare(
+                "SELECT created_at, username, action, ip_address
+                 FROM admin_activity
+                 WHERE created_at BETWEEN ? AND ?
+                 ORDER BY created_at DESC
+                 LIMIT 500"
+            );
+            $stmtPreview->execute(["$from 00:00:00", "$to 23:59:59"]);
+        } else {
+            $stmtPreview = $pdo->prepare(
+                "SELECT created_at, username, action, ip_address
+                 FROM admin_activity
+                 WHERE username = ?
+                   AND created_at BETWEEN ? AND ?
+                 ORDER BY created_at DESC
+                 LIMIT 500"
+            );
+            $stmtPreview->execute([$_SESSION['admin_username'], "$from 00:00:00", "$to 23:59:59"]);
+        }
+        $previewRows = $stmtPreview->fetchAll(PDO::FETCH_ASSOC);
+        $showPreview = true;
     }
-
-    $rowsExport = $stmtExport->fetchAll(PDO::FETCH_ASSOC);
-    header('Content-Type: text/csv');
-    header('Content-Disposition: attachment;filename=activity_' . $from . '_to_' . $to . '.csv');
-    $out = fopen('php://output', 'w');
-    fputcsv($out, ['Time','Username','Action','IP']);
-    foreach ($rowsExport as $r) {
-        fputcsv($out, [$r['created_at'], $r['username'], $r['action'], $r['ip_address']]);
-    }
-    fclose($out);
-    exit;
 }
 
 // build log list query depending on role and optional date range
@@ -424,9 +453,9 @@ $isFiltered = $validRange;
                     To
                     <input type="date" name="to" value="<?= htmlspecialchars($to ?? '') ?>">
                 </label>
-                <button type="submit">Apply Filter</button>
-                <?php if ($isFiltered): ?>
-                    <button type="submit" name="download" value="1">Download CSV</button>
+                <button type="submit">Preview Log</button>
+                <?php if ($showPreview): ?>
+                    <a href="activity.php?from=<?= urlencode($from) ?>&to=<?= urlencode($to) ?>&download=1" class="btn" style="background:seagreen;color:white;margin-left:10px;">&#8659; Download CSV</a>
                 <?php endif; ?>
             </form>
 
@@ -441,24 +470,46 @@ $isFiltered = $validRange;
             <div class="notice">Activity logs have been cleared successfully.</div>
         <?php endif; ?>
 
-        <?php if (empty($rows)): ?>
-            <div class="empty-state">No activity entries found for the selected criteria.</div>
+        <?php if ($showPreview): ?>
+            <?php if (empty($previewRows)): ?>
+                <div class="empty-state">No activity entries found for the selected criteria.</div>
+            <?php else: ?>
+                <div class="table-wrap">
+                    <table>
+                        <thead><tr><th>Time</th><th>Admin</th><th>Action</th><th>IP</th></tr></thead>
+                        <tbody>
+                        <?php foreach ($previewRows as $r): ?>
+                            <tr>
+                                <td><?=htmlspecialchars($r['created_at'])?></td>
+                                <td><?=htmlspecialchars($r['username'] ?? 'unknown')?></td>
+                                <td><?=htmlspecialchars($r['action'])?></td>
+                                <td><?=htmlspecialchars($r['ip_address'])?></td>
+                            </tr>
+                        <?php endforeach; ?>
+                        </tbody>
+                    </table>
+                </div>
+            <?php endif; ?>
         <?php else: ?>
-            <div class="table-wrap">
-                <table>
-                    <thead><tr><th>Time</th><th>Admin</th><th>Action</th><th>IP</th></tr></thead>
-                    <tbody>
-                    <?php foreach ($rows as $r): ?>
-                        <tr>
-                            <td><?=htmlspecialchars($r['created_at'])?></td>
-                            <td><?=htmlspecialchars($r['username'] ?? 'unknown')?></td>
-                            <td><?=htmlspecialchars($r['action'])?></td>
-                            <td><?=htmlspecialchars($r['ip_address'])?></td>
-                        </tr>
-                    <?php endforeach; ?>
-                    </tbody>
-                </table>
-            </div>
+            <?php if (empty($rows)): ?>
+                <div class="empty-state">No activity entries found for the selected criteria.</div>
+            <?php else: ?>
+                <div class="table-wrap">
+                    <table>
+                        <thead><tr><th>Time</th><th>Admin</th><th>Action</th><th>IP</th></tr></thead>
+                        <tbody>
+                        <?php foreach ($rows as $r): ?>
+                            <tr>
+                                <td><?=htmlspecialchars($r['created_at'])?></td>
+                                <td><?=htmlspecialchars($r['username'] ?? 'unknown')?></td>
+                                <td><?=htmlspecialchars($r['action'])?></td>
+                                <td><?=htmlspecialchars($r['ip_address'])?></td>
+                            </tr>
+                        <?php endforeach; ?>
+                        </tbody>
+                    </table>
+                </div>
+            <?php endif; ?>
         <?php endif; ?>
 
         <div class="info-strip">

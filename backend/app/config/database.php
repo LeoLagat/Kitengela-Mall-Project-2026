@@ -86,6 +86,17 @@ class DatabaseConnection {
                 // ignore if creation fails
             }
 
+            // add vehicle_make and vehicle_color to staff_vehicles for physical verification at gate
+            try {
+                $this->pdo->exec("ALTER TABLE staff_vehicles ADD COLUMN vehicle_make VARCHAR(100) NULL");
+            } catch (PDOException $ignore) {}
+            try {
+                $this->pdo->exec("ALTER TABLE staff_vehicles ADD COLUMN vehicle_color VARCHAR(50) NULL");
+            } catch (PDOException $ignore) {}
+            try {
+                $this->pdo->exec("ALTER TABLE staff_vehicles ADD COLUMN deleted_at DATETIME NULL");
+            } catch (PDOException $ignore) {}
+
             // ensure owner accounts table exists for invoiced business owners
             try {
                 $this->pdo->exec("\

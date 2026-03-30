@@ -24,8 +24,33 @@ if (!empty($_SESSION['admin_username'])) {
 $vehicle = new Vehicle($pdo);
 
 $vehiclesInside = $vehicle->vehiclesInside();
+$currentLoggedRevenue = $vehicle->currentLoggedRevenue();
+$archivedRevenueTotal = $vehicle->archivedRevenue();
 $totalRevenue   = $vehicle->totalRevenue();
 $overstays = $vehicle->overstays(8);
+
+// detect suspicious staff exits today (same plate exited more than once)
+$suspiciousExitRows = [];
+try {
+    $stmtSusp = $pdo->prepare("
+        SELECT vl.plate_number,
+               COUNT(*) AS exit_count,
+               sv.employee_name,
+               sv.vehicle_make,
+               sv.vehicle_color,
+               MAX(vl.exit_time) AS last_exit
+        FROM vehicle_logs vl
+        JOIN staff_vehicles sv ON sv.plate_number = vl.plate_number AND sv.deleted_at IS NULL
+        WHERE vl.exit_time IS NOT NULL
+          AND DATE(vl.exit_time) = CURDATE()
+          AND vl.payment_status = 'paid'
+        GROUP BY vl.plate_number, sv.employee_name, sv.vehicle_make, sv.vehicle_color
+        HAVING COUNT(*) > 1
+        ORDER BY last_exit DESC
+    ");
+    $stmtSusp->execute();
+    $suspiciousExitRows = $stmtSusp->fetchAll(PDO::FETCH_ASSOC);
+} catch (Exception $e) { /* ignore */ }
 
 // bay counts
 $stmt = $pdo->prepare("
@@ -332,6 +357,7 @@ footer {
 <a href="staff.php">Staff Parking</a>
 <a href="owners.php">Owner Vehicles</a>
 <a href="restricted.php">Restricted List</a>
+<a href="vehicle_log_report.php">Vehicle Logs Report</a>
 <?php if (!empty($_SESSION['admin_role']) && $_SESSION['admin_role'] === 'super_admin'): ?>
     <a href="add_user.php">Manage Admins</a>
     <a href="activity.php">Activity Log</a>
@@ -392,15 +418,33 @@ if (isset($_GET['from']) && isset($_GET['to'])) {
 </div>
 
 <div class="dashboard-box">
-<h3>Total Revenue</h3>
+<h3>Current Logs Revenue</h3>
+<p>Ksh <?= number_format($currentLoggedRevenue,2) ?></p>
+</div>
+
+<div class="dashboard-box">
+<h3>All-Time Revenue</h3>
 <p>Ksh <?= number_format($totalRevenue,2) ?></p>
+<small style="display:block;margin-top:8px;color:dimgray;">
+    Includes archived clears: Ksh <?= number_format($archivedRevenueTotal,2) ?>
+</small>
 </div>
 
 <!-- revenue report form -->
 <div class="dashboard-box">
     <h3>Revenue Report</h3>
     <form method="get" action="revenue_report.php">
-        <input type="hidden" name="from_id" value="25">
+        <div class="quick-form">
+            <label>From <input type="date" name="from" required></label>
+            <label>To <input type="date" name="to" required></label>
+            <button type="submit" class="quick-btn">Download</button>
+        </div>
+    </form>
+</div>
+
+<div class="dashboard-box">
+    <h3>Vehicle Log Report</h3>
+    <form method="get" action="vehicle_log_report.php">
         <div class="quick-form">
             <label>From <input type="date" name="from" required></label>
             <label>To <input type="date" name="to" required></label>
@@ -431,6 +475,37 @@ if (isset($_GET['from']) && isset($_GET['to'])) {
 
 </div>
 
+
+<?php if (!empty($suspiciousExitRows)): ?>
+<div class="overstay-alert" style="background:mistyrose;border-color:lightcoral;border-left-color:crimson;">
+    <strong style="color:crimson;">&#9888; SECURITY ALERT — Suspicious Staff Exits Today</strong><br>
+    <span style="font-size:13px;color:maroon;">The following staff plate(s) exited more than once today, which may indicate plate number impersonation. Investigate immediately and do not tip off the suspect.</span>
+    <div style="overflow-x:auto;margin-top:10px;">
+    <table style="min-width:600px;font-size:13px;">
+        <thead><tr style="background:mistyrose;">
+            <th style="text-align:left;padding:7px 10px;">Plate</th>
+            <th style="text-align:left;padding:7px 10px;">Employee</th>
+            <th style="text-align:left;padding:7px 10px;">Make / Model</th>
+            <th style="text-align:left;padding:7px 10px;">Colour</th>
+            <th style="text-align:left;padding:7px 10px;">Exits Today</th>
+            <th style="text-align:left;padding:7px 10px;">Last Exit</th>
+        </tr></thead>
+        <tbody>
+        <?php foreach ($suspiciousExitRows as $sr): ?>
+        <tr style="border-top:1px solid lightcoral;">
+            <td style="padding:6px 10px;"><strong><?= htmlspecialchars($sr['plate_number']) ?></strong></td>
+            <td style="padding:6px 10px;"><?= htmlspecialchars($sr['employee_name'] ?? 'N/A') ?></td>
+            <td style="padding:6px 10px;"><?= htmlspecialchars($sr['vehicle_make'] ?? '—') ?></td>
+            <td style="padding:6px 10px;"><?= htmlspecialchars($sr['vehicle_color'] ?? '—') ?></td>
+            <td style="padding:6px 10px;color:crimson;font-weight:700;"><?= (int)$sr['exit_count'] ?>x</td>
+            <td style="padding:6px 10px;"><?= htmlspecialchars($sr['last_exit']) ?></td>
+        </tr>
+        <?php endforeach; ?>
+        </tbody>
+    </table>
+    </div>
+</div>
+<?php endif; ?>
 
 <?php if (!empty($overstays)): ?>
 <div class="overstay-alert">

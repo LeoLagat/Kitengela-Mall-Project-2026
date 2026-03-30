@@ -31,14 +31,21 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 <style>
 
+
+html, body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+}
 body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    margin: 0;
-    min-height: 100vh;
     background: whitesmoke;
     color: darkslategray;
+    min-height: 100vh;
+    height: 100vh;
     display: flex;
     flex-direction: column;
+    box-sizing: border-box;
 }
 
 nav {
@@ -91,11 +98,14 @@ nav {
 }
 
 .page {
-    flex: 1;
+    flex: 1 1 auto;
     display: flex;
     justify-content: center;
-    align-items: flex-start;
-    padding: 28px 16px;
+    align-items: center;
+    min-height: 0;
+    padding: 0 8px;
+    box-sizing: border-box;
+    overflow-y: auto;
 }
 
 .card {
@@ -105,8 +115,9 @@ nav {
     box-shadow: 0 12px 28px gainsboro;
     border: 1px solid lightgray;
     width: 100%;
-    max-width: 430px;
+    max-width: 600px;
     text-align: center;
+    box-sizing: border-box;
 }
 
 .card h2 {
@@ -275,6 +286,9 @@ footer {
     padding: 14px;
     background: gainsboro;
     color: darkslategray;
+    flex-shrink: 0;
+    width: 100%;
+    box-sizing: border-box;
 }
 
 @media (max-width: 760px) {
@@ -316,6 +330,33 @@ Server time: <?= date('Y-m-d H:i:s'); ?>
 
 <h2>Entry Gate</h2>
 <p class="subtitle">Enter the vehicle plate number to assign a parking bay.</p>
+<div style="background:lemonchiffon;border-left:4px solid orange;border-radius:10px;padding:12px 16px;margin-bottom:16px;text-align:left;font-size:14px;color:darkorange;">
+    <strong>Please park at your designated bay as assigned by the system. Thank you for your cooperation!</strong>
+</div>
+
+<?php if (!$success): ?>
+<div style="
+    background: honeydew;
+    border: 1px solid palegreen;
+    border-left: 5px solid seagreen;
+    border-radius: 10px;
+    padding: 12px 16px;
+    margin-bottom: 16px;
+    text-align: left;
+    font-size: 13px;
+    color: darkslategray;
+">
+    <div style="font-weight: 800; color: darkgreen; margin-bottom: 6px; font-size: 14px;">Parking Rates</div>
+    <div style="display: flex; flex-direction: column; gap: 4px;">
+        <span>&#10003; &nbsp;<strong>First 30 minutes</strong> &mdash; Free (grace period)</span>
+        <span>&#10003; &nbsp;<strong>Up to 1 hour</strong> &mdash; Ksh 50</span>
+        <span>&#10003; &nbsp;<strong>Each additional hour</strong> &mdash; Ksh 20</span>
+        <span>&#10003; &nbsp;<strong>Full day (12+ hours)</strong> &mdash; Ksh 1,000 flat rate</span>
+        <span>&#10003; &nbsp;<strong>Staff &amp; owner vehicles</strong> &mdash; Complimentary</span>
+    </div>
+    <div style="margin-top: 8px; color: dimgray; font-size: 11px;">Payment is processed via M-Pesa at exit.</div>
+</div>
+<?php endif; ?>
 
 <?php if (!$success && $message): ?>
 
