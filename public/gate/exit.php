@@ -223,6 +223,38 @@ footer {
     }
 }
 
+/* Professional exit icon placement and sizing */
+.exit-icon-kiosk {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 0 auto 18px auto;
+    width: 100%;
+    max-width: 120px;
+    height: 80px;
+    background: linear-gradient(135deg, #219a21 60%, #2d862d 100%);
+    border-radius: 16px;
+    box-shadow: 0 2px 8px rgba(44,130,44,0.10);
+    border: 2px solid #2d862d;
+}
+.exit-icon-kiosk svg {
+    width: 30px;
+    height: 30px;
+    display: block;
+    margin: auto;
+}
+@media (max-width: 600px) {
+  .exit-icon-kiosk {
+    max-width: 80px;
+    height: 60px;
+    border-radius: 10px;
+  }
+  .exit-icon-kiosk svg {
+    width: 40px;
+    height: 40px;
+  }
+}
+
 </style>
 
 </head>

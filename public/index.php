@@ -112,6 +112,34 @@ footer{
     background:#eee;
 }
 
+/* SCROLLING */
+
+html, body {
+    height: auto !important;
+    min-height: 100vh;
+    overflow: auto !important;
+}
+
+body.home-no-scroll {
+    height: auto !important;
+    min-height: 100vh;
+    overflow: auto !important;
+    display: block !important;
+}
+
+.container {
+    flex: 1 0 auto;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 100vw;
+    max-width: 100vw;
+    min-height: 0;
+    margin: 0;
+    box-sizing: border-box;
+}
+
 </style>
 
 </head>

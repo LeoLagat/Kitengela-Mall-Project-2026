@@ -302,6 +302,87 @@ footer {
     }
 }
 
+/* Make the entry icon fill the available space and center it */
+.entry-icon-large {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100vw;
+    height: calc(100vh - 180px); /* Adjust for nav and footer */
+    max-width: 100vw;
+    max-height: 80vh;
+    margin: 0 auto 18px auto;
+    box-sizing: border-box;
+}
+.entry-icon-large svg {
+    width: 60vw;
+    height: 60vw;
+    max-width: 420px;
+    max-height: 60vh;
+    display: block;
+}
+@media (max-width: 600px) {
+  .entry-icon-large svg {
+    width: 90vw;
+    height: 40vh;
+    max-width: 98vw;
+    max-height: 40vh;
+  }
+  .entry-icon-large {
+    height: 40vh;
+    min-height: 200px;
+  }
+}
+
+/* Entry page: fit icon and form together, no scroll, center everything */
+.entry-kiosk-wrap {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: calc(100vh - 120px); /* nav+footer space */
+    width: 100vw;
+    max-width: 100vw;
+    margin: 0 auto;
+    box-sizing: border-box;
+    position: absolute;
+    top: 60px;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 2;
+}
+.entry-icon-kiosk {
+    margin-bottom: 18px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.entry-icon-kiosk svg {
+    width: 120px;
+    height: 80px;
+    max-width: 30vw;
+    max-height: 12vh;
+    display: block;
+}
+#entryForm {
+    width: 100%;
+    max-width: 340px;
+}
+@media (max-width: 600px) {
+  .entry-kiosk-wrap {
+    min-height: calc(100vh - 80px);
+    padding: 0 2vw;
+    top: 40px;
+  }
+  .entry-icon-kiosk svg {
+    width: 90px;
+    height: 60px;
+    max-width: 60vw;
+    max-height: 10vh;
+  }
+}
+
 </style>
 
 </head>
@@ -383,19 +464,20 @@ Warning: <?= htmlspecialchars($message); ?>
 
 <?php else: ?>
 
-<form method="POST" id="entryForm">
-
-<div class="field">
-    <label for="plate">Plate Number</label>
-    <input id="plate" type="text" name="plate" placeholder="KBC 123A" required autofocus autocomplete="off" value="<?= htmlspecialchars($plateInput) ?>" oninput="this.value = this.value.toUpperCase()">
-</div>
-
-<button type="submit" class="main-action-btn">
+<div class="entry-kiosk-wrap">
+  <div class="entry-icon-kiosk">
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48"><path d="M8 36q-1.65 0-2.825-1.175Q4 33.65 4 32V16q0-1.65 1.175-2.825Q6.35 12 8 12h32q1.65 0 2.825 1.175Q44 14.35 44 16v16q0 1.65-1.175 2.825Q41.65 36 40 36Zm0-2h32q.85 0 1.425-.575Q42 32.85 42 32V16q0-.85-.575-1.425Q40.85 14 40 14H8q-.85 0-1.425.575Q6 15.15 6 16v16q0 .85.575 1.425Q7.15 34 8 34Zm0 0V14v20Z"/><circle cx="14" cy="24" r="3"/><circle cx="34" cy="24" r="3"/></svg>
-    Enter &amp; Assign Bay
-</button>
-
-</form>
+  </div>
+  <form method="POST" id="entryForm" style="width:100%;max-width:340px;">
+    <div class="field">
+      <label for="plate">Plate Number</label>
+      <input id="plate" type="text" name="plate" placeholder="KBC 123A" required autofocus autocomplete="off" value="<?= htmlspecialchars($plateInput) ?>" oninput="this.value = this.value.toUpperCase()">
+    </div>
+    <button type="submit" class="main-action-btn">
+      Enter &amp; Assign Bay
+    </button>
+  </form>
+</div>
 
 <?php endif; ?>
 
