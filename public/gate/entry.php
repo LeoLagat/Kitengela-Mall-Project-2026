@@ -306,7 +306,7 @@ footer {
 
 </head>
 
-<body>
+<body class="entry-exit-no-scroll">
 
 <nav>
 <div class="logo">Kitengela Mall Parking</div>
@@ -390,7 +390,10 @@ Warning: <?= htmlspecialchars($message); ?>
     <input id="plate" type="text" name="plate" placeholder="KBC 123A" required autofocus autocomplete="off" value="<?= htmlspecialchars($plateInput) ?>" oninput="this.value = this.value.toUpperCase()">
 </div>
 
-<button type="submit">Confirm Plate</button>
+<button type="submit" class="main-action-btn">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48"><path d="M8 36q-1.65 0-2.825-1.175Q4 33.65 4 32V16q0-1.65 1.175-2.825Q6.35 12 8 12h32q1.65 0 2.825 1.175Q44 14.35 44 16v16q0 1.65-1.175 2.825Q41.65 36 40 36Zm0-2h32q.85 0 1.425-.575Q42 32.85 42 32V16q0-.85-.575-1.425Q40.85 14 40 14H8q-.85 0-1.425.575Q6 15.15 6 16v16q0 .85.575 1.425Q7.15 34 8 34Zm0 0V14v20Z"/><circle cx="14" cy="24" r="3"/><circle cx="34" cy="24" r="3"/></svg>
+    Enter &amp; Assign Bay
+</button>
 
 </form>
 

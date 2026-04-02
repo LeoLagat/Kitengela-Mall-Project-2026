@@ -1,4 +1,4 @@
- <?php
+<?php
 // This class handles all vehicle parking operations
 class Vehicle {
 

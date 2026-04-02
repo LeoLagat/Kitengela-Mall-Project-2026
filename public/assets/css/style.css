@@ -28,27 +28,48 @@ nav {
     align-items: center;
     box-shadow: 0 3px 12px rgba(0,0,0,0.2);
     position: sticky;
-    top: 0;
-    z-index: 100;
-}
 
-nav .logo {
-    color: white;
-    font-size: 26px;
-    font-weight: 700;
-    letter-spacing: 2px;
-}
-
-/* Bay boxes for basement display */
-.bay-boxes {
-    display: flex;
-    gap: 32px;
-    justify-content: center;
-    margin-top: 32px;
-}
-.bay-box {
-    background: #fff;
-    border-radius: 16px;
+    .main-action-btn {
+        width: 100%;
+        padding: 20px 0;
+        margin-top: 12px;
+        background: linear-gradient(90deg, darkgreen, seagreen);
+        color: white;
+        border: none;
+        border-radius: 12px;
+        font-size: 1.5rem;
+        font-weight: 900;
+        cursor: pointer;
+        box-shadow: 0 4px 18px rgba(44,130,44,0.13);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 14px;
+        transition: transform 0.13s, box-shadow 0.13s, opacity 0.13s;
+        letter-spacing: 1.5px;
+        text-align: center;
+        outline: none;
+    }
+    .main-action-btn svg {
+        width: 2em;
+        height: 2em;
+        margin-right: 8px;
+        vertical-align: middle;
+        fill: white;
+    }
+    .main-action-btn:hover {
+        opacity: 0.95;
+        transform: scale(1.03);
+        box-shadow: 0 8px 32px rgba(44,130,44,0.18);
+    }
+    .main-action-btn:active {
+        opacity: 0.88;
+        transform: scale(0.98);
+    }
+    .main-action-btn:disabled {
+        opacity: 0.7;
+        cursor: not-allowed;
+    }
     box-shadow: 0 2px 8px rgba(44,130,44,0.08);
     padding: 24px 36px;
     min-width: 220px;
@@ -277,6 +298,12 @@ nav .links a.active {
     width: 95%;
     max-width: 1000px;
     margin: 80px auto 100px auto;
+}
+.container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 70vh;
 }
 
 /* make cards more prominent with gradient and shadow */
@@ -537,4 +564,81 @@ footer {
     position: fixed;
     bottom: 0;
     width: 100%;
+}
+
+/* Unified responsive container and card for all screens */
+.container {
+    width: 100vw;
+    min-height: calc(100vh - 120px);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin: 0;
+    padding: 0 8px;
+    box-sizing: border-box;
+}
+.card {
+    background: #fff;
+    border-radius: 16px;
+    box-shadow: 0 8px 32px rgba(44, 130, 44, 0.12), 0 1.5px 6px rgba(0,0,0,0.08);
+    padding: 36px 18px;
+    max-width: 480px;
+    width: 100%;
+    margin: 0 auto;
+    text-align: center;
+    border-top: 8px solid #2d862d;
+    box-sizing: border-box;
+    transition: transform 0.3s;
+}
+.card:hover { transform: translateY(-3px); }
+
+@media (max-width: 600px) {
+  .container {
+    padding: 0 2px;
+    min-height: calc(100vh - 80px);
+  }
+  .card {
+    padding: 14px 2px;
+    border-radius: 10px;
+    max-width: 99vw;
+  }
+  .main-action-btn {
+    font-size: 1.1rem;
+    padding: 14px 0;
+    max-width: 99vw;
+  }
+}
+
+/* Prevent scrolling for entry/exit pages: force content to fit viewport */
+body.entry-exit-no-scroll {
+    min-height: 100vh;
+    height: 100vh;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+.page, .card {
+    flex: 1 0 auto;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 100vw;
+    max-width: 100vw;
+    min-height: 0;
+    margin: 0;
+    box-sizing: border-box;
+}
+@media (max-width: 600px) {
+  body.entry-exit-no-scroll {
+    padding: 0;
+  }
+  .card {
+    padding: 8px 0;
+    border-radius: 8px;
+    max-width: 100vw;
+  }
 }

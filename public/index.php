@@ -180,12 +180,22 @@ $vacantByFloor = $stmt->fetchAll(PDO::FETCH_ASSOC);
 </script>
 <?php endif; ?>
 
-<h2>Welcome to Kitengela Mall Parking System</h2>
 
+<h2>Welcome to Kitengela Mall Parking System</h2>
 <p>This system manages vehicle entry, billing, and exit automatically.</p>
 
-<hr>
+<div style="display: flex; flex-direction: row; gap: 24px; justify-content: center; margin: 32px 0 24px 0; flex-wrap: wrap;">
+    <a href="gate/entry.php" class="main-action-btn" style="max-width: 260px; min-width: 180px; text-decoration: none;">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48"><path d="M8 36q-1.65 0-2.825-1.175Q4 33.65 4 32V16q0-1.65 1.175-2.825Q6.35 12 8 12h32q1.65 0 2.825 1.175Q44 14.35 44 16v16q0 1.65-1.175 2.825Q41.65 36 40 36Zm0-2h32q.85 0 1.425-.575Q42 32.85 42 32V16q0-.85-.575-1.425Q40.85 14 40 14H8q-.85 0-1.425.575Q6 15.15 6 16v16q0 .85.575 1.425Q7.15 34 8 34Zm0 0V14v20Z"/><circle cx="14" cy="24" r="3"/><circle cx="34" cy="24" r="3"/></svg>
+        Entry
+    </a>
+    <a href="gate/exit.php" class="main-action-btn" style="max-width: 260px; min-width: 180px; text-decoration: none;">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48"><path d="M8 36q-1.65 0-2.825-1.175Q4 33.65 4 32V16q0-1.65 1.175-2.825Q6.35 12 8 12h32q1.65 0 2.825 1.175Q44 14.35 44 16v16q0 1.65-1.175 2.825Q41.65 36 40 36Zm0-2h32q.85 0 1.425-.575Q42 32.85 42 32V16q0-.85-.575-1.425Q40.85 14 40 14H8q-.85 0-1.425.575Q6 15.15 6 16v16q0 .85.575 1.425Q7.15 34 8 34Zm0 0V14v20Z"/><path d="M24 18v6.15l5.2 5.2 1.4-1.4-4.6-4.6V18Z"/></svg>
+        Exit
+    </a>
+</div>
 
+<hr>
 <h3>Available Bays</h3>
 
 <div class="bay-boxes">

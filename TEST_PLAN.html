@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Kitengela Parking System - Test Plan</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 2em; }
+        h1, h2, h3 { color: #2E8B57; }
+        table { border-collapse: collapse; width: 100%; margin-bottom: 2em; }
+        th, td { border: 1px solid #888; padding: 8px; text-align: left; }
+        th { background-color: #f2f2f2; }
+    </style>
+</head>
+<body>
+    <h1>Test Plan for Kitengela Parking System</h1>
+    <h2>1. Introduction</h2>
+    <p>This test plan outlines the strategy, scope, objectives, and approach for testing the Kitengela Parking System, including backend, public, admin, driver, and gate modules.</p>
+
+    <h2>2. Objectives</h2>
+    <ul>
+        <li>Verify all system modules and interfaces function as intended under various conditions.</li>
+        <li>Ensure integration and data flow between all modules is seamless and robust.</li>
+        <li>Validate security, usability, accessibility, and performance requirements.</li>
+        <li>Ensure compliance with relevant legal, regulatory, and data protection standards.</li>
+        <li>Assess system reliability, maintainability, and disaster recovery capabilities.</li>
+        <li>Confirm compatibility across browsers, devices, and operating systems.</li>
+    </ul>
+
+    <h2>3. Scope</h2>
+    <ul>
+        <li>Backend API and business logic</li>
+        <li>Public user interfaces (driver, gate, admin)</li>
+        <li>Database interactions</li>
+        <li>Payment processing (M-Pesa integration)</li>
+    </ul>
+
+    <h2>4. Test Items</h2>
+    <ul>
+        <li>User authentication and authorization</li>
+        <li>Vehicle entry and exit management</li>
+        <li>Payment processing and status updates</li>
+        <li>Admin dashboard and reporting</li>
+        <li>Staff and owner management</li>
+        <li>LED display and notifications</li>
+    </ul>
+
+    <h2>5. Test Types</h2>
+    <ul>
+        <li>Functional Testing</li>
+        <li>Integration Testing</li>
+        <li>System Testing</li>
+        <li>Regression Testing</li>
+        <li>Security Testing</li>
+        <li>Usability Testing</li>
+        <li>Accessibility Testing (WCAG, color contrast, screen reader support)</li>
+        <li>Performance and Load Testing</li>
+        <li>Compliance Testing (data protection, legal, regulatory)</li>
+        <li>Disaster Recovery and Backup Testing</li>
+        <li>Cross-Browser and Cross-Device Testing</li>
+        <li>Localization/Internationalization Testing (if applicable)</li>
+    </ul>
+
+    <h2>6. Test Cases (Sample)</h2>
+    <table>
+        <tr>
+            <th>ID</th>
+            <th>Test Case</th>
+            <th>Module</th>
+            <th>Expected Result</th>
+        </tr>
+        <tr>
+            <td>TC-01</td>
+            <td>Login with valid credentials</td>
+            <td>Admin/Public</td>
+            <td>User is redirected to dashboard</td>
+        </tr>
+        <tr>
+            <td>TC-02</td>
+            <td>Login with invalid credentials</td>
+            <td>Admin/Public</td>
+            <td>Error message is displayed</td>
+        </tr>
+        <tr>
+            <td>TC-03</td>
+            <td>Vehicle entry at gate</td>
+            <td>Gate</td>
+            <td>Vehicle is logged and entry time recorded</td>
+        </tr>
+        <tr>
+            <td>TC-04</td>
+            <td>Vehicle exit and payment verification</td>
+            <td>Gate/Driver</td>
+            <td>Payment status is checked and exit allowed if paid</td>
+        </tr>
+        <tr>
+            <td>TC-05</td>
+            <td>Admin generates revenue report</td>
+            <td>Admin</td>
+            <td>Report is generated with correct data</td>
+        </tr>
+        <tr>
+            <td>TC-06</td>
+            <td>Simulate M-Pesa payment</td>
+            <td>Driver/Backend</td>
+            <td>Payment is processed and status updated</td>
+        </tr>
+        <tr>
+            <td>TC-07</td>
+            <td>Restrict unauthorized vehicle</td>
+            <td>Admin/Gate</td>
+            <td>Vehicle is denied entry</td>
+        </tr>
+        <tr>
+            <td>TC-08</td>
+            <td>Verify accessibility with screen reader</td>
+            <td>All UI</td>
+            <td>All content is accessible via screen reader</td>
+        </tr>
+        <tr>
+            <td>TC-09</td>
+            <td>Test system recovery after server crash</td>
+            <td>Backend</td>
+            <td>System restores to last consistent state</td>
+        </tr>
+        <tr>
+            <td>TC-10</td>
+            <td>Check GDPR compliance for user data</td>
+            <td>Backend/Admin</td>
+            <td>User data is handled per GDPR requirements</td>
+        </tr>
+        <tr>
+            <td>TC-11</td>
+            <td>Cross-browser compatibility (Chrome, Firefox, Edge)</td>
+            <td>All UI</td>
+            <td>System works identically across browsers</td>
+        </tr>
+        <tr>
+            <td>TC-12</td>
+            <td>Mobile device compatibility</td>
+            <td>Driver/Public</td>
+            <td>System is usable and responsive on mobile devices</td>
+        </tr>
+    </table>
+
+    <h2>7. Test Environment</h2>
+    <ul>
+        <li>Windows OS with XAMPP (Apache, PHP, MySQL)</li>
+        <li>Linux and Mac OS (for cross-platform testing)</li>
+        <li>Web browsers: Chrome, Firefox, Edge, Safari</li>
+        <li>Mobile device browsers (Android, iOS)</li>
+        <li>Screen readers and accessibility tools</li>
+        <li>Backup and recovery tools for disaster recovery testing</li>
+    </ul>
+
+    <h2>8. Responsibilities</h2>
+    <ul>
+        <li>Test Lead: Oversees test planning and execution</li>
+        <li>Testers: Execute test cases and report issues</li>
+        <li>Developers: Fix reported bugs and support testers</li>
+    </ul>
+
+    <h2>9. Schedule</h2>
+    <ul>
+        <li>Test Planning: 1 day</li>
+        <li>Test Case Design: 2 days</li>
+        <li>Test Execution: 3 days</li>
+        <li>Bug Fixing & Retest: 2 days</li>
+    </ul>
+
+    <h2>10. Deliverables</h2>
+    <ul>
+        <li>Test Plan Document (this file)</li>
+        <li>Test Cases Spreadsheet</li>
+        <li>Bug Reports</li>
+        <li>Test Summary Report</li>
+    </ul>
+</body>
+</html>
