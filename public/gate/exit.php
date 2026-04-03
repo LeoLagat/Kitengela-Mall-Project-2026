@@ -88,7 +88,7 @@ nav {
     padding: 26px;
     border-radius: 14px;
     width: 100%;
-    max-width: 440px;
+    max-width: 280px;
     border: 1px solid lightgray;
     box-shadow: 0 12px 28px gainsboro;
     text-align: center;
@@ -238,21 +238,70 @@ footer {
     border: 2px solid #2d862d;
 }
 .exit-icon-kiosk svg {
-    width: 30px;
-    height: 30px;
+    width: 60px;
+    height: 60px;
     display: block;
     margin: auto;
 }
 @media (max-width: 600px) {
   .exit-icon-kiosk {
-    max-width: 80px;
-    height: 60px;
+    max-width: 40px;
+    height: 30px;
     border-radius: 10px;
   }
   .exit-icon-kiosk svg {
-    width: 40px;
-    height: 40px;
+    width: 20px;
+    height: 20px;
   }
+}
+
+.exit-icon-kiosk-sm {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 0 auto 12px auto;
+    width: 90px;
+    height: 54px;
+    background: linear-gradient(135deg, #219a21 60%, #2d862d 100%);
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(44,130,44,0.10);
+    border: 2px solid #2d862d;
+}
+.exit-icon-kiosk-sm svg {
+    width: 60px;
+    height: 32px;
+    display: block;
+    margin: auto;
+}
+@media (max-width: 600px) {
+  .exit-icon-kiosk-sm {
+    max-width: 40px;
+    height: 30px;
+    border-radius: 10px;
+  }
+  .exit-icon-kiosk-sm svg {
+    width: 20px;
+    height: 20px;
+  }
+}
+
+.exit-icon-kiosk {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 0 auto 8px auto;
+    width: 120px;   /* Increased width for broadness */
+    height: 28px;
+    background: linear-gradient(135deg, #219a21 60%, #2d862d 100%);
+    border-radius: 10px;
+    box-shadow: 0 2px 8px rgba(44,130,44,0.10);
+    border: 2px solid #2d862d;
+}
+.exit-icon-kiosk svg {
+    width: 100px;   /* Increased width for broadness */
+    height: 18px;
+    display: block;
+    margin: auto;
 }
 
 </style>
