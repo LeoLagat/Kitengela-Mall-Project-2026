@@ -281,7 +281,7 @@ if ($plate) {
         </div>
 
         <div id="success-ui" style="display:none;">
-            <h2 class="status-title">Welcome to Kitengela Mall</h2>
+            <h2 class="status-title">Thank You for Visiting Kitengela Mall</h2>
             <p class="status-subtitle">Your vehicle has checked out successfully.</p>
             
             <div class="chips-container">

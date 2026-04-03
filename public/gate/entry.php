@@ -21,154 +21,87 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 }
 ?>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 
-<!-- Main Page Content -->
-<div class="page" style="display: flex; flex-direction: row; justify-content: center; align-items: flex-start; gap: 32px; width: 100%; max-width: 1200px; margin: 0 auto;">
-    <div style="flex: 1; max-width: 320px; display: flex; flex-direction: column; gap: 18px; margin-top: 24px;">
-        <div style="background: #fff3cd; border-left: 6px solid orange; border-radius: 12px; padding: 16px 18px 12px 18px; text-align: left; color: #ff9800; font-size: 17px; font-weight: 700;">
-            <span style="color: #e65100; font-weight: bold;">Kindly park at your assigned bay only.</span><br>
-            <span style="font-weight: 400; color: #e65100;">If you park in a different basement or bay than assigned, you will be fined <b>Ksh 50</b> upon exit.</span>
-        </div>
-        <div style="background: #eaffea; border: 2px solid #b2f2b2; border-radius: 12px; padding: 16px 18px 12px 18px; text-align: left; color: #2d862d; font-size: 17px; font-weight: 700;">
-            <div style="font-weight: bold; font-size: 18px; margin-bottom: 6px;">Parking Rates</div>
-            <div style="display: flex; flex-direction: column; gap: 4px; font-weight: 400; color: #1b5e20;">
-                <span>&#10003; <b>First 30 minutes</b> — Free (grace period)</span>
-                <span>&#10003; <b>Up to 1 hour</b> — Ksh 50</span>
-                <span>&#10003; <b>Each additional hour</b> — Ksh 20</span>
-                <span>&#10003; <b>Full day (12+ hours)</b> — Ksh 1,000 flat rate</span>
-                <span>&#10003; <b>Staff &amp; owner vehicles</b> — Complimentary</span>
-            </div>
-            <div style="margin-top: 8px; color: dimgray; font-size: 12px;">Payment is processed via M-Pesa at exit.</div>
-        </div>
-    </div>
-    <div class="card" style="flex: 2; min-width: 340px; max-width: 600px; margin: 0 auto;">
-        <h2 style="margin-bottom: 0; color: #2d862d;">Entry Gate</h2>
-        <p class="subtitle" style="margin-top: 8px; margin-bottom: 18px; color: dimgray; font-size: 16px;">Enter the vehicle plate number to assign a parking bay.</p>
-        <?php if (!$success && $message): ?>
-            <div class="status-error" style="margin-bottom: 16px;">
-                Warning: <?= htmlspecialchars($message); ?>
-            </div>
-        <?php endif; ?>
-        <?php if ($success): ?>
-            <div class="status-success">
-                <h3 class="welcome-title">Welcome to Kitengela Mall</h3>
-                <p class="welcome-subtitle">Your vehicle has been checked in successfully.</p>
-                <div class="plate-chip"><?= htmlspecialchars($plateInput) ?></div>
-                <?php if ($assignedBay !== ''): ?>
-                    <div class="bay-pill"><?= htmlspecialchars($assignedBay) ?></div>
-                <?php endif; ?>
-                <div><?= htmlspecialchars($message) ?></div>
-                <div class="welcome-note">Enjoy your visit. Your parking slot is reserved.</div>
-                <div class="progress" aria-hidden="true"><span></span></div>
-                <div style="margin-top:8px;color:dimgray;font-size:13px;">Returning to home screen...</div>
-            </div>
-        <?php else: ?>
-            <form method="POST" id="entryForm" style="width:100%;max-width:100%;margin-top:18px;">
-                <div class="field">
-                    <label for="plate">Plate Number</label>
-                    <input id="plate" type="text" name="plate" placeholder="KBC 123A" required autofocus autocomplete="off" value="<?= htmlspecialchars($plateInput) ?>" oninput="this.value = this.value.toUpperCase()" style="border: 2px solid #2d862d; border-radius: 8px; font-size: 20px; padding: 16px;">
-                </div>
-                <button type="submit" class="main-action-btn">
-                    Enter &amp; Assign Bay
-                </button>
-            </form>
-        <?php endif; ?>
-    </div>
-</div>
+<title>Entry Gate | Kitengela Mall</title>
 
-<?php if ($success): ?>
-<script>
-window.setTimeout(function() {
-    window.location.href = '../index.php';
-}, 3000);
-</script>
-<?php endif; ?>
+<style>
 
-<script>
-document.getElementById('entryForm')?.addEventListener('submit', function() {
-    const submitBtn = this.querySelector('button[type="submit"]');
-    submitBtn.disabled = true;
-    submitBtn.textContent = 'Processing...';
-});
-</script>
 
-<footer>
-© <?= date("Y"); ?> Kitengela Mall Parking System
-</footer>
 
-</body>
+html, body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+}
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: whitesmoke;
+    color: darkslategray;
+    min-height: 100vh;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    box-sizing: border-box;
+}
 
-</html>
-    <div style="flex: 1; max-width: 320px; display: flex; flex-direction: column; gap: 18px; margin-top: 24px;">
-        <div style="background: #fff3cd; border-left: 6px solid orange; border-radius: 12px; padding: 16px 18px 12px 18px; text-align: left; color: #ff9800; font-size: 17px; font-weight: 700;">
-            <span style="color: #e65100; font-weight: bold;">Kindly park at your assigned bay only.</span><br>
-            <span style="font-weight: 400; color: #e65100;">If you park in a different basement or bay than assigned, you will be fined <b>Ksh 50</b> upon exit.</span>
-        </div>
-        <div style="background: #eaffea; border: 2px solid #b2f2b2; border-radius: 12px; padding: 16px 18px 12px 18px; text-align: left; color: #2d862d; font-size: 17px; font-weight: 700;">
-            <div style="font-weight: bold; font-size: 18px; margin-bottom: 6px;">Parking Rates</div>
-            <div style="display: flex; flex-direction: column; gap: 4px; font-weight: 400; color: #1b5e20;">
-                <span>&#10003; <b>First 30 minutes</b> — Free (grace period)</span>
-                <span>&#10003; <b>Up to 1 hour</b> — Ksh 50</span>
-                <span>&#10003; <b>Each additional hour</b> — Ksh 20</span>
-                <span>&#10003; <b>Full day (12+ hours)</b> — Ksh 1,000 flat rate</span>
-                <span>&#10003; <b>Staff &amp; owner vehicles</b> — Complimentary</span>
-            </div>
-            <div style="margin-top: 8px; color: dimgray; font-size: 12px;">Payment is processed via M-Pesa at exit.</div>
-        </div>
-    </div>
-    <div class="card" style="flex: 2; min-width: 340px; max-width: 600px; margin: 0 auto;">
-        <h2 style="margin-bottom: 0; color: #2d862d;">Entry Gate</h2>
-        <p class="subtitle" style="margin-top: 8px; margin-bottom: 18px; color: dimgray; font-size: 16px;">Enter the vehicle plate number to assign a parking bay.</p>
-        <?php if (!$success && $message): ?>
-            <div class="status-error" style="margin-bottom: 16px;">
-                Warning: <?= htmlspecialchars($message); ?>
-            </div>
-        <?php endif; ?>
-        <?php if ($success): ?>
-            <div class="status-success">
-                <h3 class="welcome-title">Welcome to Kitengela Mall</h3>
-                <p class="welcome-subtitle">Your vehicle has been checked in successfully.</p>
-                <div class="plate-chip"><?= htmlspecialchars($plateInput) ?></div>
-                <?php if ($assignedBay !== ''): ?>
-                    <div class="bay-pill"><?= htmlspecialchars($assignedBay) ?></div>
-                <?php endif; ?>
-                <div><?= htmlspecialchars($message) ?></div>
-                <div class="welcome-note">Enjoy your visit. Your parking slot is reserved.</div>
-                <div class="progress" aria-hidden="true"><span></span></div>
-                <div style="margin-top:8px;color:dimgray;font-size:13px;">Returning to home screen...</div>
-            </div>
-        <?php else: ?>
-            <form method="POST" id="entryForm" style="width:100%;max-width:100%;margin-top:18px;">
-                <div class="field">
-                    <label for="plate">Plate Number</label>
-                    <input id="plate" type="text" name="plate" placeholder="KBC 123A" required autofocus autocomplete="off" value="<?= htmlspecialchars($plateInput) ?>" oninput="this.value = this.value.toUpperCase()" style="border: 2px solid #2d862d; border-radius: 8px; font-size: 20px; padding: 16px;">
-                </div>
-                <button type="submit" class="main-action-btn">
-                    Enter &amp; Assign Bay
-                <?php
-                require_once "../../backend/app/controllers/GateController.php";
+.page {
+    flex: 1 1 auto;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    min-height: 0;
+    padding: 0 8px;
+    box-sizing: border-box;
+    overflow-y: auto;
+    min-height: 80vh;
+    height: 100%;
+}
 
-                $message = "";
-                $success = false;
-                $plateInput = '';
-                $assignedBay = '';
+nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    background: linear-gradient(90deg, darkgreen 0%, seagreen 100%);
+    padding: 12px 24px;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}
 
-                if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-                    $plate = strtoupper(trim($_POST['plate'] ?? ''));
-                    $plateInput = $plate;
-                    $controller = new GateController();
-                    $result = $controller->processEntry($plate);
+.logo {
+    color: white;
+    font-size: 24px;
+    font-weight: 700;
+    letter-spacing: 1px;
+}
 
-                    $message = $result['message'];
-                    $success = $result['success'];
+.links {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+}
 
-                    if ($success) {
-                        preg_match('/Assigned Bay:\s*([^ ]+)/', $message, $matches);
-                        $assignedBay = isset($matches[1]) ? $matches[1] : '';
-                    }
-                }
-                ?>
-                <div class="page" style="display: flex; flex-direction: row; justify-content: center; align-items: flex-start; gap: 32px; width: 100%; max-width: 1200px; margin: 0 auto;">
+.links a {
+    color: white;
+    text-decoration: none;
+    font-weight: 600;
+    padding: 6px 10px;
+    border-radius: 6px;
+}
+
+.links a:hover {
+    background: forestgreen;
+}
+
+.links a.active {
+    background: white;
     color: darkgreen;
 }
 
@@ -184,11 +117,10 @@ document.getElementById('entryForm')?.addEventListener('submit', function() {
     display: flex;
     justify-content: center;
     align-items: center;
-    min-height: calc(100vh - 80px);
-    height: calc(100vh - 80px);
+    min-height: 0;
     padding: 0 8px;
     box-sizing: border-box;
-    overflow: hidden;
+    overflow-y: auto;
 }
 
 .card {
@@ -201,11 +133,7 @@ document.getElementById('entryForm')?.addEventListener('submit', function() {
     max-width: 600px;
     text-align: center;
     box-sizing: border-box;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    min-height: 70vh;
+
 }
 
 .card h2 {
@@ -389,147 +317,25 @@ footer {
         font-size: 22px;
     }
 }
+@media (max-width: 480px) {
+    .card {
+        padding: 20px;
+    }
 
-/* Make the entry icon fill the available space and center it */
-.entry-icon-large {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    width: 100vw;
-    height: calc(100vh - 180px); /* Adjust for nav and footer */
-    max-width: 100vw;
-    max-height: 80vh;
-    margin: 0 auto 18px auto;
-    box-sizing: border-box;
-}
-.entry-icon-large svg {
-    width: 60vw;
-    height: 60vw;
-    max-width: 420px;
-    max-height: 60vh;
-    display: block;
-}
-@media (max-width: 600px) {
-  .entry-icon-large svg {
-    width: 90vw;
-    height: 40vh;
-    max-width: 98vw;
-    max-height: 40vh;
-  }
-  .entry-icon-large {
-    height: 40vh;
-    min-height: 200px;
-  }
-}
+    .welcome-title {
+        font-size: 22px;
+    }
 
-/* Entry page: fit icon and form together, no scroll, center everything */
-.entry-kiosk-wrap {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    min-height: calc(100vh - 120px); /* nav+footer space */
-    width: 100vw;
-    max-width: 100vw;
-    margin: 0 auto;
-    box-sizing: border-box;
-    position: absolute;
-    top: 60px;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    z-index: 2;
-}
-.entry-icon-kiosk {
-    margin-bottom: 18px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-.entry-icon-kiosk svg {
-    width: 120px;
-    height: 80px;
-    max-width: 30vw;
-    max-height: 12vh;
-    display: block;
-}
-#entryForm {
-    width: 100%;
-    max-width: 340px;
-}
-@media (max-width: 600px) {
-  .entry-kiosk-wrap {
-    min-height: calc(100vh - 80px);
-    padding: 0 2vw;
-    top: 40px;
-  }
-  .entry-icon-kiosk svg {
-    width: 90px;
-    height: 60px;
-    max-width: 60vw;
-    max-height: 10vh;
-  }
-}
-
-.entry-icon-kiosk {
-    background: linear-gradient(135deg, #219a21 60%, #2d862d 100%);
-    border-radius: 10px;
-    box-shadow: 0 2px 8px rgba(44,130,44,0.10);
-    border: 2px solid #2d862d;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    width: 120px;
-    height: 28px;
-    margin: 24px auto 16px auto;
-    position: relative;
-    left: 0;
-    right: 0;
-}
-.entry-icon-kiosk svg {
-    width: 100px;
-    height: 18px;
-    display: block;
-    margin: 0 auto;
-}
-
-.entry-info-box {
-    background: #fff8e1;
-    border-left: 6px solid orange;
-    border-radius: 12px;
-    padding: 18px 18px 18px 18px;
-    margin-bottom: 18px;
-    text-align: center;
-    color: #ff9800;
-    font-size: 17px;
-    font-weight: 700;
-    position: relative;
-}
-.entry-info-box .entry-icon-kiosk {
-    background: linear-gradient(135deg, #219a21 60%, #2d862d 100%);
-    border-radius: 10px;
-    box-shadow: 0 2px 8px rgba(44,130,44,0.10);
-    border: 2px solid #2d862d;
-    display: inline-flex;
-    justify-content: center;
-    align-items: center;
-    width: 60px;
-    height: 28px;
-    margin: 0 0 8px 0;
-    vertical-align: middle;
-}
-.entry-info-box .entry-icon-kiosk svg {
-    width: 44px;
-    height: 18px;
-    display: block;
-    margin: 0 auto;
-}
+    .bay-pill {
+        font-size: 20px;
+        padding: 6px 10px;
+    }
 
 </style>
 
 </head>
 
-<body class="entry-exit-no-scroll">
+<body>
 
 <nav>
 <div class="logo">Kitengela Mall Parking</div>
@@ -549,53 +355,69 @@ Server time: <?= date('Y-m-d H:i:s'); ?>
 
 
 
-<div class="page">
-    <div class="card">
-?>
-<div class="page" style="display: flex; flex-direction: row; justify-content: center; align-items: flex-start; gap: 32px; width: 100%; max-width: 1200px; margin: 0 auto;">
-            <span style="color: #e65100; font-weight: bold;">Kindly park at your assigned bay only.</span><br>
-            <span style="font-weight: 400; color: #e65100;">If you park in a different basement or bay than assigned, you will be fined  upon exit.</span>
+
+<div class="page" style="gap: 32px; align-items: center; min-height: 70vh;">
+    <!-- Left Info Container -->
+    <div style="flex:1; max-width:400px; display:flex; flex-direction:column; gap:24px; justify-content:center; height:100%;">
+        <div style="background:lemonchiffon;border-left:6px solid orange;border-radius:12px;padding:18px 18px 18px 18px;text-align:left;color:darkorange;font-size:20px;font-weight:700;">
+        NOTICE :   
+        Please park at your designated bay as assigned by the system. Thank you for your cooperation!
         </div>
-        <div style="background: #eaffea; border: 2px solid #b2f2b2; border-radius: 12px; padding: 16px 18px 12px 18px; margin-bottom: 18px; text-align: left; color: #2d862d; font-size: 17px; font-weight: 700;">
-            <div style="font-weight: bold; font-size: 18px; margin-bottom: 6px;"></div>
-            <div style="display: flex; flex-direction: column; gap: 4px; font-weight: 400; color: #1b5e20;">
+        <div style="background: #eaffea; border: 2px solid #b2f2b2; border-radius: 12px; padding: 18px 18px 18px 18px; text-align: left; color: #2d862d; font-size: 17px; font-weight: 700;">
+            <div style="font-weight: bold; font-size: 22px; margin-bottom: 6px; color: forestgreen;">Parking Rates</div>
+            <div style="display: flex; flex-direction: column; gap: 4px; font-weight: 600; color: #1b5e20;">
                 <span>&#10003; <b>First 30 minutes</b> — Free (grace period)</span>
                 <span>&#10003; <b>Up to 1 hour</b> — Ksh 50</span>
                 <span>&#10003; <b>Each additional hour</b> — Ksh 20</span>
                 <span>&#10003; <b>Full day (12+ hours)</b> — Ksh 1,000 flat rate</span>
                 <span>&#10003; <b>Staff &amp; owner vehicles</b> — Complimentary</span>
             </div>
-            <div style="margin-top: 8px; color: dimgray; font-size: 12px;">Payment is processed via M-Pesa at exit.</div>
+            <div style="margin-top: 8px; color: dimgray; font-size: 13px; font-weight:400;">Payment is processed via M-Pesa at exit.</div>
         </div>
-        <?php if (!$success && $message): ?>
-            <div class="status-error" style="margin-bottom: 16px;">
-                Warning: <?= htmlspecialchars($message); ?>
+    </div>
+    <!-- Right Entry Form Container -->
+    <div style="flex:2; min-width:340px; max-width:600px; margin:0 auto; display:flex; align-items:center; justify-content:center; height:100%;">
+        <div class="card" style="width:100%;max-width:620px; margin:auto;">
+            <div style="display:flex;justify-content:center;align-items:center;margin-bottom:18px;">
+                <!-- Card Icon SVG -->
+                <svg width="80" height="54" viewBox="0 0 80 54" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <rect x="3" y="7" width="74" height="40" rx="7" fill="#e0ffe0" stroke="seagreen" stroke-width="3"/>
+                  <rect x="10" y="18" width="60" height="8" rx="2" fill="#b2f2b2" />
+                  <rect x="10" y="32" width="18" height="6" rx="2" fill="#b2f2b2" />
+                  <rect x="32" y="32" width="18" height="6" rx="2" fill="#b2f2b2" />
+                  <rect x="54" y="32" width="16" height="6" rx="2" fill="#b2f2b2" />
+                </svg>
             </div>
-        <?php endif; ?>
-        <?php if ($success): ?>
-            <div class="status-success">
-                <h3 class="welcome-title">Welcome to Kitengela Mall</h3>
-                <p class="welcome-subtitle">Your vehicle has been checked in successfully.</p>
-                <div class="plate-chip"><?= htmlspecialchars($plateInput) ?></div>
-                <?php if ($assignedBay !== ''): ?>
-                    <div class="bay-pill"><?= htmlspecialchars($assignedBay) ?></div>
-                <?php endif; ?>
-                <div><?= htmlspecialchars($message) ?></div>
-                <div class="welcome-note">Enjoy your visit. Your parking slot is reserved.</div>
-                <div class="progress" aria-hidden="true"><span></span></div>
-                <div style="margin-top:8px;color:dimgray;font-size:13px;">Returning to home screen...</div>
-            </div>
-        <?php else: ?>
-            <form method="POST" id="entryForm" style="width:100%;max-width:100%;margin-top:18px;">
-                <div class="field">
-                    <label for="plate">Plate Number</label>
-                    <input id="plate" type="text" name="plate" placeholder="KBC 123A" required autofocus autocomplete="off" value="<?= htmlspecialchars($plateInput) ?>" oninput="this.value = this.value.toUpperCase()" style="border: 2px solid #2d862d; border-radius: 8px; font-size: 20px; padding: 16px;">
+            <h2 style="color:forestgreen;">Entry Gate</h2>
+            <p class="subtitle" style="font-size:16px;">Enter the vehicle plate number to assign a parking bay.</p>
+            <?php if (!$success && $message): ?>
+                <div class="status-error" style="margin-bottom: 16px;">
+                    Warning: <?= htmlspecialchars($message); ?>
                 </div>
-                <button type="submit" class="main-action-btn">
-                    Enter &amp; Assign Bay
-                </button>
-            </form>
-        <?php endif; ?>
+            <?php endif; ?>
+            <?php if ($success): ?>
+                <div class="status-success">
+                    <h3 class="welcome-title">Welcome to Kitengela Mall</h3>
+                    <p class="welcome-subtitle">Your vehicle has been checked in successfully.</p>
+                    <div class="plate-chip"><?= htmlspecialchars($plateInput) ?></div>
+                    <?php if ($assignedBay !== ''): ?>
+                        <div class="bay-pill"><?= htmlspecialchars($assignedBay) ?></div>
+                    <?php endif; ?>
+                    <div><?= htmlspecialchars($message) ?></div>
+                    <div class="welcome-note">Enjoy your visit. Your parking slot is reserved.</div>
+                    <div class="progress" aria-hidden="true"><span></span></div>
+                    <div style="margin-top:8px;color:dimgray;font-size:13px;">Returning to home screen...</div>
+                </div>
+            <?php else: ?>
+                <form method="POST" id="entryForm" style="margin-top:18px;">
+                    <div class="field">
+                        <label for="plate">Plate Number</label>
+                        <input id="plate" type="text" name="plate" placeholder="KBC 123A" required autofocus autocomplete="off" value="<?= htmlspecialchars($plateInput) ?>" oninput="this.value = this.value.toUpperCase()" style="border: 2px solid #2d862d; border-radius: 8px; font-size: 20px; padding: 16px;">
+                    </div>
+                    <button type="submit" style="font-size:18px;">Enter &amp; Assign Bay</button>
+                </form>
+            <?php endif; ?>
+        </div>
     </div>
 </div>
 

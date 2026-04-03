@@ -85,12 +85,12 @@ nav {
 
 .card {
     background: white;
-    padding: 26px;
+    padding: 18px 18px 22px 18px;
     border-radius: 14px;
     width: 100%;
-    max-width: 280px;
+    max-width: 320px;
     border: 1px solid lightgray;
-    box-shadow: 0 12px 28px gainsboro;
+    box-shadow: 0 8px 18px gainsboro;
     text-align: center;
 }
 
@@ -289,17 +289,17 @@ footer {
     display: flex;
     justify-content: center;
     align-items: center;
-    margin: 0 auto 8px auto;
-    width: 120px;   /* Increased width for broadness */
-    height: 28px;
+    margin: 0 auto 6px auto;
+    width: 64px;
+    height: 24px;
     background: linear-gradient(135deg, #219a21 60%, #2d862d 100%);
-    border-radius: 10px;
+    border-radius: 8px;
     box-shadow: 0 2px 8px rgba(44,130,44,0.10);
     border: 2px solid #2d862d;
 }
 .exit-icon-kiosk svg {
-    width: 100px;   /* Increased width for broadness */
-    height: 18px;
+    width: 44px;
+    height: 16px;
     display: block;
     margin: auto;
 }
@@ -325,9 +325,21 @@ footer {
 
 <div class="page">
 
-<div class="card">
 
-<h2>Vehicle Exit</h2>
+<div class="card">
+        <div style="display:flex;justify-content:center;align-items:center;margin-bottom:18px;">
+            <!-- Card Icon SVG (entry style) -->
+            <div style="background:white;border-radius:12px;box-shadow:0 2px 8px rgba(44,130,44,0.10);border:2px solid #b2f2b2;padding:8px 12px;display:flex;align-items:center;justify-content:center;">
+                <svg width="80" height="54" viewBox="0 0 80 54" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <rect x="3" y="7" width="74" height="40" rx="7" fill="#e0ffe0" stroke="seagreen" stroke-width="3"/>
+                    <rect x="10" y="18" width="60" height="8" rx="2" fill="#b2f2b2" />
+                    <rect x="10" y="32" width="18" height="6" rx="2" fill="#b2f2b2" />
+                    <rect x="32" y="32" width="18" height="6" rx="2" fill="#b2f2b2" />
+                    <rect x="54" y="32" width="16" height="6" rx="2" fill="#b2f2b2" />
+                </svg>
+            </div>
+        </div>
+        <h2>Vehicle Exit</h2>
 
 <p class="subtitle">
 Enter the plate number to compute fees and open the barrier.
@@ -356,7 +368,7 @@ Warning: <?= htmlspecialchars($message) ?>
 <div class="field">
 
 <label for="plate">
-Enter Vehicle Plate Number
+Enter Vehicle Plate Number & Press "Process Exit"
 </label>
 
 <input id="plate" type="text" name="plate" placeholder="E.G. KAA 123A" required autofocus autocomplete="off" oninput="this.value = this.value.toUpperCase()">
@@ -364,8 +376,9 @@ Enter Vehicle Plate Number
 </div>
 
 <button type="submit" class="main-action-btn">
+      Process Exit
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48"><path d="M8 36q-1.65 0-2.825-1.175Q4 33.65 4 32V16q0-1.65 1.175-2.825Q6.35 12 8 12h32q1.65 0 2.825 1.175Q44 14.35 44 16v16q0 1.65-1.175 2.825Q41.65 36 40 36Zm0-2h32q.85 0 1.425-.575Q42 32.85 42 32V16q0-.85-.575-1.425Q40.85 14 40 14H8q-.85 0-1.425.575Q6 15.15 6 16v16q0 .85.575 1.425Q7.15 34 8 34Zm0 0V14v20Z"/><path d="M24 18v6.15l5.2 5.2 1.4-1.4-4.6-4.6V18Z"/></svg>
-    Process Exit
+   
 </button>
 
 </form>

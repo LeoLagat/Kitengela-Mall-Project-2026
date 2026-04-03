@@ -152,7 +152,7 @@ require_once(__DIR__ . '/../backend/app/config/database.php');
 $welcomeMessage = '';
 if (isset($_GET['welcome'])) {
     if ($_GET['welcome'] === 'exit') {
-        $welcomeMessage = 'Welcome! Exit completed successfully. Ready for the next vehicle.';
+        $welcomeMessage = 'GOODBYE! Exit completed successfully. Ready for the next vehicle.';
     }
 }
 
@@ -176,8 +176,7 @@ $vacantByFloor = $stmt->fetchAll(PDO::FETCH_ASSOC);
 <div class="logo">Kitengela Mall Parking</div>
 
 <div class="links">
-<a href="gate/entry.php">Entry</a>
-<a href="gate/exit.php">Exit</a>
+
 <a href="admin/dashboard.php">Dashboard</a>
 </div>
 

@@ -1,4 +1,19 @@
 # Kitengela Mall Parking Management System
+
+---
+## Recent Changes (April 2026)
+
+**User Interface Improvements:**
+
+- Entry and Exit gate pages now feature a modern card layout with improved centering and kiosk-style design for easier use on touch screens and tablets.
+- Both Entry and Exit forms now display a consistent card icon above the main heading for visual clarity.
+- The Entry and Exit containers are perfectly centered and visually balanced side-by-side with info panels, ensuring a professional look on all screen sizes.
+- The card size and icon have been standardized for a clean, consistent appearance.
+- Minor adjustments to padding, spacing, and color for improved accessibility and user experience.
+
+**No changes to core workflows or business rules.**
+
+---
 ## User Manual
 
 ---
