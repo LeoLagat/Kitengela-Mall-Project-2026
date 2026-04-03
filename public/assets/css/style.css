@@ -4,13 +4,13 @@
 body {
     margin: 0;
     font-family: 'Roboto', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background: #f5f7fa;
+    background: aliceblue;
     color: darkslategray;
     line-height: 1.6;
 }
 
 h1, h2, h3, h4, h5 {
-    color: #2d862d;
+    color: seagreen;
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
@@ -80,7 +80,7 @@ nav {
     align-items: center;
 }
 .bay-title {
-    color: #2d862d;
+    color: seagreen;
     font-size: 22px;
     font-weight: 700;
     margin-bottom: 12px;
@@ -88,18 +88,18 @@ nav {
 .bay-count {
     font-size: 32px;
     font-weight: 700;
-    color: #34495e;
+    color: slategray;
 }
 .bay-label {
     font-size: 16px;
-    color: #219a21;
+    color: forestgreen;
     font-weight: 500;
     margin-left: 8px;
 }
 .bay-number {
     font-size: 38px;
     font-weight: 900;
-    color: #219a21;
+    color: forestgreen;
     margin-right: 8px;
     display: inline-block;
     letter-spacing: 2px;
@@ -129,7 +129,7 @@ nav {
 .admin-header {
     font-size: 32px;
     font-weight: 700;
-    color: #2d862d;
+    color: seagreen;
     margin-bottom: 24px;
 }
 .admin-nav {
@@ -139,7 +139,7 @@ nav {
 }
 .admin-nav a {
     color: #fff;
-    background: #2d862d;
+    background: seagreen;
     padding: 8px 18px;
     border-radius: 6px;
     font-weight: 600;
@@ -147,7 +147,7 @@ nav {
     transition: background 0.2s;
 }
 .admin-nav a:hover {
-    background: #219a21;
+    background: forestgreen;
 }
 .admin-content {
     width: 100%;
@@ -188,7 +188,7 @@ nav {
     max-width: 600px;
     margin: 40px auto;
     text-align: center;
-    border-top: 8px solid #2d862d;
+    border-top: 8px solid seagreen;
 }
 
 /* Floor blocks styling */

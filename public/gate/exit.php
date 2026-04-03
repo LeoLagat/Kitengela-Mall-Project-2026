@@ -232,10 +232,10 @@ footer {
     width: 100%;
     max-width: 120px;
     height: 80px;
-    background: linear-gradient(135deg, #219a21 60%, #2d862d 100%);
+    background: linear-gradient(135deg, forestgreen 60%, seagreen 100%);
     border-radius: 16px;
     box-shadow: 0 2px 8px rgba(44,130,44,0.10);
-    border: 2px solid #2d862d;
+    border: 2px solid seagreen;
 }
 .exit-icon-kiosk svg {
     width: 60px;
@@ -262,10 +262,10 @@ footer {
     margin: 0 auto 12px auto;
     width: 90px;
     height: 54px;
-    background: linear-gradient(135deg, #219a21 60%, #2d862d 100%);
+    background: linear-gradient(135deg, forestgreen 60%, seagreen 100%);
     border-radius: 12px;
     box-shadow: 0 2px 8px rgba(44,130,44,0.10);
-    border: 2px solid #2d862d;
+    border: 2px solid seagreen;
 }
 .exit-icon-kiosk-sm svg {
     width: 60px;
@@ -292,10 +292,10 @@ footer {
     margin: 0 auto 6px auto;
     width: 64px;
     height: 24px;
-    background: linear-gradient(135deg, #219a21 60%, #2d862d 100%);
+    background: linear-gradient(135deg, forestgreen 60%, seagreen 100%);
     border-radius: 8px;
     box-shadow: 0 2px 8px rgba(44,130,44,0.10);
-    border: 2px solid #2d862d;
+    border: 2px solid seagreen;
 }
 .exit-icon-kiosk svg {
     width: 44px;
@@ -331,11 +331,11 @@ footer {
             <!-- Card Icon SVG (entry style) -->
             <div style="background:white;border-radius:12px;box-shadow:0 2px 8px rgba(44,130,44,0.10);border:2px solid #b2f2b2;padding:8px 12px;display:flex;align-items:center;justify-content:center;">
                 <svg width="80" height="54" viewBox="0 0 80 54" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <rect x="3" y="7" width="74" height="40" rx="7" fill="#e0ffe0" stroke="seagreen" stroke-width="3"/>
-                    <rect x="10" y="18" width="60" height="8" rx="2" fill="#b2f2b2" />
-                    <rect x="10" y="32" width="18" height="6" rx="2" fill="#b2f2b2" />
-                    <rect x="32" y="32" width="18" height="6" rx="2" fill="#b2f2b2" />
-                    <rect x="54" y="32" width="16" height="6" rx="2" fill="#b2f2b2" />
+                    <rect x="3" y="7" width="74" height="40" rx="7" fill="honeydew" stroke="seagreen" stroke-width="3"/>
+                    <rect x="10" y="18" width="60" height="8" rx="2" fill="palegreen" />
+                    <rect x="10" y="32" width="18" height="6" rx="2" fill="palegreen" />
+                    <rect x="32" y="32" width="18" height="6" rx="2" fill="palegreen" />
+                    <rect x="54" y="32" width="16" height="6" rx="2" fill="palegreen" />
                 </svg>
             </div>
         </div>

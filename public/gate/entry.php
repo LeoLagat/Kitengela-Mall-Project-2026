@@ -361,11 +361,11 @@ Server time: <?= date('Y-m-d H:i:s'); ?>
     <div style="flex:1; max-width:400px; display:flex; flex-direction:column; gap:24px; justify-content:center; height:100%;">
         <div style="background:lemonchiffon;border-left:6px solid orange;border-radius:12px;padding:18px 18px 18px 18px;text-align:left;color:darkorange;font-size:20px;font-weight:700;">
         NOTICE :   
-        Please park at your designated bay as assigned by the system. Thank you for your cooperation!
+        Please park at your designated bay as assigned by the system.Failure to do so may result in penalties. Thank you for your cooperation!
         </div>
-        <div style="background: #eaffea; border: 2px solid #b2f2b2; border-radius: 12px; padding: 18px 18px 18px 18px; text-align: left; color: #2d862d; font-size: 17px; font-weight: 700;">
+        <div style="background: honeydew; border: 2px solid palegreen; border-radius: 12px; padding: 18px 18px 18px 18px; text-align: left; color: seagreen; font-size: 17px; font-weight: 700;">
             <div style="font-weight: bold; font-size: 22px; margin-bottom: 6px; color: forestgreen;">Parking Rates</div>
-            <div style="display: flex; flex-direction: column; gap: 4px; font-weight: 600; color: #1b5e20;">
+            <div style="display: flex; flex-direction: column; gap: 4px; font-weight: 600; color: darkgreen;">
                 <span>&#10003; <b>First 30 minutes</b> — Free (grace period)</span>
                 <span>&#10003; <b>Up to 1 hour</b> — Ksh 50</span>
                 <span>&#10003; <b>Each additional hour</b> — Ksh 20</span>
@@ -380,12 +380,12 @@ Server time: <?= date('Y-m-d H:i:s'); ?>
         <div class="card" style="width:100%;max-width:620px; margin:auto;">
             <div style="display:flex;justify-content:center;align-items:center;margin-bottom:18px;">
                 <!-- Card Icon SVG -->
-                <svg width="80" height="54" viewBox="0 0 80 54" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <rect x="3" y="7" width="74" height="40" rx="7" fill="#e0ffe0" stroke="seagreen" stroke-width="3"/>
-                  <rect x="10" y="18" width="60" height="8" rx="2" fill="#b2f2b2" />
-                  <rect x="10" y="32" width="18" height="6" rx="2" fill="#b2f2b2" />
-                  <rect x="32" y="32" width="18" height="6" rx="2" fill="#b2f2b2" />
-                  <rect x="54" y="32" width="16" height="6" rx="2" fill="#b2f2b2" />
+                                <svg width="80" height="54" viewBox="0 0 80 54" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <rect x="3" y="7" width="74" height="40" rx="7" fill="honeydew" stroke="seagreen" stroke-width="3"/>
+                                    <rect x="10" y="18" width="60" height="8" rx="2" fill="palegreen" />
+                                    <rect x="10" y="32" width="18" height="6" rx="2" fill="palegreen" />
+                                    <rect x="32" y="32" width="18" height="6" rx="2" fill="palegreen" />
+                                    <rect x="54" y="32" width="16" height="6" rx="2" fill="palegreen" />
                 </svg>
             </div>
             <h2 style="color:forestgreen;">Entry Gate</h2>

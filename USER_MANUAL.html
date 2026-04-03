@@ -241,8 +241,8 @@
 </div>
 
 <!-- ═══════════════════ RECENT CHANGES ═══════════════════ -->
-<h2 style="color: green; margin-top: 0;">Recent System Updates <span style="font-size:13px; color:seagreen;">(April 2026)</span></h2>
-<ul style="font-size: 12.5pt; color: green;">
+<h2 style="margin-top: 0;">Recent System Updates <span style="font-size:13px;">(April 2026)</span></h2>
+<ul style="font-size: 12.5pt;">
   <li><b>Entry/Exit UI Redesign:</b> Entry and Exit gate pages now feature a modern card layout, improved centering, and kiosk-style design for easier use on touch screens and tablets.</li>
   <li><b>Consistent Card Icon:</b> Both Entry and Exit forms now display a consistent card icon above the main heading for visual clarity.</li>
   <li><b>Perfect Centering & Layout:</b> The Entry and Exit containers are perfectly centered and visually balanced side-by-side with info panels, ensuring a professional look on all screen sizes.</li>
@@ -562,9 +562,9 @@
 
 <table>
   <tr><th>Outcome Displayed</th><th>What It Means</th><th>Action</th></tr>
-  <tr style="background: #b6ffb6;"><td>Free Exit — Staff Vehicle</td><td>Plate belongs to a registered employee<br><span style="color:green;">Staff details (name, make, color) shown for verification. All exits are logged for audit. Multiple exits in one day are flagged for admin review.</span></td><td>Raise boom gate immediately.<br><span style="color:green;">Physically verify vehicle details before release.</span></td></tr>
-  <tr style="background: #b6ffb6;"><td>Free Exit — Grace Period</td><td>Vehicle has been parked ≤ 30 minutes</td><td>Raise boom gate immediately.<br><span style="color:green;">Exit reason is displayed to driver.</span></td></tr>
-  <tr style="background: #b6ffb6;"><td>Free Exit — Owner Invoiced</td><td>Registered business owner vehicle<br><span style="color:green;">Fee is added to monthly invoice. Only owners with outstanding balances are shown in reports.</span></td><td>Raise boom gate.<br><span style="color:green;">No payment required at exit.</span></td></tr>
+  <tr><td>Free Exit — Staff Vehicle</td><td>Plate belongs to a registered employee<br>Staff details (name, make, color) shown for verification. All exits are logged for audit. Multiple exits in one day are flagged for admin review.</td><td>Raise boom gate immediately.<br>Physically verify vehicle details before release.</td></tr>
+  <tr><td>Free Exit — Grace Period</td><td>Vehicle has been parked ≤ 30 minutes</td><td>Raise boom gate immediately.<br>Exit reason is displayed to driver.</td></tr>
+  <tr><td>Free Exit — Owner Invoiced</td><td>Registered business owner vehicle<br>Fee is added to monthly invoice. Only owners with outstanding balances are shown in reports.</td><td>Raise boom gate.<br>No payment required at exit.</td></tr>
   <tr><td>Payment Required — KES [amount]</td><td>Standard visitor, fee is owed</td><td>Direct driver to payment page or kiosk.</td></tr>
   <tr><td>Plate Not Found</td><td>No matching entry record</td><td>Do not open gate. Check plate spelling, contact admin.</td></tr>
 </table>
@@ -604,7 +604,7 @@
   <li>Your vehicle plate number</li>
   <li>The amount due (in Kenyan Shillings)</li>
   <li>A field for your M-Pesa phone number</li>
-  <li style="background: #b6ffb6; color: #155724; border-radius: 4px; padding: 2px 6px;">If you qualify for a free exit (staff, owner, or grace period), the reason will be shown clearly on screen.</li>
+  <li>If you qualify for a free exit (staff, owner, or grace period), the reason will be shown clearly on screen.</li>
 </ul>
 
 <p><strong>Step 2 —</strong> Type in your Safaricom phone number. Any of these formats are accepted:</p>
@@ -672,11 +672,10 @@
   <tr><td>Vehicles Currently Inside</td><td>How many vehicles are actively parked (have entered but not yet exited)</td></tr>
   <tr><td>Vacant Bays</td><td>Number of bays that are currently unoccupied and available</td></tr>
   <tr><td>Occupied Bays</td><td>Number of bays that currently have a vehicle in them</td></tr>
-  <tr><td style="background: #b6ffb6;">Current Logs Revenue</td><td style="background: #b6ffb6;">Total revenue from current vehicle logs (paid and invoiced)</td></tr>
-  <tr><td style="background: #b6ffb6;">All-Time Revenue</td><td style="background: #b6ffb6;">Combined total including archived revenue from cleared logs</td></tr>
+  <tr><td>Current Logs Revenue</td><td>Total revenue from current vehicle logs (paid and invoiced)</td></tr>
+  <tr><td>All-Time Revenue</td><td>Combined total including archived revenue from cleared logs</td></tr>
 </table>
-<div style="background: #b6ffb6; color: #155724; border-radius: 4px; padding: 6px 10px; margin: 8px 0 14px 0;">
-  <b>New:</b> <b>Suspicious Staff Exits</b> are now flagged in a red alert box if a staff vehicle exits more than once in a day. <b>Vehicle Log Report</b> is available for download.</div>
+<div><b>New:</b> <b>Suspicious Staff Exits</b> are now flagged in a red alert box if a staff vehicle exits more than once in a day. <b>Vehicle Log Report</b> is available for download.</div>
 
 <h4>Active Vehicles Table</h4>
 <p>Below the summary cards is a table listing every vehicle that is currently parked. For each vehicle you can see the plate number, the bay it occupies, when it entered, how long it has been parked, its payment status, and a Manual Bypass button. Rows highlighted in orange or red indicate <strong>overstays</strong> — vehicles that have been parked for more than 8 hours.</p>
@@ -696,8 +695,7 @@
 <h1>11. Admin Panel — Revenue Reports</h1>
 
 
-<div style="background: #b6ffb6; color: #155724; border-radius: 4px; padding: 8px 12px; margin-bottom: 12px;">
-  <b>New:</b> Revenue report now previews results before download, includes only outstanding owner invoices, and matches dashboard totals (including archived revenue).<br>
+<div><b>New:</b> Revenue report now previews results before download, includes only outstanding owner invoices, and matches dashboard totals (including archived revenue).<br>
   <b>Owner Invoice section</b> only lists owners with unpaid balances. <b>CSV</b> includes all relevant columns and a summary.</div>
 
 <p>The Revenue Report page lets you preview and download a detailed record of all completed parking fee transactions as a CSV file, suitable for importing into Excel or Google Sheets for accounting and audit purposes.</p>

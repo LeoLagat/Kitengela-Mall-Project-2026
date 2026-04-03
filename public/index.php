@@ -14,7 +14,7 @@
 body{
     font-family: Arial, sans-serif;
     margin:0;
-    background:#f5f7fa;
+    background:aliceblue;
 }
 
 /* NAVBAR */
@@ -23,7 +23,7 @@ nav{
     display:flex;
     justify-content:space-between;
     align-items:center;
-    background:#2d862d;
+    background:seagreen;
     padding:12px 25px;
 }
 
@@ -74,8 +74,8 @@ nav{
 /* BAY BOX */
 
 .bay-box{
-    background:#ecf7ec;
-    border:1px solid #d4e9d4;
+    background:honeydew;
+    border:1px solid darkseagreen;
     border-radius:10px;
     padding:20px;
 }
@@ -83,7 +83,7 @@ nav{
 .bay-title{
     font-size:18px;
     font-weight:bold;
-    color:#2d862d;
+    color:seagreen;
     margin-bottom:10px;
 }
 
@@ -94,13 +94,13 @@ nav{
 .bay-number{
     font-size:32px;
     font-weight:bold;
-    color:#34495e;
+    color:slategray;
 }
 
 .bay-label{
     display:block;
     font-size:12px;
-    color:#555;
+    color:dimgray;
 }
 
 /* FOOTER */
@@ -109,7 +109,7 @@ footer{
     margin-top:40px;
     text-align:center;
     padding:15px;
-    background:#eee;
+    background:gainsboro;
 }
 
 /* SCROLLING */
